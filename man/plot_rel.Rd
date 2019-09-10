@@ -5,7 +5,7 @@
 \title{Plotting relative data of Rootdetection standard}
 \usage{
 plot_rel(root_norm, plot_significance = T, pairwise_2facaov_output,
-  control = "20", type = "jitter")
+  control = "20", type = "jitter", letter_height = 10)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
@@ -17,6 +17,8 @@ plot_rel(root_norm, plot_significance = T, pairwise_2facaov_output,
 \item{control}{string; name of the Factor2 control condition}
 
 \item{type}{string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot}
+
+\item{letter_height}{numeric; defines the position of the significance letters}
 }
 \value{
 plot or list of plots; box or box-jitter-plot of relative data, if significance = T and multiple Factor2 treatments a list of boxplots will be generated
@@ -34,6 +36,7 @@ plot_rel(root_test_norm, plot_significance = F, control = '20', type = 'box')
 plot_rel(root_test_norm, plot_significance = F, control = '20', type = 'jitter')
 
 # Plot with siginficance letters
+
 root_test_norm <- norm_10mm_standard(root_test)
 root_stat <- pairwise_2facaov(root_test_norm, draw_out = F, label_delim = ';')
 # boxplot with statistics

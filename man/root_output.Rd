@@ -17,6 +17,6 @@
 root_output
 }
 \description{
-A dataset containing measured A. thaliana wild-type (Col-0) and mutant (tir1_1afb2_3, weitar1_1, yucOx) seedling hypocotyls and a 10mm length standard in colum LengthPx.
+A dataset containing measured _Arabidopsis thaliana_ wild-type (Col-0) and mutant (tir1_1afb2_3, weitar1_1, yucOx) seedling hypocotyls measured at 20 °C and 28°C. Plants were grown on ATS plates for 4 days at 20°C and then stayed at 20°C or were shifted to 28°C. The columns labeled with '10mm' contains the length standard in colum LengthPx.
 }
 \keyword{datasets}
