@@ -1,0 +1,16 @@
+#' rootdetectR: Statistical analysis of rootdetection output with R
+#'
+#' rootdectR can be used to analyse the output from rootdetection software. This package contains functions to visualize and statistically test data coming from rootdetection 			software. It can be used to produce pretty boxplots including statistics from ANOVA analysis.
+#' @section Data Processing Functions:
+#' is.RootdetectionOutput, norm_10mm_standard, se, summary_stat, normality_test, rel_data
+#' @section Statistics (ANOVA) Functions:
+#' onefacaov_fac1, onefacaov_fac2, twofacaov, pairwise_2facaov
+#' @section Plotting Functions:
+#' plot_hist, plot_abs, plot_rel
+#'
+#' @docType package
+#' @name rootdetectR
+NULL
+
+## NULL
+

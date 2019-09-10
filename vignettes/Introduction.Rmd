@@ -1,0 +1,65 @@
+---
+title: "Introduction"
+author: "Philipp Janitza"
+date: "`r Sys.Date()`"
+fig_caption: yes
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Table of Contents
+1. [Introduction](#introduction)
+2. [Installation](#installation)
+3. [Process Data](#data-processing)
+4. [Conduct Statistical Tests](#anova-statistics)
+5. [Plots](#plot-data)
+
+## Introduction
+
+[RootDetection](http://www.labutils.de/) is an automated tool for evaluating photographs of plant roots. It detects single strand roots, traces their paths and measures the resulting lengths - completely automatic. It can also be used to measure hypocotyl, petiol length and other parameters by hand. All results are written to an embedded database and can be exported as CSV files.
+
+The `rootdetectR` package provides useful functions in R to analyze the *.csv output from Rootdetection. With the provided functions it is possible to conduct all necessary data processing (e.g. normalize data according to length standard, compute relative data) and statistical test (e.g. summary statistics, test for normal distribution, different types of ANOVA analysis). Additionally it is possible to produce publication ready data representation (box or jitter plois containing statistic information) with the provided functions. This vignette is showing the workflow for standard statistical analysis and data representation with `rootdetectR`. The methods implemented in this package were previously used for multiple publications (e.g. [Bellstaedt et. al 2019](https://www.plantphysiol.org/content/180/2/757); [Ibañez et. al 208](https://www.cell.com/current-biology/fulltext/S0960-9822(17)31602-0) ) .
+
+## Installation
+
+Users can download `rootdetectR` from my [GitHub repository](https://github.com/PhilippJanitza) :
+
+```r
+# devtools needs to be available to download packages from github
+if('devtools' %in% rownames(installed.packages()) == FALSE) {install.packages('devtools')}
+library('devtools')
+
+#install from github
+install_github('xxxxx_needs_to_be_added_xxxx')
+```
+
+After the installation the package can be loaded within R.
+
+```{r setup}
+library(rootdetectR)
+```
+
+## Data Processing
+
+```{r}
+# load example data set stored in rootdetectR
+data("root_output")
+
+# show an example Rootdetection output
+head(root_output)
+```
+## ANOVA Statisics
+
+## Plot data
+
+
