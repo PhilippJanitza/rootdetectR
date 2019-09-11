@@ -7,14 +7,14 @@
 #' @examples
 #' #Only produce list of plots:
 #'
-#' root_test_norm <- norm_10mm_standard(root_test)
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' plot_hist(root_test_norm, draw_out = F)
 #' #To view the first plot in R:
 #' plot_hist[[1]]
 #'
 #' #Produce plots and print as pdf
 #'
-#' root_test_norm <- norm_10mm_standard(root_test)
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' plot_hist(root_test_norm, draw_out = T, file = 'test_plot_histograms.pdf')
 #' #To view the first plot in R:
 #' plot_hist[[1]]
@@ -96,14 +96,15 @@ plot_hist <- function(root_norm, draw_out = T,
 #' @examples
 #' # Plot without significance
 #'
-#' root_test_norm <- norm_10mm_standard(root_test)
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' # boxplot
 #' plot_abs(root_test_norm, plot_significance = F, type = 'box')
 #' # jitterplot
 #' plot_abs(root_test_norm, plot_significance = F, type = 'jitter')
 #'
 #' # Plot with siginficance letters
-#' root_test_norm <- norm_10mm_standard(root_test)
+#'
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' root_stat <- twofacaov(root_test_norm, draw_out = F)
 #' # boxplot with statistics
 #' plot_abs(root_test_norm, plot_significance = T, twofacaov_output = root_stat, type = 'box')
@@ -276,7 +277,7 @@ plot_abs <- function(root_norm, plot_significance = F,
 #' @examples
 #' # Plot without significance
 #'
-#' root_test_norm <- norm_10mm_standard(root_test)
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' # boxplot
 #' plot_rel(root_test_norm, plot_significance = F, control = '20', type = 'box')
 #' # jitterplot
@@ -284,7 +285,7 @@ plot_abs <- function(root_norm, plot_significance = F,
 #'
 #' # Plot with siginficance letters
 #'
-#' root_test_norm <- norm_10mm_standard(root_test)
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' root_stat <- pairwise_2facaov(root_test_norm, draw_out = F, label_delim = ';')
 #' # boxplot with statistics
 #' plot_rel(root_test_norm, plot_significance = T, pairwise_2facaov_output = root_stat, control = '20', type = 'box')
