@@ -3,7 +3,7 @@
 #' @param root_output data.frame; output *.csv from Rootdetection
 #' @return logical; TRUE or FALSE
 #' @examples
-#' is.RootdetectionOutput(root_test)
+#' is.RootdetectionOutput(root_output)
 #'
 #' @export
 is.root_detection_output <- function(root_output) {
@@ -75,8 +75,8 @@ is.root_detection_output <- function(root_output) {
 #' @param label_delim character; defin how Factor1 and Factor2 are seperated in Label
 #' @return data.frame; containing normalized length values
 #' @examples
-#' norm_10mm_standard(root_test)
-#' norm_10mm_standard(root_test, sort = FALSE)
+#' norm_10mm_standard(root_output)
+#' norm_10mm_standard(root_output, sort = FALSE)
 #'
 #' @export
 norm_10mm_standard <- function(root_output, sort = TRUE, label_delim = ";") {
@@ -114,7 +114,7 @@ norm_10mm_standard <- function(root_output, sort = TRUE, label_delim = ";") {
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
 #' @return data.frame; containing summary statistics for each Factor1 - Factor2 combination
 #' @examples
-#' root_test_norm <- norm_10mm_standard(root_test)
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' summary_stat(root_test_norm)
 #'
 #' @export
@@ -137,7 +137,7 @@ summary_stat <- function(root_norm) {
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
 #' @return data.frame; containing p-values for each Factor1 Facto2 combinations.
 #' @examples
-#' root_test_norm <- norm_10mm_standard(root_test)
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' normality_test(root_test_norm)
 #'
 #' @export
@@ -162,7 +162,7 @@ normality_test <- function(root_norm) {
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
 #' @return data.frame; containing data for each Factor2 relative to Factor2 control
 #' @examples
-#' root_test_norm <- norm_10mm_standard(root_test)
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' rel_data(root_test_norm)
 #'
 #' @export
@@ -188,5 +188,38 @@ rel_data <- function(root_norm, control = "20") {
 }
 
 
+#' @title Remove Outlier from Rootdetection standard
+#' @description The function removes or replaces outliers for every Factor1 Factor2 (Label) combination. Outliers are defined as 1.5 x IQR.
+#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
+#' @param fill_na logical; If TRUE all outliers present in x will be replaced by NA. If False all outliers will be deleted.
+#' @return data.frame; containing data without outliers or outliers replaced by NA
+#' @examples
+#' root_test_norm <- norm_10mm_standard(root_output)
+#'
+#' # transform outliers to NA
+#' rm_outlier_df(root_test_norm, fill_na = T)
+#' # remove outliers
+#' rm_outlier_df(root_test_norm, fill_na = F)
+#'
+#' @export
+rm_outlier_df <- function(root_norm, fill_na = F) {
+  # remove all NAs before from LengthMM
+  root_norm <- root_norm[!is.na(root_norm$LengthMM),]
 
+  # create empty data-frame
+  final <- root_norm[0,]
 
+  # loop over labels in data.frame
+  for(name in unique(root_norm$Label)){
+    #extract subsets and replace outliers with NA
+    temp <- root_norm[root_norm$Label == name,]
+    temp$LengthMM <- rm_outlier(temp$LengthMM, fill_na = T)
+
+    final <- rbind(final, temp)
+  }
+
+  if(fill_na == F){
+    final <- final[!is.na(final$LengthMM),]
+  }
+  return(final)
+}
