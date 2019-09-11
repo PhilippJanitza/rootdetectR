@@ -4,7 +4,7 @@ How To Install rootdetectR
 Make sure you have the latest version of R and RStudio.
 __Caution:__ Windows user will need to install [RTools](cran.r-project.org/bin/windows/Rtools/) to be able to biuld the package.
 
-To build the vignette on you computer you will need to install the packages knitr and rmarkdown.
+To build the vignette (detailed manual) on you computer you will need to install the packages knitr and rmarkdown.
 ```r
 install.packages(c('knitr', 'rmarkdown'))
 ```
@@ -20,4 +20,8 @@ library('devtools')
 install_github("PhilippJanitza/rootdetectR", build_vignettes = TRUE)
 ```
 
+To view the vignette in R type:
 
+```r
+vignette('Introduction', package = 'rootdetectR')
+```
