@@ -186,3 +186,7 @@ rel_data <- function(root_norm, control = "20") {
 
     return(rel_root_table)
 }
+
+
+
+
