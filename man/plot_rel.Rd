@@ -29,7 +29,7 @@ Relative data are plotted as boxplot or box-jitter-plot combination. If Signific
 \examples{
 # Plot without significance
 
-root_test_norm <- norm_10mm_standard(root_test)
+root_test_norm <- norm_10mm_standard(root_output)
 # boxplot
 plot_rel(root_test_norm, plot_significance = F, control = '20', type = 'box')
 # jitterplot
@@ -37,7 +37,7 @@ plot_rel(root_test_norm, plot_significance = F, control = '20', type = 'jitter')
 
 # Plot with siginficance letters
 
-root_test_norm <- norm_10mm_standard(root_test)
+root_test_norm <- norm_10mm_standard(root_output)
 root_stat <- pairwise_2facaov(root_test_norm, draw_out = F, label_delim = ';')
 # boxplot with statistics
 plot_rel(root_test_norm, plot_significance = T, pairwise_2facaov_output = root_stat, control = '20', type = 'box')

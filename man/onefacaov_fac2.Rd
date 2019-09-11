@@ -25,11 +25,12 @@ The function performes a one way ANOVA over Factor2. The function takes each con
 \examples{
 # get data.frame containg p-values for one way ANOVA over Factor 2
 
-root_test_norm <- norm_10mm_standard(root_test)
+root_test_norm <- norm_10mm_standard(root_output)
 onefacaov_fac2(root_test_norm, control = '20', draw_out = F)
 
 # get data.frame and plot as pdf output
-root_test_norm <- norm_10mm_standard(root_test)
+
+root_test_norm <- norm_10mm_standard(root_output)
 onefacaov_fac2(root_test_norm, control = '20', draw_out = T, file_base = '1fac_ANOVA_factor2')
 # create a pdf file 1fac_ANOVA_factor2_28.pdf
 }

@@ -20,7 +20,7 @@ data.frame; containing normalized length values
 This function takes 10mm standard values to calculate LengthMM from LengthPx
 }
 \examples{
-norm_10mm_standard(root_test)
-norm_10mm_standard(root_test, sort = FALSE)
+norm_10mm_standard(root_output)
+norm_10mm_standard(root_output, sort = FALSE)
 
 }

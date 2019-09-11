@@ -16,7 +16,7 @@ data.frame; containing summary statistics for each Factor1 - Factor2 combination
 This function calculates some summary statistics for a LengthMM normalized Rootdetection output. Calculated values are: sample size (n), median, mean, standard deviation (sd), standard error (se)
 }
 \examples{
-root_test_norm <- norm_10mm_standard(root_test)
+root_test_norm <- norm_10mm_standard(root_output)
 summary_stat(root_test_norm)
 
 }

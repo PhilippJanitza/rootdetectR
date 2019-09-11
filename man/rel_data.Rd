@@ -16,7 +16,7 @@ data.frame; containing data for each Factor2 relative to Factor2 control
 The function takes the control values of Factor2 and calculates the relative data for the other Factor2
 }
 \examples{
-root_test_norm <- norm_10mm_standard(root_test)
+root_test_norm <- norm_10mm_standard(root_output)
 rel_data(root_test_norm)
 
 }

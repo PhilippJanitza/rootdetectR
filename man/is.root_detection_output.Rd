@@ -16,6 +16,6 @@ logical; TRUE or FALSE
 The function tests wether a given data.frame has all important columns and the corresponding data types.
 }
 \examples{
-is.RootdetectionOutput(root_test)
+is.RootdetectionOutput(root_output)
 
 }

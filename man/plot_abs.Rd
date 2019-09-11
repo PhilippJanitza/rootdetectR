@@ -32,14 +32,15 @@ Absolute data are plotted as boxplot or box-jitter-plot combination. Signifcance
 \examples{
 # Plot without significance
 
-root_test_norm <- norm_10mm_standard(root_test)
+root_test_norm <- norm_10mm_standard(root_output)
 # boxplot
 plot_abs(root_test_norm, plot_significance = F, type = 'box')
 # jitterplot
 plot_abs(root_test_norm, plot_significance = F, type = 'jitter')
 
 # Plot with siginficance letters
-root_test_norm <- norm_10mm_standard(root_test)
+
+root_test_norm <- norm_10mm_standard(root_output)
 root_stat <- twofacaov(root_test_norm, draw_out = F)
 # boxplot with statistics
 plot_abs(root_test_norm, plot_significance = T, twofacaov_output = root_stat, type = 'box')

@@ -25,10 +25,11 @@ The function performes a two way ANOVA for Rootdetection standard
 \examples{
 # get data.frame containg p-values for one way ANOVA over Factor 2
 
-root_test_norm <- norm_10mm_standard(root_test)
+root_test_norm <- norm_10mm_standard(root_output)
 twofacaov(root_test_norm, label_delim = ';', draw_out = F)
 
 # get data.frame and plot as pdf output
-root_test_norm <- norm_10mm_standard(root_test)
+
+root_test_norm <- norm_10mm_standard(root_output)
 twofacaov(root_test_norm, label_delim = ';', draw_out = T, file = '2fac_ANOVA_all_vs_all.pdf')
 }

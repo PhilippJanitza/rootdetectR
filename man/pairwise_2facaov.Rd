@@ -27,10 +27,11 @@ The function performes a two way ANOVA. It compares the treatment effect of Fact
 \examples{
 # get data.frame containg p-values for pairwise two way ANOVA
 
-root_test_norm <- norm_10mm_standard(root_test)
+root_test_norm <- norm_10mm_standard(root_output)
 pairwise_2facaov(root_test_norm, control = '20', label_delim = ';', draw_out = F)
 
 # get data.frame and plot as pdf output
-root_test_norm <- norm_10mm_standard(root_test)
+
+root_test_norm <- norm_10mm_standard(root_output)
 twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file = '2fac_ANOVA_BH_corrected')
 }

@@ -16,7 +16,7 @@ data.frame; containing p-values for each Factor1 Facto2 combinations.
 The function performes a normality test for each Factor1 Factor 2 combination in Rootdetecion standard data.frame. Until now only Shapiro-Wilk test is implemented.
 }
 \examples{
-root_test_norm <- norm_10mm_standard(root_test)
+root_test_norm <- norm_10mm_standard(root_output)
 normality_test(root_test_norm)
 
 }

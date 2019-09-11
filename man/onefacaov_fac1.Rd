@@ -23,11 +23,12 @@ The function performes a one way ANOVA over Factor1. The function iterates over 
 \examples{
 # get data.frame containg p-values for one way ANOVA over Factor 1
 
-root_test_norm <- norm_10mm_standard(root_test)
+root_test_norm <- norm_10mm_standard(root_output)
 onefacaov_fac1(root_test_norm, draw_out = F)
 
 # get data.frame and plot as pdf output
-root_test_norm <- norm_10mm_standard(root_test)
+
+root_test_norm <- norm_10mm_standard(root_output)
 onefacaov_fac1(root_test_norm, draw_out = T, file_base = '1fac_ANOVA_factor1')
 # create two pdf files: 1fac_ANOVA_factor1_20.pdf and 1fac_ANOVA_factor1_28.pdf
 }

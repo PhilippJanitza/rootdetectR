@@ -22,14 +22,14 @@ The function performes a shapiro-wilk normality test for each Factor1 Factor 2 c
 \examples{
 #Only produce list of plots:
 
-root_test_norm <- norm_10mm_standard(root_test)
+root_test_norm <- norm_10mm_standard(root_output)
 plot_hist(root_test_norm, draw_out = F)
 #To view the first plot in R:
 plot_hist[[1]]
 
 #Produce plots and print as pdf
 
-root_test_norm <- norm_10mm_standard(root_test)
+root_test_norm <- norm_10mm_standard(root_output)
 plot_hist(root_test_norm, draw_out = T, file = 'test_plot_histograms.pdf')
 #To view the first plot in R:
 plot_hist[[1]]
