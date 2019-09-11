@@ -109,19 +109,6 @@ norm_10mm_standard <- function(root_output, sort = TRUE, label_delim = ";") {
 
 
 
-#' @title Calculate Standard Error
-#' @description This function calculates the standard error for a numeric-vector x. NA values will be removed.
-#' @param x a numeric vector
-#' @return numeric value; standard error of vector x
-#' @examples
-#' x <- 1:20
-#' se(x)
-#'
-#' @export
-se <- function(x) sd(x, na.rm = T) / sqrt(length(na.omit(x)))
-
-
-
 #' @title Calculate Summary Statistics for Rootdetection standard
 #' @description This function calculates some summary statistics for a LengthMM normalized Rootdetection output. Calculated values are: sample size (n), median, mean, standard deviation (sd), standard error (se)
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
