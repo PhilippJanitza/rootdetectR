@@ -7,11 +7,12 @@
 #' @examples
 #' # get data.frame containg p-values for one way ANOVA over Factor 1
 #'
-#' root_test_norm <- norm_10mm_standard(root_test)
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' onefacaov_fac1(root_test_norm, draw_out = F)
 #'
 #' # get data.frame and plot as pdf output
-#' root_test_norm <- norm_10mm_standard(root_test)
+#'
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' onefacaov_fac1(root_test_norm, draw_out = T, file_base = '1fac_ANOVA_factor1')
 #' # create two pdf files: 1fac_ANOVA_factor1_20.pdf and 1fac_ANOVA_factor1_28.pdf
 #' @export
@@ -93,11 +94,12 @@ onefacaov_fac1 <- function(root_norm, draw_out = T,
 #' @examples
 #' # get data.frame containg p-values for one way ANOVA over Factor 2
 #'
-#' root_test_norm <- norm_10mm_standard(root_test)
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' onefacaov_fac2(root_test_norm, control = '20', draw_out = F)
 #'
 #' # get data.frame and plot as pdf output
-#' root_test_norm <- norm_10mm_standard(root_test)
+#'
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' onefacaov_fac2(root_test_norm, control = '20', draw_out = T, file_base = '1fac_ANOVA_factor2')
 #' # create a pdf file 1fac_ANOVA_factor2_28.pdf
 #' @export
@@ -173,11 +175,12 @@ onefacaov_fac2 <- function(root_norm, control = '20',  draw_out = T,
 #' @examples
 #' # get data.frame containg p-values for one way ANOVA over Factor 2
 #'
-#' root_test_norm <- norm_10mm_standard(root_test)
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' twofacaov(root_test_norm, label_delim = ';', draw_out = F)
 #'
 #' # get data.frame and plot as pdf output
-#' root_test_norm <- norm_10mm_standard(root_test)
+#'
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' twofacaov(root_test_norm, label_delim = ';', draw_out = T, file = '2fac_ANOVA_all_vs_all.pdf')
 #' @export
 twofacaov <- function(root_norm, label_delim = ";", draw_out = T,
@@ -250,11 +253,12 @@ twofacaov <- function(root_norm, label_delim = ";", draw_out = T,
 #' @examples
 #' # get data.frame containg p-values for pairwise two way ANOVA
 #'
-#' root_test_norm <- norm_10mm_standard(root_test)
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' pairwise_2facaov(root_test_norm, control = '20', label_delim = ';', draw_out = F)
 #'
 #' # get data.frame and plot as pdf output
-#' root_test_norm <- norm_10mm_standard(root_test)
+#'
+#' root_test_norm <- norm_10mm_standard(root_output)
 #' twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file = '2fac_ANOVA_BH_corrected')
 #' @export
 pairwise_2facaov <- function(root_norm, control = "20", label_delim = ";",
