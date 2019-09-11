@@ -47,7 +47,7 @@ if('devtools' %in% rownames(installed.packages()) == FALSE) {install.packages('d
 library('devtools')
 
 #install from github
-install_github('xxxxx_needs_to_be_added_xxxx')
+install_github("PhilippJanitza/rootdetectR", build_vignettes = TRUE)
 ```
 
 After the installation the package can be loaded within R.
