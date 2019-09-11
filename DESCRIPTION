@@ -8,6 +8,7 @@ Description: rootdectR can be used to analyse the output from rootdetection soft
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
+biocViews:
 Imports: 
     plyr (>= 1.8.4),
     multtest (>= 2.40.0),
