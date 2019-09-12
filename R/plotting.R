@@ -34,42 +34,28 @@ plot_hist <- function(root_norm, draw_out = T,
         # create subset contain only the data for one label
         hist_sub <- subset(root_norm, Label == levels(root_norm$Label)[lev])
         hist_sub$Factor1 <- droplevels(hist_sub$Factor1)
-        # shapiro-wilk test (> 0.05 significant normally distributed =
-        # green else (< 0.05) = failure --> red)
+
+        #calculate Shapiro-Wilk
         shap <- shapiro.test(hist_sub$LengthMM)
-        if (shap$p.value >= 0.05) {
 
-            brx <- pretty(range(hist_sub$LengthMM),
-                          n = nclass.Sturges(hist_sub$LengthMM), min.n = 1)
+        #calculate breaks
+        brx <- pretty(range(hist_sub$LengthMM),
+                      n = nclass.Sturges(hist_sub$LengthMM), min.n = 1)
 
-            p <- ggplot2::ggplot(hist_sub, ggplot2::aes_string(x =
-                          hist_sub$LengthMM)) +
-                 ggplot2::geom_histogram(color = "black", fill = "green",
-                          breaks = brx) +
-                 ggplot2::theme_classic() +
-                 ggplot2::scale_x_continuous("LengthMM") +
-                 ggplot2::annotate("text", x = Inf, y = Inf,
-                          label = round(shap$p.value, digits = 4), hjust = 1,
-                          vjust = 1, size = 3) +
-                 ggplot2::ggtitle(paste(unique(hist_sub$Factor1),
-                         unique(hist_sub$Factor2, sep = " ")))
+        p <- ggplot2::ggplot(hist_sub, ggplot2::aes_string(x =
+                                                               hist_sub$LengthMM)) +
+            {if(shap$p.value >= 0.05)ggplot2::geom_histogram(color = "black", fill = "green",
+                                                             breaks = brx)} +
+            {if(shap$p.value < 0.05)ggplot2::geom_histogram(color = "black", fill = "red",
+                                                            breaks = brx)} +
+            ggplot2::theme_classic() +
+            ggplot2::scale_x_continuous("LengthMM") +
+            ggplot2::annotate("text", x = Inf, y = Inf,
+                              label = round(shap$p.value, digits = 4), hjust = 1,
+                              vjust = 1, size = 3) +
+            ggplot2::ggtitle(paste(unique(hist_sub$Factor1),
+                                   unique(hist_sub$Factor2, sep = " ")))
 
-        } else {
-
-            brx <- pretty(range(hist_sub$LengthMM),
-                          n = nclass.Sturges(hist_sub$LengthMM), min.n = 1)
-
-            p <- ggplot2::ggplot(hist_sub, ggplot2::aes_string(x =
-                          hist_sub$LengthMM)) +
-                 ggplot2::geom_histogram(color = "black", fill = "red", breaks = brx) +
-                 ggplot2::theme_classic() +
-                 ggplot2::scale_x_continuous("LengthMM") +
-                 ggplot2::annotate("text", x = Inf, y = Inf,
-                          label = round(shap$p.value, digits = 4), hjust = 1,
-                          vjust = 1, size = 3) +
-                 ggplot2::ggtitle(paste(unique(hist_sub$Factor1),
-                         unique(hist_sub$Factor2, sep = " ")))
-        }
         plot_list[[lev]] <- p
     }
 
