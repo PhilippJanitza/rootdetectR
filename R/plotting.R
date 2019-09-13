@@ -72,11 +72,21 @@ plot_hist <- function(root_norm, draw_out = T,
 #' @title Plotting absolute data of Rootdetection standard
 #' @description Absolute data are plotted as boxplot or box-jitter-plot combination. Signifcances can be illustrated in the plot.
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param plot_significance logical; if TRUE significances will be drawn as letters
-#' @param twofacaov_output data.frame; Output of twofacaov (needed if plot_significance = T)
 #' @param label_delim character; defin how Factor1 and Factor2 are seperated in Label
 #' @param type string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot
+#' @param plot_n logical; if TRUE sample size (n) will be plotted
 #' @param plot_colours vector; provide colours for the boxplot - colour vector must have the same length than Factor2
+#' @param y_label string; axes description of y-axes
+#' @param x_label string; axes description of x-axes
+#' @param size_legend_title numeric; defines size of legend title
+#' @param size_legend_text numeric; defines size of legend text
+#' @param size_x_axes numeric; defines size of x-axes labels
+#' @param size_y_axes numeric; defines size of y-axes labels
+#' @param size_n = numeric; defines size of n plotted (if plot_n = TRUE)
+#' @param plot_significance logical; if TRUE significances will be drawn as letters
+#' @param twofacaov_output data.frame; Output of twofacaov (needed if plot_significance = T)
+#' @param size_letter numeric; defines size of the significance letters
+#' @param angle_letter numeric, defines angle of significance letters
 #' @param letter_height numeric; defines the position of the significance letters
 #' @return plot; box or box-jitter-plot of the absolute data
 #' @examples
@@ -99,16 +109,42 @@ plot_hist <- function(root_norm, draw_out = T,
 #' root_test_norm <- norm_10mm_standard(root_test)
 #' plot_abs(root_test_norm, plot_significance = F, type = 'jitter', plot_colours = c('dodgerblue3', 'firebrick2'))
 #'
+#' # all customizable plotting parameters have a default value
+#'
+#'  plot_abs_short(root_test_norm,
+#'                 label_delim = ';',
+#'                 type = 'jitter',
+#'                 plot_n = T,
+#'                 plot_colours = c('cornflowerblue', 'coral2'),
+#'                 y_label = 'length mm', x_label = '',
+#'                 size_legend_title = 12, size_legend_text = 10,
+#'                 size_x_axes = 9, size_y_axes = 9,
+#'                 size_n = 3,
+#'                 plot_significance = T, twofacov_output = twofacaov(root_norm, draw_out = F),
+#'                 letter_height = 5, size_letter = 5, angle_letter = 0)
+#'
 #' @export
-plot_abs <- function(root_norm, plot_significance = F,
-                     twofacov_output, label_delim = ";", type = "jitter",
-                     plot_colours, letter_height = 2) {
+plot_abs <- function(root_norm,
+                     label_delim = ";",
+                     type = "jitter",
+                     plot_n = T,
+                     plot_colours,
+                     y_label = 'hypocotyl length [mm]',
+                     x_label = '',
+                     size_legend_title = 12,
+                     size_legend_text = 10,
+                     size_x_axes = 9,
+                     size_y_axes = 9,
+                     size_n = 3,
+                     plot_significance = F,
+                     twofacov_output,
+                     letter_height = 2,
+                     size_letter = 5,
+                     angle_letter = 0) {
 
-    # kann hart gekürzt werden indem stat_n einfach angefügt wird ohne den
-    # ganzen ggplot2 Befehl neu auszuführen! Style und so!
-    # if length(plot_colours) != length(levels(root_norm$Factor2)) --> error!
-    # braucht man wirklich label_delim als input???? ist ja schon mal getrennt wurden
+    ############## first chunk creating letters from statistics
 
+    # create table with letters only if plot_significance = T
     if (plot_significance) {
 
         # get Letters for twofacaov output
@@ -129,122 +165,56 @@ plot_abs <- function(root_norm, plot_significance = F,
         names(mat_values) <- mat_names
         # get df with letters and replace : with label delim!!
         letters <-
-          data.frame(multcompView::multcompLetters(mat_values)["Letters"])
+            data.frame(multcompView::multcompLetters(mat_values)["Letters"])
         letters$Label <- gsub(":", label_delim, rownames(letters))
 
 
         # letter 1/5 of highest value
         y_coord <- plyr::ddply(root_norm, plyr::.(Label), plyr::summarize,
-                         y = fivenum(LengthMM)[5])
+                               y = fivenum(LengthMM)[5])
         y_coord$y <- y_coord$y + letter_height
         plot_letters <- merge(letters, y_coord, by = "Label")
-
-        if (type == "jitter") {
-
-
-            # Input von oben : Farben, Größen
-            abs_plot <- ggplot2::ggplot() +
-              ggplot2::geom_boxplot(data = root_norm,
-                                    ggplot2::aes(x = root_norm$Label,
-                                    y = root_norm$LengthMM),
-                                    outlier.shape = NA) +
-              ggplot2::geom_jitter(data = root_norm,
-                            ggplot2::aes(x = root_norm$Label,
-                            y = root_norm$LengthMM,
-                            colour = as.factor(root_norm$Factor2)),
-                            position = ggplot2::position_jitter(0.2,
-                            seed = 1)) +
-              ggplot2::geom_text(data = plot_letters,
-                            ggplot2::aes(x = plot_letters$Label,
-                            y = plot_letters$y,
-                            label = plot_letters$Letters)) +
-              ggplot2::labs(colour = "condition") +
-              ggplot2::theme_classic() +
-              ggplot2::scale_y_continuous(name = "hypocotyl length [mm]") +
-              ggplot2::scale_x_discrete(name = "") +
-              ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
-                hjust = 1, vjust = 1), legend.title =
-                ggplot2::element_text(size = 16), legend.text =
-                ggplot2::element_text(size = 12)) +
-              EnvStats::stat_n_text(data = root_norm,
-                ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM),
-                angle = 90, size = 3)
-
-        } else if (type == "box") {
-
-            abs_plot <- ggplot2::ggplot() +
-              ggplot2::geom_boxplot(data = root_norm,
-                ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM,
-                fill = as.factor(root_norm$Factor2))) +
-              ggplot2::geom_text(data = plot_letters,
-                ggplot2::aes(x = plot_letters$Label, y = plot_letters$y,
-                label = plot_letters$Letters)) +
-              ggplot2::labs(fill = "condition") +
-              ggplot2::theme_classic() +
-              ggplot2::scale_y_continuous(name = "hypocotyl length [mm]") +
-              ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
-                hjust = 1, vjust = 1)) +
-              EnvStats::stat_n_text(data = root_norm,
-                ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM),
-                angle = 90, size = 3)
-
-        } else {
-            stop("For type only \"box\" or \"jitter\" are yet implemented")
-        }
-
-    } else {
-
-        if (type == "jitter") {
-
-            # Input von oben : Farben, Größen
-            abs_plot <- ggplot2::ggplot() +
-              ggplot2::geom_boxplot(data = root_norm,
-                ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM),
-                outlier.shape = NA) +
-              ggplot2::geom_jitter(data = root_norm,
-                ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM,
-                colour = as.factor(root_norm$Factor2)), position =
-                ggplot2::position_jitter(0.2, seed = 1)) +
-              ggplot2::labs(colour = "condition") +
-              ggplot2::theme_classic() +
-              ggplot2::scale_y_continuous(name = "hypocotyl length [mm]") +
-              ggplot2::scale_x_discrete(name = "") +
-              ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
-                hjust = 1, vjust = 1), legend.title =
-                ggplot2::element_text(size = 16), legend.text =
-                ggplot2::element_text(size = 12)) +
-              EnvStats::stat_n_text(data = root_norm,
-                ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM),
-                angle = 90, size = 3)
-
-        } else if (type == "box") {
-
-            abs_plot <- ggplot2::ggplot() +
-              ggplot2::geom_boxplot(data = root_norm,
-                ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM,
-                fill = as.factor(root_norm$Factor2))) +
-              ggplot2::labs(fill = "condition") +
-              ggplot2::theme_classic() +
-              ggplot2::scale_y_continuous(name = "hypocotyl length [mm]") +
-              ggplot2::scale_x_discrete(name = "") +
-              ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
-                hjust = 1, vjust = 1)) +
-              EnvStats::stat_n_text(data = root_norm,
-                 ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM),
-                 angle = 90, size = 3)
-
-        } else {
-            stop("For type only \"box\" or \"jitter\" are yet implemented")
-        }
-
     }
 
-    if (!missing(plot_colours)) {
 
-        abs_plot <- abs_plot +
-          ggplot2::scale_fill_manual(values = plot_colours) +
-          ggplot2::scale_colour_manual(values = plot_colours)
-    }
+    abs_plot <- ggplot2::ggplot() +
+        {if(type == 'jitter')ggplot2::geom_boxplot(data = root_norm,
+                                                   ggplot2::aes(x = root_norm$Label,
+                                                                y = root_norm$LengthMM),
+                                                   outlier.shape = NA)} +
+        {if(type == 'jitter')ggplot2::geom_jitter(data = root_norm,
+                                                  ggplot2::aes(x = root_norm$Label,
+                                                               y = root_norm$LengthMM,
+                                                               colour = as.factor(root_norm$Factor2)),
+                                                  position = ggplot2::position_jitter(0.2,
+                                                                                      seed = 1))} +
+        {if(type == 'jitter')ggplot2::labs(colour = "condition")} +
+        {if(type == 'box')ggplot2::geom_boxplot(data = root_norm,
+                                                ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM,
+                                                             fill = as.factor(root_norm$Factor2)))} +
+        {if(type == 'box')ggplot2::labs(fill = "condition")} +
+        {if(plot_significance)ggplot2::geom_text(data = plot_letters,
+                                                 ggplot2::aes(x = plot_letters$Label,
+                                                              y = plot_letters$y,
+                                                              label = plot_letters$Letters,
+                                                              angle = angle_letter),
+                                                 size = size_letter)} +
+        ggplot2::theme_classic() +
+        ggplot2::scale_y_continuous(name = y_label) +
+        ggplot2::scale_x_discrete(name = x_label) +
+        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
+                                                           hjust = 1, vjust = 1,
+                                                           colour = 'black',
+                                                           size = size_x_axes),
+                       axis.text.y = ggplot2::element_text(colour = 'black',
+                                                           size= size_y_axes),
+                       legend.title = ggplot2::element_text(size = size_legend_title),
+                       legend.text = ggplot2::element_text(size = size_legend_text)) +
+        {if(plot_n)EnvStats::stat_n_text(data = root_norm,
+                                         ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM),
+                                         angle = 90, size = size_n)} +
+        {if(!missing(plot_colours))ggplot2::scale_fill_manual(values = plot_colours)} +
+        {if(!missing(plot_colours))ggplot2::scale_colour_manual(values = plot_colours)}
 
     return(abs_plot)
 }

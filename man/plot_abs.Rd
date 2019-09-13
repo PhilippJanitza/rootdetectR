@@ -4,22 +4,45 @@
 \alias{plot_abs}
 \title{Plotting absolute data of Rootdetection standard}
 \usage{
-plot_abs(root_norm, plot_significance = F, twofacov_output,
-  label_delim = ";", type = "jitter", plot_colours,
-  letter_height = 2)
+plot_abs(root_norm, label_delim = ";", type = "jitter", plot_n = T,
+  plot_colours, y_label = "hypocotyl length [mm]", x_label = "",
+  size_legend_title = 12, size_legend_text = 10, size_x_axes = 9,
+  size_y_axes = 9, size_n = 3, plot_significance = F,
+  twofacov_output, letter_height = 2, size_letter = 5,
+  angle_letter = 0)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
-
-\item{plot_significance}{logical; if TRUE significances will be drawn as letters}
 
 \item{label_delim}{character; defin how Factor1 and Factor2 are seperated in Label}
 
 \item{type}{string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot}
 
+\item{plot_n}{logical; if TRUE sample size (n) will be plotted}
+
 \item{plot_colours}{vector; provide colours for the boxplot - colour vector must have the same length than Factor2}
 
+\item{y_label}{string; axes description of y-axes}
+
+\item{x_label}{string; axes description of x-axes}
+
+\item{size_legend_title}{numeric; defines size of legend title}
+
+\item{size_legend_text}{numeric; defines size of legend text}
+
+\item{size_x_axes}{numeric; defines size of x-axes labels}
+
+\item{size_y_axes}{numeric; defines size of y-axes labels}
+
+\item{size_n}{= numeric; defines size of n plotted (if plot_n = TRUE)}
+
+\item{plot_significance}{logical; if TRUE significances will be drawn as letters}
+
 \item{letter_height}{numeric; defines the position of the significance letters}
+
+\item{size_letter}{numeric; defines size of the significance letters}
+
+\item{angle_letter}{numeric, defines angle of significance letters}
 
 \item{twofacaov_output}{data.frame; Output of twofacaov (needed if plot_significance = T)}
 }
@@ -48,5 +71,19 @@ plot_abs(root_test_norm, plot_significance = T, twofacaov_output = root_stat, ty
 # provide own colours (ggplot2-colours or hex-code) - must have the same length than level(root_test_norm$Factor2)
 root_test_norm <- norm_10mm_standard(root_test)
 plot_abs(root_test_norm, plot_significance = F, type = 'jitter', plot_colours = c('dodgerblue3', 'firebrick2'))
+
+# all customizable plotting parameters have a default value
+
+ plot_abs_short(root_test_norm,
+                label_delim = ';',
+                type = 'jitter',
+                plot_n = T,
+                plot_colours = c('cornflowerblue', 'coral2'),
+                y_label = 'length mm', x_label = '',
+                size_legend_title = 12, size_legend_text = 10,
+                size_x_axes = 9, size_y_axes = 9,
+                size_n = 3,
+                plot_significance = T, twofacov_output = twofacaov(root_norm, draw_out = F),
+                letter_height = 5, size_letter = 5, angle_letter = 0)
 
 }
