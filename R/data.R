@@ -15,19 +15,18 @@
 
 ## IDEAS
 
+# dringend Testdatensatz mit multiplen Factor2 benötigt - am besten auch mehr als 3.
+
 # normality test erweitern --> über die Factoren??
 # andere tests rein
 
-# ausreiser rauswerfen funktion
 
 # is.root... erweitern und verbessern
 # eine Funktion mit 10mm und eine ohne??
 # check dann in jede Funktion einbauen welche dieses als Input verwendet!
 
-# Plotting Parameter verfügbar machen
-# Text an labs / title
-# Schriftgrößen
-# Letter height!
+
 # ggplot2 producing figure captions??? mal versuchen!
+
 
 # Label delim für twofacaov benötigt??
