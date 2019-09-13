@@ -5,7 +5,8 @@
 \title{Pairwise Two Way ANOVA of Treatment Effects}
 \usage{
 pairwise_2facaov(root_norm, control = "20", label_delim = ";",
-  draw_out = T, file_base = "2fac_ANOVA_BH_corrected")
+  draw_out = T, file_base = "2fac_ANOVA_BH_corrected",
+  p_value_size = 0.8)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
@@ -17,6 +18,8 @@ pairwise_2facaov(root_norm, control = "20", label_delim = ";",
 \item{draw_out}{logical; If TRUE Matrix containg p-values is plotted in pdf file}
 
 \item{file_base}{string; file name of the pdf output (is needed if draw_out = T)}
+
+\item{p_value_size}{numeric; font siz of the p-values printed in pdf file}
 }
 \value{
 list; data.frames containg p-values for pairwise two way ANOVA for each Factor1 per Factor2 control treatment effect
@@ -33,5 +36,8 @@ pairwise_2facaov(root_test_norm, control = '20', label_delim = ';', draw_out = F
 # get data.frame and plot as pdf output
 
 root_test_norm <- norm_10mm_standard(root_output)
-twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file = '2fac_ANOVA_BH_corrected')
+twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected')
+# change size of printed p-values
+twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected', p_value_size = 1)
+# function creates a pdf file 2fac_ANOVA_BH_corrected_28.pdf
 }

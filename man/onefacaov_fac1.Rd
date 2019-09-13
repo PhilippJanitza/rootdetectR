@@ -5,7 +5,7 @@
 \title{1 Factorial ANOVA Over Factor1}
 \usage{
 onefacaov_fac1(root_norm, draw_out = T,
-  file_base = "1fac_ANOVA_factor1")
+  file_base = "1fac_ANOVA_factor1", p_value_size = 0.8)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
@@ -13,6 +13,8 @@ onefacaov_fac1(root_norm, draw_out = T,
 \item{draw_out}{logical; If TRUE Matrix containg p-values is plotted in pdf file}
 
 \item{file_base}{string; file base name of the pdf output (is needed if draw_out = T)}
+
+\item{p_value_size}{numeric; font siz of the p-values printed in pdf file}
 }
 \value{
 list; data.frames containg p-values for one way ANOVA over Factor 1
@@ -30,5 +32,7 @@ onefacaov_fac1(root_test_norm, draw_out = F)
 
 root_test_norm <- norm_10mm_standard(root_output)
 onefacaov_fac1(root_test_norm, draw_out = T, file_base = '1fac_ANOVA_factor1')
-# create two pdf files: 1fac_ANOVA_factor1_20.pdf and 1fac_ANOVA_factor1_28.pdf
+# change size of printed p-values
+onefacaov_fac1(root_test_norm, draw_out = T, file_base = '1fac_ANOVA_factor1', p_value_size = 1)
+# function creates two pdf files: 1fac_ANOVA_factor1_20.pdf and 1fac_ANOVA_factor1_28.pdf
 }

@@ -5,7 +5,7 @@
 \title{Two Way ANOVA}
 \usage{
 twofacaov(root_norm, label_delim = ";", draw_out = T,
-  file = "2fac_ANOVA_all_vs_all.pdf")
+  file = "2fac_ANOVA_all_vs_all.pdf", p_value_size = 0.8)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
@@ -15,6 +15,8 @@ twofacaov(root_norm, label_delim = ";", draw_out = T,
 \item{draw_out}{logical; If TRUE Matrix containg p-values is plotted in pdf file}
 
 \item{file}{string; file name of the pdf output (is needed if draw_out = T)}
+
+\item{p_value_size}{numeric; font siz of the p-values printed in pdf file}
 }
 \value{
 list; data.frames containg p-values for one way ANOVA over Factor2
@@ -32,4 +34,6 @@ twofacaov(root_test_norm, label_delim = ';', draw_out = F)
 
 root_test_norm <- norm_10mm_standard(root_output)
 twofacaov(root_test_norm, label_delim = ';', draw_out = T, file = '2fac_ANOVA_all_vs_all.pdf')
+# change size of printed p-values
+twofacaov(root_test_norm, label_delim = ';', draw_out = T, file = '2fac_ANOVA_all_vs_all.pdf', p_value_size = 1)
 }

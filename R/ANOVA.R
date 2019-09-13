@@ -4,6 +4,7 @@
 #' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
 #' @param file_base string; file base name of the pdf output (is needed if draw_out = T)
 #' @return list; data.frames containg p-values for one way ANOVA over Factor 1
+#' @param p_value_size numeric; font siz of the p-values printed in pdf file
 #' @examples
 #' # get data.frame containg p-values for one way ANOVA over Factor 1
 #'
@@ -14,10 +15,12 @@
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
 #' onefacaov_fac1(root_test_norm, draw_out = T, file_base = '1fac_ANOVA_factor1')
-#' # create two pdf files: 1fac_ANOVA_factor1_20.pdf and 1fac_ANOVA_factor1_28.pdf
+#' # change size of printed p-values
+#' onefacaov_fac1(root_test_norm, draw_out = T, file_base = '1fac_ANOVA_factor1', p_value_size = 1)
+#' # function creates two pdf files: 1fac_ANOVA_factor1_20.pdf and 1fac_ANOVA_factor1_28.pdf
 #' @export
 onefacaov_fac1 <- function(root_norm, draw_out = T,
-                           file_base = "1fac_ANOVA_factor1") {
+                           file_base = "1fac_ANOVA_factor1", p_value_size = 0.8) {
 
     fac2 <- levels(as.factor(root_norm$Factor2))
     fac1 <- levels(as.factor(root_norm$Factor1))
@@ -73,7 +76,7 @@ onefacaov_fac1 <- function(root_norm, draw_out = T,
             text(sg[, 2], sg[, 1], format(c(as.vector(mat), 0.123456789),
                                           digits = 2, nsmall = 3,
                                           scientiffic = FALSE)[1:nr_fac1 ^ 2],
-                                          col = as.vector(col), cex = 0.8)
+                                          col = as.vector(col), cex = p_value_size)
             dev.off()
         }
     }
@@ -90,6 +93,7 @@ onefacaov_fac1 <- function(root_norm, draw_out = T,
 #' @param control string; name of the Factor2 control condition
 #' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
 #' @param file_base string; file base name of the pdf output (is needed if draw_out = T)
+#' @param p_value_size numeric; font siz of the p-values printed in pdf file
 #' @return list; data.frames containg p-values for one way ANOVA over Factor2
 #' @examples
 #' # get data.frame containg p-values for one way ANOVA over Factor 2
@@ -101,11 +105,14 @@ onefacaov_fac1 <- function(root_norm, draw_out = T,
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
 #' onefacaov_fac2(root_test_norm, control = '20', draw_out = T, file_base = '1fac_ANOVA_factor2')
-#' # create a pdf file 1fac_ANOVA_factor2_28.pdf
+#' # change size of printed p-values
+#' onefacaov_fac2(root_test_norm, control = '20', draw_out = T, file_base = '1fac_ANOVA_factor2', p_value_size = 1)
+#' # function creates a pdf file 1fac_ANOVA_factor2_28.pdf
 #' @export
 # 1 factorial ANOVA over factor2
 onefacaov_fac2 <- function(root_norm, control = '20',  draw_out = T,
-                           file_base = "1fac_ANOVA_factor2") {
+                           file_base = "1fac_ANOVA_factor2",
+                           p_value_size = 0.8) {
 
     # only last mat is returned --> list of dfs!!!
 
@@ -155,7 +162,7 @@ onefacaov_fac2 <- function(root_norm, control = '20',  draw_out = T,
                 axis(2, at = s[1], labels = "pval", las = 2)
                 abline(v = c(s - (s[2] - s[1]) / 2, s[nr_fac1] +
                                (s[2] - s[1]) / 2), col = "grey")
-                text(s, s[1], round(as.vector(mat), 3), cex = 0.8)
+                text(s, s[1], round(as.vector(mat), 3), cex = p_value_size)
                 dev.off()
             }
         }
@@ -171,6 +178,7 @@ onefacaov_fac2 <- function(root_norm, control = '20',  draw_out = T,
 #' @param label_delim character; defin how Factor1 and Factor2 are seperated in Label
 #' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
 #' @param file string; file name of the pdf output (is needed if draw_out = T)
+#' @param p_value_size numeric; font siz of the p-values printed in pdf file
 #' @return list; data.frames containg p-values for one way ANOVA over Factor2
 #' @examples
 #' # get data.frame containg p-values for one way ANOVA over Factor 2
@@ -182,9 +190,12 @@ onefacaov_fac2 <- function(root_norm, control = '20',  draw_out = T,
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
 #' twofacaov(root_test_norm, label_delim = ';', draw_out = T, file = '2fac_ANOVA_all_vs_all.pdf')
+#' # change size of printed p-values
+#' twofacaov(root_test_norm, label_delim = ';', draw_out = T, file = '2fac_ANOVA_all_vs_all.pdf', p_value_size = 1)
 #' @export
 twofacaov <- function(root_norm, label_delim = ";", draw_out = T,
-                      file = "2fac_ANOVA_all_vs_all.pdf") {
+                      file = "2fac_ANOVA_all_vs_all.pdf",
+                      p_value_size = 0.8) {
 
     # model that compares all vs all
     aov_all_vs_all <- aov(LengthMM ~ Factor1 * Factor2, data = root_norm)
@@ -235,7 +246,7 @@ twofacaov <- function(root_norm, label_delim = ";", draw_out = T,
         text(sg[, 2], sg[, 1], format(c(as.vector(mat), 0.123456789),
                                       digits = 2, nsmall = 3,
                                       scientiffic = FALSE)[1:nr_labs ^ 2],
-                                      col = as.vector(col), cex = 0.8)
+                                      col = as.vector(col), cex = p_value_size)
         dev.off()
     }
     return(mat)
@@ -249,6 +260,7 @@ twofacaov <- function(root_norm, label_delim = ";", draw_out = T,
 #' @param label_delim character; defin how Factor1 and Factor2 are seperated in Label
 #' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
 #' @param file_base string; file name of the pdf output (is needed if draw_out = T)
+#' @param p_value_size numeric; font siz of the p-values printed in pdf file
 #' @return list; data.frames containg p-values for pairwise two way ANOVA for each Factor1 per Factor2 control treatment effect
 #' @examples
 #' # get data.frame containg p-values for pairwise two way ANOVA
@@ -259,11 +271,14 @@ twofacaov <- function(root_norm, label_delim = ";", draw_out = T,
 #' # get data.frame and plot as pdf output
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
-#' twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file = '2fac_ANOVA_BH_corrected')
+#' twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected')
+#' # change size of printed p-values
+#' twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected', p_value_size = 1)
+#' # function creates a pdf file 2fac_ANOVA_BH_corrected_28.pdf
 #' @export
 pairwise_2facaov <- function(root_norm, control = "20", label_delim = ";",
                              draw_out = T, file_base =
-                             "2fac_ANOVA_BH_corrected") {
+                             "2fac_ANOVA_BH_corrected", p_value_size = 0.8) {
 
     root_norm$Factor1 <- as.factor(root_norm$Factor1)
     root_norm$Factor2 <- as.factor(root_norm$Factor2)
@@ -337,7 +352,7 @@ pairwise_2facaov <- function(root_norm, control = "20", label_delim = ";",
                    col = "grey")
             # print p-Werte into it
             sg <- expand.grid(rev(s), s)
-            text(sg[, 2], sg[, 1], cex = 0.8, format(c(as.vector(mat),
+            text(sg[, 2], sg[, 1], cex = p_value_size, format(c(as.vector(mat),
                  0.123456789), digits = 1, nsmall = 3,
                  scientiffic = FALSE)[1:nr_fac1 ^ 2], col = as.vector(col))
             dev.off()
