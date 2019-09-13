@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Detailed manual for `rootdetectR` version 0.0.09005.
+Detailed manual for `rootdetectR 0.1.0`
 
 # Table of Contents
 1. [Introduction](#introduction)
@@ -171,6 +171,9 @@ The `file_base` argument is necessary if `draw_out = T`. It is used to get the p
 # draw_out = T produces a list of matrices containing p-values from Tukey post-hoc test 
 # in addition pdf files with basename 1fac_ANOVA_factor1 are produced in your working dir
 ow_anova_factor1 <- onefacaov_fac1(root_norm, draw_out = T, file_base = '1fac_ANOVA_factor1')
+# the argument p_value_size changes the sizes of the plotted p-value
+ow_anova_factor1 <- onefacaov_fac1(root_norm, draw_out = T, file_base = '1fac_ANOVA_factor1', 
+                                   p_value_size = 0.8)
 ```
 <br><br>
 <center>
@@ -202,6 +205,9 @@ The `file_base` argument is necessary if `draw_out = T`. It is used to get the p
 # in addition pdf files with basename 1fac_ANOVA_factor1 are produced in your working dir
 ow_anova_factor2 <- onefacaov_fac2(root_norm, control = '20', draw_out = T, 
                                    file_base = '1fac_ANOVA_factor2')
+# the argument p_value_size changes the sizes of the plotted p-value
+ow_anova_factor2 <- onefacaov_fac2(root_norm, control = '20', draw_out = T, 
+                                   file_base = '1fac_ANOVA_factor2', p_value_size = 0.8)
 ```
 <br><br>
 <center>
@@ -230,7 +236,10 @@ The `file` argument is necessary if `draw_out = T` is used to have a path and th
 # in addition pdf files with basename 1fac_ANOVA_factor1 are produced in the working dir
 tw_anova <- twofacaov(root_norm, label_delim = ';', draw_out = T, 
                                    file = '2fac_ANOVA_all_vs_all.pdf')
-tw_anova
+# the argument p_value_size changes the sizes of the plotted p-value
+tw_anova <- twofacaov(root_norm, label_delim = ';', draw_out = T, 
+                                   file = '2fac_ANOVA_all_vs_all.pdf',
+                                   p_value_size = 0.8)
 ```
 
 <br><br>
@@ -264,7 +273,10 @@ The `file_base` argument is necessary if `draw_out = T` is used to have a path a
 # in addition you need to tell the function the name of the control
 pairwise_tw_anova <- pairwise_2facaov(root_norm, control = "20", label_delim = ';', 
                                       draw_out = T, file_base = '2fac_ANOVA_BH_corrected')
-pairwise_tw_anova
+# the argument p_value_size changes the sizes of the plotted p-value
+pairwise_tw_anova <- pairwise_2facaov(root_norm, control = "20", label_delim = ';', 
+                                      draw_out = T, file_base = '2fac_ANOVA_BH_corrected'
+                                      p_value_size = 0.8)
 ```
 <br><br>
 <center>
@@ -276,9 +288,7 @@ pairwise_tw_anova
 
 # Plot data
 
-To visualize the data obtained from Rootdetection the `rootdetectR` package comes with several plot features to produce publication ready data visualization using the `ggplot2` package. The plot functions of `rootdetectR` are also able to illustrate significance among several lines within the plot using a Letter code.
-
-This first developmental version is only limited in customizability of the plots. The availability of more features is the main focus for future releases.
+To visualize the data obtained from Rootdetection the `rootdetectR` package comes with several plot features to produce publication ready data visualization using the `ggplot2` package. The plot functions of `rootdetectR` are also able to illustrate significance among several lines within the plot using a Letter code. 
 
 ## Histogram plots
 
@@ -309,7 +319,7 @@ plot_hist(root_norm, draw_out = T, file = 'data_distribution.pdf')
 
 ## Plot absolute data
 
-To visualize the absolute data there is the function `plot_abs` implemented in `rootdetectR`. This function will produce a box or jitter plot containing measurments of each line (Factor1) under each condition (Factor2) using `ggplot2`. In this developmental version there are only a few possibilities to customize the plots - in later versions there will be more settings available. 
+To visualize the absolute data there is the function `plot_abs` implemented in `rootdetectR`. This function will produce a box or jitter plot containing measurments of each line (Factor1) under each condition (Factor2) using `ggplot2`. There are some features (arguments) to customize the plots to your needs. For more information on customization of legend elements, axes elements, plotting of sample size, letter elements etc. just check out the man file by typing `?plot_abs` after loading the package. 
 
 ```{r}
 # plot absolute data as boxplot
@@ -362,7 +372,7 @@ Analogous to the plots of the absolute date `rootdetectR` comes with a function 
 _Caution: The input data set is the Normalized Root Output and not the table with relative data._ The relative data is calculated within the function
 
 ```{r}
-# plot absolute data
+# plot relative data
 relative_plot <- plot_rel(root_norm, plot_significance = F, type = 'jitter', control = '20')
 relative_plot
 ```
@@ -370,12 +380,15 @@ relative_plot
 To add statistics to this plot set `plot_significance = T` and add the output from the `pairwise_2facaoc`.
 
 ```{r}
-# plot absolute data
+# plot relative data
 pairwise_tw_anova <- pairwise_2facaov(root_norm, control = '20', label_delim = ';', draw_out = F)
-relative_plot <- plot_rel(root_norm, plot_significance = T, pairwise_2facaov = pairwise_tw_anova, 
+relative_plot <- plot_rel(root_norm, plot_significance = T, 
+                          pairwise_2facaov = pairwise_tw_anova, 
                           type = 'jitter', control = '20', letter_height = 10)
 relative_plot
 ```
+
+There are some features (arguments) to customize the plots to your needs. For more information on customization of legend elements, axes elements, plotting of sample size, letter elements, coloring etc. just check out the man file by typing `?plot_rel` after loading the package. 
 
 # Additional Features
 
@@ -443,15 +456,13 @@ head(rm_outlier_df(root_norm, fill_na = T))
 
 In future versions several features will be implemented:
 
-1. Rewrite `abs_plot` and `rel_plot` to get cleaner code
-2. Add more customizability to `abs_plot` and `rel_plot`
-3. Function to check if data.set is already normalized by a length standard
-4. Possibility to have other Length standards
-4. Function to remove outlier from data set - done!
-5. Function to remove NA and LengthPx = 0 from data.set
-6. Function to build subsets
-7. Add alternative normality tests to `plot_hist` and `check_norm` functions
-8. Add internal testing to the package
+1. Function to check if data.set is already normalized by a length standard
+2. Possibility to have other Length standards
+3. Function to remove NA and LengthPx = 0 from data.set
+4. Function to build subsets
+5. Add alternative normality tests to `plot_hist` and `check_norm` functions
+6. Add internal testing to the package
+7. add options of sorting plots - using forcats package?
 
 If you have any suggestions or questions please drop an e-mail to [philipp.janitza@landw.uni-halle.de](mailto:philipp.janitza@landw.uni-halle.de) .
 
