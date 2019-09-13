@@ -6,10 +6,10 @@
 \usage{
 plot_abs(root_norm, label_delim = ";", type = "jitter", plot_n = T,
   plot_colours, y_label = "hypocotyl length [mm]", x_label = "",
-  size_legend_title = 12, size_legend_text = 10, size_x_axes = 9,
-  size_y_axes = 9, size_n = 3, plot_significance = F,
-  twofacov_output, letter_height = 2, size_letter = 5,
-  angle_letter = 0)
+  legend_label = "Factor 2", size_legend_title = 12,
+  size_legend_text = 10, size_x_axes = 9, size_y_axes = 9,
+  size_n = 3, plot_significance = F, twofacov_output,
+  letter_height = 2, size_letter = 5, angle_letter = 0)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
@@ -25,6 +25,8 @@ plot_abs(root_norm, label_delim = ";", type = "jitter", plot_n = T,
 \item{y_label}{string; axes description of y-axes}
 
 \item{x_label}{string; axes description of x-axes}
+
+\item{legend_label}{string; title of legend}
 
 \item{size_legend_title}{numeric; defines size of legend title}
 
@@ -80,10 +82,10 @@ plot_abs(root_test_norm, plot_significance = F, type = 'jitter', plot_colours = 
                 plot_n = T,
                 plot_colours = c('cornflowerblue', 'coral2'),
                 y_label = 'length mm', x_label = '',
-                size_legend_title = 12, size_legend_text = 10,
+                legend_label = 'condition', size_legend_title = 12, size_legend_text = 10,
                 size_x_axes = 9, size_y_axes = 9,
                 size_n = 3,
-                plot_significance = T, twofacov_output = twofacaov(root_norm, draw_out = F),
+                plot_significance = T, twofacov_output = root_stat,
                 letter_height = 5, size_letter = 5, angle_letter = 0)
 
 }

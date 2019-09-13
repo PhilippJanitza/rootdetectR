@@ -4,21 +4,44 @@
 \alias{plot_rel}
 \title{Plotting relative data of Rootdetection standard}
 \usage{
-plot_rel(root_norm, plot_significance = T, pairwise_2facaov_output,
-  control = "20", type = "jitter", letter_height = 10)
+plot_rel(root_norm, control = 20, type = "jitter", plot_colours,
+  y_label = "\% growth", x_label = "", legend_label = "Label",
+  size_legend_title = 12, size_legend_text = 10, size_x_axes = 9,
+  size_y_axes = 9, plot_significance = T, pairwise_2facaov_output,
+  letter_height = 10, size_letter = 5, angle_letter = 0)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
-
-\item{plot_significance}{logical; if TRUE significances will be drawn as letters}
-
-\item{pairwise_2facaov_output}{data.frame; Output of pairwise_2facaov (needed if plot_significance = T)}
 
 \item{control}{string; name of the Factor2 control condition}
 
 \item{type}{string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot}
 
+\item{plot_colours}{vector; provide colours for the boxplot - colour vector must have the same length than Factor1}
+
+\item{y_label}{string; axes description of y-axes}
+
+\item{x_label}{string; axes description of x-axes}
+
+\item{legend_label}{string; title of legend}
+
+\item{size_legend_title}{numeric; defines size of legend title}
+
+\item{size_legend_text}{numeric; defines size of legend text}
+
+\item{size_x_axes}{numeric; defines size of x-axes labels}
+
+\item{size_y_axes}{numeric; defines size of y-axes labels}
+
+\item{plot_significance}{logical; if TRUE significances will be drawn as letters}
+
+\item{pairwise_2facaov_output}{data.frame; Output of pairwise_2facaov (needed if plot_significance = T)}
+
 \item{letter_height}{numeric; defines the position of the significance letters}
+
+\item{size_letter}{numeric; defines size of the significance letters}
+
+\item{angle_letter}{numeric, defines angle of significance letters}
 }
 \value{
 plot or list of plots; box or box-jitter-plot of relative data, if significance = T and multiple Factor2 treatments a list of boxplots will be generated
@@ -41,5 +64,23 @@ root_test_norm <- norm_10mm_standard(root_output)
 root_stat <- pairwise_2facaov(root_test_norm, draw_out = F, label_delim = ';')
 # boxplot with statistics
 plot_rel(root_test_norm, plot_significance = T, pairwise_2facaov_output = root_stat, control = '20', type = 'box')
+
+# all customizable plotting parameters have a default value
+plot_rel(root_test_norm,
+         control = 20,
+         type = "jitter",
+         plot_colours = c('blue', 'red', 'orange', 'green'),
+         y_label = '\% growth',
+         x_label = '',
+         legend_label = 'Label',
+         size_legend_title = 12,
+         size_legend_text = 10,
+         size_x_axes = 9,
+         size_y_axes = 9,
+         plot_significance = T,
+         pairwise_2facaov_output = root_stat,
+         letter_height = 10,
+         size_letter = 5,
+         angle_letter = 0)
 
 }

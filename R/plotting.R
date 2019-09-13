@@ -78,6 +78,7 @@ plot_hist <- function(root_norm, draw_out = T,
 #' @param plot_colours vector; provide colours for the boxplot - colour vector must have the same length than Factor2
 #' @param y_label string; axes description of y-axes
 #' @param x_label string; axes description of x-axes
+#' @param legend_label string; title of legend
 #' @param size_legend_title numeric; defines size of legend title
 #' @param size_legend_text numeric; defines size of legend text
 #' @param size_x_axes numeric; defines size of x-axes labels
@@ -85,9 +86,9 @@ plot_hist <- function(root_norm, draw_out = T,
 #' @param size_n = numeric; defines size of n plotted (if plot_n = TRUE)
 #' @param plot_significance logical; if TRUE significances will be drawn as letters
 #' @param twofacaov_output data.frame; Output of twofacaov (needed if plot_significance = T)
+#' @param letter_height numeric; defines the position of the significance letters
 #' @param size_letter numeric; defines size of the significance letters
 #' @param angle_letter numeric, defines angle of significance letters
-#' @param letter_height numeric; defines the position of the significance letters
 #' @return plot; box or box-jitter-plot of the absolute data
 #' @examples
 #' # Plot without significance
@@ -117,10 +118,10 @@ plot_hist <- function(root_norm, draw_out = T,
 #'                 plot_n = T,
 #'                 plot_colours = c('cornflowerblue', 'coral2'),
 #'                 y_label = 'length mm', x_label = '',
-#'                 size_legend_title = 12, size_legend_text = 10,
+#'                 legend_label = 'condition', size_legend_title = 12, size_legend_text = 10,
 #'                 size_x_axes = 9, size_y_axes = 9,
 #'                 size_n = 3,
-#'                 plot_significance = T, twofacov_output = twofacaov(root_norm, draw_out = F),
+#'                 plot_significance = T, twofacov_output = root_stat,
 #'                 letter_height = 5, size_letter = 5, angle_letter = 0)
 #'
 #' @export
@@ -131,6 +132,7 @@ plot_abs <- function(root_norm,
                      plot_colours,
                      y_label = 'hypocotyl length [mm]',
                      x_label = '',
+                     legend_label = 'Factor 2',
                      size_legend_title = 12,
                      size_legend_text = 10,
                      size_x_axes = 9,
@@ -188,11 +190,11 @@ plot_abs <- function(root_norm,
                                                                colour = as.factor(root_norm$Factor2)),
                                                   position = ggplot2::position_jitter(0.2,
                                                                                       seed = 1))} +
-        {if(type == 'jitter')ggplot2::labs(colour = "condition")} +
+        {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
         {if(type == 'box')ggplot2::geom_boxplot(data = root_norm,
                                                 ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM,
                                                              fill = as.factor(root_norm$Factor2)))} +
-        {if(type == 'box')ggplot2::labs(fill = "condition")} +
+        {if(type == 'box')ggplot2::labs(fill = legend_label)} +
         {if(plot_significance)ggplot2::geom_text(data = plot_letters,
                                                  ggplot2::aes(x = plot_letters$Label,
                                                               y = plot_letters$y,
@@ -224,11 +226,21 @@ plot_abs <- function(root_norm,
 #' @title Plotting relative data of Rootdetection standard
 #' @description Relative data are plotted as boxplot or box-jitter-plot combination. If Significances should be illustrated multiple plots are generated. Each Factor2 control Factor2 treatment combination will produce a plot.
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param plot_significance logical; if TRUE significances will be drawn as letters
-#' @param pairwise_2facaov_output data.frame; Output of pairwise_2facaov (needed if plot_significance = T)
 #' @param control string; name of the Factor2 control condition
 #' @param type string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot
+#' @param plot_colours vector; provide colours for the boxplot - colour vector must have the same length than Factor1
+#' @param y_label string; axes description of y-axes
+#' @param x_label string; axes description of x-axes
+#' @param legend_label string; title of legend
+#' @param size_legend_title numeric; defines size of legend title
+#' @param size_legend_text numeric; defines size of legend text
+#' @param size_x_axes numeric; defines size of x-axes labels
+#' @param size_y_axes numeric; defines size of y-axes labels
+#' @param plot_significance logical; if TRUE significances will be drawn as letters
+#' @param pairwise_2facaov_output data.frame; Output of pairwise_2facaov (needed if plot_significance = T)
 #' @param letter_height numeric; defines the position of the significance letters
+#' @param size_letter numeric; defines size of the significance letters
+#' @param angle_letter numeric, defines angle of significance letters
 #' @return plot or list of plots; box or box-jitter-plot of relative data, if significance = T and multiple Factor2 treatments a list of boxplots will be generated
 #' @examples
 #' # Plot without significance
@@ -246,149 +258,126 @@ plot_abs <- function(root_norm,
 #' # boxplot with statistics
 #' plot_rel(root_test_norm, plot_significance = T, pairwise_2facaov_output = root_stat, control = '20', type = 'box')
 #'
+#' # all customizable plotting parameters have a default value
+#' plot_rel(root_test_norm,
+#'          control = 20,
+#'          type = "jitter",
+#'          plot_colours = c('blue', 'red', 'orange', 'green'),
+#'          y_label = '% growth',
+#'          x_label = '',
+#'          legend_label = 'Label',
+#'          size_legend_title = 12,
+#'          size_legend_text = 10,
+#'          size_x_axes = 9,
+#'          size_y_axes = 9,
+#'          plot_significance = T,
+#'          pairwise_2facaov_output = root_stat,
+#'          letter_height = 10,
+#'          size_letter = 5,
+#'          angle_letter = 0)
+#'
 #' @export
-plot_rel <- function(root_norm, plot_significance = T,  pairwise_2facaov_output,
-                     control = "20", type = "jitter", letter_height = 10) {
+plot_rel <- function(root_norm,
+                     control = 20,
+                     type = "jitter",
+                     plot_colours,
+                     y_label = '% growth',
+                     x_label = '',
+                     legend_label = 'Label',
+                     size_legend_title = 12,
+                     size_legend_text = 10,
+                     size_x_axes = 9,
+                     size_y_axes = 9,
+                     plot_significance = T,
+                     pairwise_2facaov_output,
+                     letter_height = 10,
+                     size_letter = 5,
+                     angle_letter = 0) {
 
     rel_root_norm <- rootdetectR::rel_data(root_norm, control = control)
 
-    if (plot_significance == F) {
+    if (plot_significance == T) {
 
-        if (type == "jitter") {
+        relative_plot <- list()
 
-            relative_plot <- ggplot2::ggplot() +
-              ggplot2::geom_boxplot(data = rel_root_norm,
-                ggplot2::aes(x = rel_root_norm$Label, y =
-                rel_root_norm$relative_value), outlier.shape = NA) +
-              ggplot2::geom_jitter(data = rel_root_norm,
-                ggplot2::aes(x = rel_root_norm$Label, y =
-                rel_root_norm$relative_value, colour =
-                as.factor(rel_root_norm$Label)), position =
-                ggplot2::position_jitter(0.2, seed = 1)) +
-              ggplot2::labs(colour = "ecotypes") +
-              ggplot2::theme_classic() +
-              ggplot2::scale_y_continuous(name = "% growth") +
-              ggplot2::scale_x_discrete(name = "") +
-              ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
-                hjust = 1, vjust = 1), legend.title =
-                ggplot2::element_text(size = 16), legend.text =
-                ggplot2::element_text(size = 12))
+        for (i in 1:length(pairwise_2facaov_output)) {
 
-        } else if (type == "box") {
+            # get labels for every table
+            labs <-
+                data.frame(multcompView::multcompLetters(
+                    structure(pairwise_2facaov_output[[i]][, 2],
+                              names =
+                                  as.character(pairwise_2facaov_output[[i]][, 1])))["Letters"])
+            labs$Label <- rownames(labs)
+            y_coord <- plyr::ddply(rel_root_norm, plyr::.(Label),
+                                   plyr::summarize, y = fivenum(relative_value)[5])
+            y_coord$y <- y_coord$y + letter_height
+            plot_letter <- merge(labs, y_coord, by = "Label")
 
-            relative_plot <- ggplot2::ggplot() +
-              ggplot2::geom_boxplot(data = rel_root_norm, ggplot2::aes(x =
-                rel_root_norm$Label, y = rel_root_norm$relative_value,
-                fill = as.factor(rel_root_norm$Label))) +
-              ggplot2::labs(fill = "ecotypes") +
-              ggplot2::theme_classic() +
-              ggplot2::scale_y_continuous(name = "% growth") +
-              ggplot2::scale_x_discrete(name = "") +
-              ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
-                hjust = 1, vjust = 1), legend.title =
-                ggplot2::element_text(size = 16), legend.text =
-                ggplot2::element_text(size = 12))
 
-        } else {
-            stop("For type only box and jitter are allowed")
+            rel_sub <- subset(rel_root_norm,
+                              Factor2 == names(pairwise_2facaov_output)[i])
+            rel_sub$Factor2 <- as.factor(rel_sub$Factor2)
+            rel_sub$Factor2 <- droplevels(rel_sub$Factor2)
+
+            # use annotate instead of geom_text() to use within a loop
+            relative_plot_temp <- ggplot2::ggplot() +
+                {if(type == 'jitter')ggplot2::geom_boxplot(data = rel_sub,
+                                                           ggplot2::aes_string(x = rel_sub$Label, y =
+                                                                                   rel_sub$relative_value), outlier.shape = NA)} +
+                {if(type == 'jitter')ggplot2::geom_jitter(data = rel_sub,
+                                                          ggplot2::aes_string(x = rel_sub$Label, y =
+                                                                                  rel_sub$relative_value, colour = as.factor(rel_sub$Label)),
+                                                          position = ggplot2::position_jitter(0.2, seed = 1))} +
+                {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
+                {if(type == 'box')ggplot2::geom_boxplot(data = rel_sub, ggplot2::aes_string(x =
+                                                                                                rel_sub$Label, y = rel_sub$relative_value, fill =
+                                                                                                rel_sub$Label))} +
+                {if(type == 'box')ggplot2::labs(fill = legend_label)} +
+                ggplot2::theme_classic() +
+                ggplot2::scale_y_continuous(name = y_label) +
+                ggplot2::scale_x_discrete(name = x_label) +
+                ggplot2::theme(axis.text.x = ggplot2::element_text(angle =
+                                                                       45, hjust = 1, vjust = 1, colour = 'black', size = size_x_axes),
+                               axis.text.y = ggplot2::element_text(colour = 'black', size = size_y_axes),
+                               legend.title = ggplot2::element_text(size = size_legend_title),
+                               legend.text = ggplot2::element_text(size = size_legend_text)) +
+                ggplot2::annotate("text", x = plot_letter$Label,
+                                  y = plot_letter$y, label = plot_letter$Letters, size = size_letter,
+                                  angle = angle_letter) +
+                {if(!missing(plot_colours))ggplot2::scale_fill_manual(values = plot_colours)} +
+                {if(!missing(plot_colours))ggplot2::scale_colour_manual(values = plot_colours)}
+
+            relative_plot[[i]] <- relative_plot_temp
         }
+    } else if(plot_significance == F) {
+
+        relative_plot <- ggplot2::ggplot() +
+            {if(type == 'jitter')ggplot2::geom_boxplot(data = rel_root_norm,
+                                                       ggplot2::aes(x = rel_root_norm$Label, y =
+                                                                        rel_root_norm$relative_value), outlier.shape = NA)} +
+            {if(type == 'jitter')ggplot2::geom_jitter(data = rel_root_norm,
+                                                      ggplot2::aes(x = rel_root_norm$Label, y =
+                                                                       rel_root_norm$relative_value, colour =
+                                                                       as.factor(rel_root_norm$Label)), position =
+                                                          ggplot2::position_jitter(0.2, seed = 1))} +
+            {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
+            {if(type == 'box')ggplot2::geom_boxplot(data = rel_root_norm, ggplot2::aes(x =
+                                                                                           rel_root_norm$Label, y = rel_root_norm$relative_value,
+                                                                                       fill = as.factor(rel_root_norm$Label)))} +
+            {if(type == 'box')ggplot2::labs(fill = legend_label)} +
+            ggplot2::theme_classic() +
+            ggplot2::scale_y_continuous(name = y_label) +
+            ggplot2::scale_x_discrete(name = x_label) +
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
+                                                               hjust = 1, vjust = 1, colour = 'black', size = size_x_axes),
+                           axis.text.y = ggplot2::element_text(colour = 'black', size = size_y_axes),
+                           legend.title = ggplot2::element_text(size = size_legend_title),
+                           legend.text =  ggplot2::element_text(size = size_legend_text)) +
+            {if(!missing(plot_colours))ggplot2::scale_fill_manual(values = plot_colours)} +
+            {if(!missing(plot_colours))ggplot2::scale_colour_manual(values = plot_colours)}
 
 
-    } else if (plot_significance == T) {
-
-        if (type == "jitter") {
-            # loop over length elements of 2facaov output
-            relative_plot <- list()
-            for (i in 1:length(pairwise_2facaov_output)) {
-
-                # get labels for every table
-                labs <-
-                  data.frame(multcompView::multcompLetters(
-                  structure(pairwise_2facaov_output[[i]][, 2],
-                  names =
-                 as.character(pairwise_2facaov_output[[i]][, 1])))["Letters"])
-                labs$Label <- rownames(labs)
-                y_coord <- plyr::ddply(rel_root_norm, plyr::.(Label),
-                             plyr::summarize, y = fivenum(relative_value)[5])
-                y_coord$y <- y_coord$y + letter_height
-                plot_letter <- merge(labs, y_coord, by = "Label")
-
-
-                rel_sub <- subset(rel_root_norm,
-                                  Factor2 == names(pairwise_2facaov_output)[i])
-                rel_sub$Factor2 <- as.factor(rel_sub$Factor2)
-                rel_sub$Factor2 <- droplevels(rel_sub$Factor2)
-
-                # use annotate instead of geom_text() to use within a loop
-                relative_plot_temp <- ggplot2::ggplot() +
-                  ggplot2::geom_boxplot(data = rel_sub,
-                    ggplot2::aes_string(x = rel_sub$Label, y =
-                    rel_sub$relative_value), outlier.shape = NA) +
-                  ggplot2::geom_jitter(data = rel_sub,
-                    ggplot2::aes_string(x = rel_sub$Label, y =
-                    rel_sub$relative_value, colour = as.factor(rel_sub$Label)),
-                    position = ggplot2::position_jitter(0.2, seed = 1)) +
-                  ggplot2::labs(colour = "ecotypes") +
-                  ggplot2::theme_classic() +
-                  ggplot2::scale_y_continuous(name = "% growth") +
-                  ggplot2::scale_x_discrete(name = "") +
-                  ggplot2::theme(axis.text.x = ggplot2::element_text(angle =
-                    45, hjust = 1, vjust = 1), legend.title =
-                    ggplot2::element_text(size = 16), legend.text =
-                    ggplot2::element_text(size = 12)) +
-                  ggplot2::annotate("text", x = plot_letter$Label,
-                    y = plot_letter$y, label = plot_letter$Letters)
-
-                relative_plot[[i]] <- relative_plot_temp
-            }
-
-        } else if (type == "box") {
-
-            # loop over length elements of output
-            relative_plot <- list()
-            for (i in 1:length(pairwise_2facaov_output)) {
-
-                # get labels for every table
-                labs <- data.frame(multcompView::multcompLetters(
-                  structure(pairwise_2facaov_output[[i]][, 2],
-                  names =
-                  as.character(pairwise_2facaov_output[[i]][, 1])))["Letters"])
-                 labs$Label <- rownames(labs)
-                y_coord <- plyr::ddply(rel_root_norm, plyr::.(Label),
-                  plyr::summarize, y = fivenum(relative_value)[5] + 10)
-                plot_letter <- merge(labs, y_coord, by = "Label")
-
-
-                rel_sub <- subset(rel_root_norm, Factor2 ==
-                                    names(pairwise_2facaov_output)[i])
-                rel_sub$Factor2 <- as.factor(rel_sub$Factor2)
-                rel_sub$Factor2 <- droplevels(rel_sub$Factor2)
-
-                # use annotate instead of geom_text() to use within a loop
-                relative_plot_temp <- ggplot2::ggplot() +
-                  ggplot2::geom_boxplot(data = rel_sub, ggplot2::aes_string(x =
-                    rel_sub$Label, y = rel_sub$relative_value, fill =
-                    rel_sub$Label)) +
-                  ggplot2::labs(fill = "ecotypes") +
-                  ggplot2::theme_classic() +
-                  ggplot2::scale_y_continuous(name = "% growth") +
-                  ggplot2::scale_x_discrete(name = "") +
-                  ggplot2::theme(axis.text.x = ggplot2::element_text(angle =
-                    45, hjust = 1, vjust = 1), legend.title =
-                    ggplot2::element_text(size = 16), legend.text =
-                    ggplot2::element_text(size = 12)) +
-                  ggplot2::annotate("text", x = plot_letter$Label,
-                          y = plot_letter$y, label = plot_letter$Letters)
-
-                relative_plot[[i]] <- relative_plot_temp
-            }
-        } else {
-            stop("For type only box and jitter are allowed")
-        }
-
-    } else {
-        stop("plot_significance can only be TRUE or FALSE")
     }
-
     return(relative_plot)
 }
