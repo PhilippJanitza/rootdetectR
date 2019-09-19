@@ -457,7 +457,7 @@ Experiments with a lot of different conditions are quite common in biological As
 
 __Caution: If there is only a single treatment condition this type of subsetting does not make any sense and the function will print an error message.__
 ```{r}
-subset_fac2(need_dataset, control = '20')
+# not added yet
 ```
 
 
