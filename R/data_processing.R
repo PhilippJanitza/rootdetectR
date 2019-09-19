@@ -108,6 +108,37 @@ norm_10mm_standard <- function(root_output, sort = TRUE, label_delim = ";") {
 }
 
 
+# NEEDS Manual + Example! --> vielleicht kann der Multi-Factor-Dataframe das auch haben?!
+
+norm_cust_standard <- function(root_output, sort = TRUE, label_delim = ";", label_standard = '10mm', standard_length_mm = '10') {
+
+  # features --> change name of 10mm to something else choose length that
+  # should be used as normalisation (other than 10mm)
+  # calc 10mm
+  standard_mm <- subset(root_output, Label == label_standard)
+  standard_mm_mean <- mean(standard_mm$LengthPx)
+  root_output$LengthMM <- root_output$LengthPx / (standard_mm_mean / as.numeric(standard_length_mm))
+  # delete 10mm
+  root_output <- subset(root_output, Label != label_standard)
+  root_output$Label <- droplevels(root_output$Label)
+
+  # if sort is TRUE order the columns and devide labels according to
+  if (sort == TRUE) {
+    root_output <- tidyr::separate(data = root_output, col = Label,
+                                   into = c("Factor1", "Factor2"),
+                                   sep = label_delim, remove = F)
+    root_output <- root_output[, c("Nr", "Filename", "RootNr", "Label",
+                                   "Factor1", "Factor2", "LengthPx",
+                                   "LengthMM")]
+
+  }
+
+  # return data.frame
+  return(root_output)
+
+}
+
+
 
 #' @title Calculate Summary Statistics for Rootdetection standard
 #' @description This function calculates some summary statistics for a LengthMM normalized Rootdetection output. Calculated values are: sample size (n), median, mean, standard deviation (sd), standard error (se)
