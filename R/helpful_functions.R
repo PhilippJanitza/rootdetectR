@@ -16,7 +16,7 @@ se <- function(x) sd(x, na.rm = T) / sqrt(length(na.omit(x)))
 #' Outliers are defined as 1.5 x IQR. Caution: NAs already present in the input vector will be removed.
 #' @param x numeric vector
 #' @param fill.na logical; If TRUE all outliers present in x will be replaced by NA. If False all outliers will be deleted.
-#' @returns numeric vector; without outliers or outliers replaced by NA
+#' @return numeric vector; without outliers or outliers replaced by NA
 #' @examples
 #' # get some example vector
 #' root_test_norm <- norm_10mm_standard(root_output)
