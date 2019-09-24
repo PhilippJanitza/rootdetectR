@@ -11,6 +11,9 @@ rm_outlier(x, fill_na = F)
 
 \item{fill.na}{logical; If TRUE all outliers present in x will be replaced by NA. If False all outliers will be deleted.}
 }
+\value{
+numeric vector; without outliers or outliers replaced by NA
+}
 \description{
 This function removes outlier from a vector and returns either a vector without the outliers or replaces the outliers with NA.
 Outliers are defined as 1.5 x IQR. Caution: NAs already present in the input vector will be removed.

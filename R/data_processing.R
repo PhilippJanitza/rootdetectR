@@ -72,7 +72,7 @@ is.root_detection_output <- function(root_output) {
 #' @description This function takes 10mm standard values to calculate LengthMM from LengthPx
 #' @param root_output data.frame; *.csv output from Rootdetection containing 10mm values
 #' @param sort logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2
-#' @param label_delim character; defin how Factor1 and Factor2 are seperated in Label
+#' @param label_delim character; defines how Factor1 and Factor2 are seperated in Label
 #' @return data.frame; containing normalized length values
 #' @examples
 #' norm_10mm_standard(root_output)
@@ -108,8 +108,22 @@ norm_10mm_standard <- function(root_output, sort = TRUE, label_delim = ";") {
 }
 
 
-# NEEDS Manual + Example! --> vielleicht kann der Multi-Factor-Dataframe das auch haben?!
 
+#' @title Calculate LengthMM from LengthPx for Rootdetection standard
+#' @description This function takes customized standard values to calculate LengthMM from LengthPx. The label_standard must match the label in the data.frame. In addition the mm value of the standard must be provided.
+#' @param root_output data.frame; *.csv output from Rootdetection containing 10mm values
+#' @param sort logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2
+#' @param label_delim character; defines how Factor1 and Factor2 are seperated in Label
+#' @param label_standard string; defines  how the standard is labled in the data.frame
+#' @param standard_length_mm numeric; defines the length (in mm) of the standard
+#' @return data.frame; containing normalized length values
+#' @examples
+#' # use data_set with standard 10mm label
+#' # add label_standard and standard_length_mm
+#'
+#' norm_cust_standard(root_output, label_delim = ';', label_standard = '10mm', standard_length_mm = '10')
+#'
+#' @export
 norm_cust_standard <- function(root_output, sort = TRUE, label_delim = ";", label_standard = '10mm', standard_length_mm = '10') {
 
   # features --> change name of 10mm to something else choose length that

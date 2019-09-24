@@ -18,3 +18,7 @@ list of data.frames; each subset will be in an seperated data.frame stored in a 
 This function splits Normalized Rootdetection Output in subsets for each Factor2 control and treatment pair.
 To be functional Factor2 must contain a control and at least two other conditions (treatments)
 }
+\examples{
+# will come in next version with an data.frame containing multiple Factor2
+
+}

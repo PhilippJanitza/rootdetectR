@@ -11,7 +11,7 @@ norm_10mm_standard(root_output, sort = TRUE, label_delim = ";")
 
 \item{sort}{logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2}
 
-\item{label_delim}{character; defin how Factor1 and Factor2 are seperated in Label}
+\item{label_delim}{character; defines how Factor1 and Factor2 are seperated in Label}
 }
 \value{
 data.frame; containing normalized length values

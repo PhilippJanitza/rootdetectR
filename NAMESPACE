@@ -3,6 +3,7 @@
 export(extract_colors)
 export(is.root_detection_output)
 export(norm_10mm_standard)
+export(norm_cust_standard)
 export(normality_test)
 export(onefacaov_fac1)
 export(onefacaov_fac2)
