@@ -13,6 +13,28 @@
 #' }
 "root_output"
 
+
+#' Picture Of Colorful Primroses
+#'
+#' Picture of primroses loaded with 'jpeg' package. Picture made by 3268zauber~commonswiki and obtained from Wikimedia Commons.
+#'
+#' @format A matrix containing color information for each pixel.
+#' @examples
+#' # show picture in R using grid package
+#'
+#' grid.raster(primroses)
+"primroses"
+
+
+#' Color Palette For Colorblind Individuals.
+#'
+#' A String storing a color palette with 7 colors optimized for colorblind individuals in hex-format. The colors were proposed by Wong in following puclication:
+#' Wong, B. (2011). Points of view: Color blindness. Nature Methods, 8(6), 441–441. doi:10.1038/nmeth.1618.
+#'
+#' @format A vector containg hex-codes for 7 colors
+"colors_wong"
+
+
 ## IDEAS
 
 # dringend Testdatensatz mit multiplen Factor2 benötigt - am besten auch mehr als 3.
@@ -30,3 +52,5 @@
 
 
 # Label delim für twofacaov benötigt??
+
+# Farben aus Bildern extrahieren für die Plots --> cooler Zusatz, hab ich Bock drauf --> optionales Feature (nicht exportieren??)
