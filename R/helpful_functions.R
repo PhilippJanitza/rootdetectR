@@ -55,7 +55,7 @@ rm_outlier <- function(x, fill_na = F) {
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
 #' @param control string; name of the Factor2 control condition
 #' @return list of data.frames; each subset will be in an seperated data.frame stored in a list of data.frames
-#' @example
+#' @examples
 #' # will come in next version with an data.frame containing multiple Factor2
 #'
 #' @export
