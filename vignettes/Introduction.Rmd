@@ -38,6 +38,8 @@ The `rootdetectR` package provides useful functions in R to analyze the *.csv ou
 
 To illustrate the standard analysis pipeline an example data set called `root_output` (short for standard Rootdetection output) is included in the package. If you call `root_output` you will find a data set containing measured _Arabidopsis thaliana_ wild-type (Col-0) and mutant (tir1_1afb2_3, weitar1_1, yucOx) seedling roots at 20°C (hereafter also called control) and 28°C (hereafter also called treatment). Plants were grown on ATS plates for 4 days at 20°C and then stayed at 20°C or were shifted to 28°C. The columns labeled with '10mm' contains the length standard in column LengthPx (measured 10mm of a ruler for several times with exact the same camera settings than for the rest of the pictures).
 
+The `rootdetectR` package comes with another dataset for some more complex analysis. The dataset called `root_output_multfac2` consists of root measurments of _A. thaliana_ plants (2 wildtype strains and 2 mutants) grown under 3 different conditions on ATS plates: 8 days under 20°C, 8 days under 28°C and a shift experiment with 4 days 20°C and subsequently 4 days under 28°C. The length standard of this experiment is labled with '20mm' and describes standard measurments of 20mm.
+
 <br>
 
 # Installation
@@ -114,6 +116,17 @@ root_norm <- norm_10mm_standard(root_output, label_delim = ';')
 head(root_norm)
 ```
 
+
+## Calculate LengthMM according to 10mm standard
+
+If you want to add a customized length standard (different from 10mm standard described above) you can use the function `norm_cust_standard`. In addition to the function `norm_10mm_standard` you are able to change the label and the mm length described by this satndard measurements. Here the dataset `root_norm_multfac2` is used to illustrate this function.
+
+```{r}
+# calculate LengthMM for all lines
+root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_delim = ';', label_standard = '20mm', standard_length_mm = '20')
+
+head(root_norm_multfac2)
+```
 
 ## Calculate Relative Data
 
@@ -388,7 +401,43 @@ relative_plot <- plot_rel(root_norm, plot_significance = T,
 relative_plot
 ```
 
-There are some features (arguments) to customize the plots to your needs. For more information on customization of legend elements, axes elements, plotting of sample size, letter elements, coloring etc. just check out the man file by typing `?plot_rel` after loading the package. 
+The paragraph illustrates the behaviour of the `plot_rel` function if you have a dataset containing multiple Factor2 treatment levels. Therefore the dataset `root_output_multfac2` is used in the next examples.
+
+```{r}
+# first we need to normalize the dataset with length standard 
+# (Caution: customized length standard used)
+root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_delim = ';', 
+                                         label_standard = '20mm', standard_length_mm = '20')
+
+# plot relative data with multiple factor2 treatment levels without statistics
+relative_plot_multfac2 <- plot_rel(root_norm_multfac2, plot_significance = F, 
+                          type = 'jitter', control = '20', letter_height = 10)
+relative_plot_multfac2 
+```
+
+Although we have multiple Factor2 treatment levels in this example all the data is plotted together as long as we use `plot_significance = F`. If you want to plot relative data of single Factor2 treatments without statistics you need to subset your data using the `subset_fac2()` function described in the section [Additional Features](#additional-features).
+
+```{r}
+# first we need to normalize the dataset with length standard 
+# (Caution: customized length standard used)
+root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_delim = ';', 
+                                         label_standard = '20mm', standard_length_mm = '20')
+
+# condcut the pairwise two way anova of the root_norm_multfac2 dataset
+pairwise_tw_anova_multfac2 <- pairwise_2facaov(root_norm_multfac2, control = '20', 
+                                               label_delim = ';', draw_out = F)
+
+# plot relative data with multiple factor2 treatment levels with statistics
+relative_plot_multfac2 <- plot_rel(root_norm_multfac2, plot_significance = T,
+                                   pairwise_2facaov_output = pairwise_tw_anova_multfac2,
+                                   type = 'jitter', control = '20', letter_height = 10)
+# calling the variable will show us that there is a list with two plots
+relative_plot_multfac2 
+```
+<br>
+As we have two Factor2 treatments there are two plots are produced with `plot_rel` and `plot_significance = T`.
+
+There are some additional features (arguments) to customize the plots to your needs. For more information on customization of legend elements, axes elements, plotting of sample size, letter elements, coloring etc. just check out the man file by typing `?plot_rel` after loading the package. 
 
 # Additional Features
 
@@ -457,7 +506,15 @@ Experiments with a lot of different conditions are quite common in biological As
 
 __Caution: If there is only a single treatment condition this type of subsetting does not make any sense and the function will print an error message.__
 ```{r}
-# not added yet
+# We can use the root_output_multfac2 dataset to subset our data
+# this will produce a subset for eacht Factor2 control treatment pair
+list_of_subsets <- subset_fac2(root_norm_multfac2, control = '20')
+
+# this will produce a list of data.frames with the length of our control treatment pairs
+# the names of the list elements correspond to Factor2 treatment name
+head(list_of_subsets$`20_and_28`)
+head(list_of_subsets$`20_and_20_28`)
+
 ```
 
 
