@@ -15,7 +15,7 @@
 #'extract_colors(primroses, n = 4, plot_out = T)
 #'
 #' @export
-extract_color <- function(image, n = 6, plot_out = F){
+extract_colors <- function(image, n = 6, plot_out = F){
 
   # get dataframe from image
   df <- data.frame(red = matrix(image[,,1], ncol=1),
