@@ -59,7 +59,7 @@ extract_colors <- function(image, n = 6, plot_out = F){
 
   }
 
-  return(colors)
+  return(colors$rgb)
 
 }
 
@@ -76,13 +76,13 @@ extract_colors <- function(image, n = 6, plot_out = F){
 #'
 #' # show the color palette
 #'
-#' show_color(primroses_colors$rgb)
+#' show_colors(primroses_colors$rgb)
 #'
 #' # show the color palette for colorblind individuals
-#' show_color(colors_wong)
+#' show_colors(colors_wong)
 #'
 #' @export
-show_color <- function(x){
+show_colors <- function(x){
 
   on.exit(par(mar = c(0.5, 0.5, 0.5, 0.5)))
 
