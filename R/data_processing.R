@@ -1,69 +1,148 @@
-#' @title Test Input data.frame for Rootdetection standard
-#' @description The function tests wether a given data.frame has all important columns and the corresponding data types.
-#' @param root_output data.frame; output *.csv from Rootdetection
+#' @title Test Input data.frame for Rootdetection Output standard
+#' @description The function tests wether a given object fulfils all criteria of a standard rootdetection output. These standards are:
+#' - The object has to be a data.frame
+#' - The columns Label, LengthMM and LengthPx needs to be present
+#' - LengthPx needs to store numeric values
+#' - A length standard needs to be present (default = 10mm) - can be changed by argument length_standard
+#' - hyphens (-) in Labels are not allowed
+#' @param root_output data.frame; output *.csv (list) from Rootdetection
 #' @return logical; TRUE or FALSE
 #' @examples
-#' is.RootdetectionOutput(root_output)
+#' is_root_output(root_output)
 #'
 #' @export
-is.root_detection_output <- function(root_output) {
+is_root_output <- function(root_output, length_standard = '10mm') {
 
-    # sammelkommentar um weitere Abfragen zu sammeln sind 0 Werte vorhanden?
+  # get name of the input variable
+  object_name <- deparse(substitute(root_output))
 
-    d.f_bool <- is.data.frame(root_output)
-    if (!d.f_bool) {
-        stop("RootdetectionOutput is not a data.frame", call. = FALSE)
-    }
-    cols <- all(c("Label", "LengthMM", "LengthPx") %in% colnames(root_output))
-    if (!cols) {
-        stop("data.frame is missing one or more of the important columns
-             Label, LenghtPx and LengthMM - check colnames!", call. = FALSE)
-    }
-    pxnum <- is.numeric(root_output$LengthPx)
-    if (!pxnum) {
-        stop("The column LenghtPx needs to store numeric values", call. = FALSE)
-    }
-    # print messages als warnings??
-    std <- "10mm" %in% root_output$Label
-    if (!std) {
-        warning("10mm standard is missing")
-        mmnum <- is.numeric(root_output$LengthMM)
-        pxmm <- all(root_output$LengthMM == root_output$LengthPx)
-        if (mmnum == T && pxmm == F) {
-            warning("Are the LengthMM values already normalized
-                    with a standard?")
-        } else {
-            stop("LengthMM seems to be not normalized with a standard!")
-        }
-    }
+  # check if input is a data.frame
+  dataframe_bool <- is.data.frame(root_output)
+  if (!dataframe_bool) {
+    stop(paste(object_name, ' is not a data.frame', sep = ''), call. = FALSE)
+  }
 
-    hyph <- any(grepl("-", root_output$Label))
-    if (hyph == T) {
-        stop("Labels containing '-' are not allowed!", call. = TRUE)
-    }
+  # check if column Label is present
+  col_Label <- 'Label' %in% colnames(root_output)
+  if (!col_Label) {
+    stop(paste(object_name, ' is missing the column Label', sep = ''), call. = FALSE)
+  }
+  # check if column LengthMM is present
+  col_LMM <- 'LengthMM' %in% colnames(root_output)
+  if (!col_LMM) {
+    stop(paste(object_name, ' is missing the column LengthMM', sep = ''), call. = FALSE)
+  }
+  # check if column LengthPx is present
+  col_LPx <- 'LengthPx' %in% colnames(root_output)
+  if (!col_LPx) {
+    stop(paste(object_name, ' is missing the column LengthPx', sep = ''), call. = FALSE)
+  }
 
-    labna <- any(is.na(root_output$Label))
-    if (labna == T) {
-        stop("Labels containing NA!", call. = TRUE)
-    }
+  # check if LengthPx is numeric
+  pxnum <- is.numeric(root_output$LengthPx)
+  if (!pxnum) {
+    stop('The column LenghtPx needs to store numeric values!', call. = FALSE)
+  }
 
-    pxna <- any(is.na(root_output$LengthPx))
-    if (pxna == T) {
-        stop("LengthPx containing NA!", call. = TRUE)
-    }
+  # check if length standard is present
+  std <- length_standard %in% root_output$Label
+  if (!std) {
+    stop(paste('Length standard', length_standard, 'is missing! Is the dataset already normalized or do you use a customized lenght standard?'))
+  }
 
-    pxzero <- any(root_output$LengthPx == 0)
-    if (pxzero == T) {
-        warning("LengthPx containg one or more 0")
-    }
+  # check if Labels contain hyphens
+  hyph <- any(grepl("-", root_output$Label))
+  if (hyph == T) {
+    stop("Labels containing '-' are not allowed!", call. = TRUE)
+  }
+
+  # check if all testings are passed
+  if (all(c(dataframe_bool, col_Label, col_LMM, col_LPx, pxnum, std)) && !all(c(hyph))) {
+    return(TRUE)
+  } else {
+    stop('The present input object does not fulfill the
+             RootdetectionOutput standard.', call. = FALSE)
+  }
+}
 
 
-    if (all(c(d.f_bool, cols, pxnum)) && !all(hyph, labna, pxna)) {
-        return(TRUE)
-    } else {
-        stop("The present input object does not fulfill the
-             RootdetectionOutput standard.", call. = FALSE)
-    }
+
+
+#' @title Test Input data.frame for normalized Rootdetection standard
+#' @description The function tests wether a given object fulfils all criteria of a normalized rootdetection dataset. These standards are:
+#' - The object has to be a data.frame
+#' - The columns Label, LengthMM and LengthPx, Factor1 and Factor2 needs to be present
+#' - LengthMM needs to store numeric values
+#' - No length standard must be present
+#' - hyphens (-) in Labels are not allowed
+#' @param root_output data.frame; output *.csv (list) from Rootdetection
+#' @return logical; TRUE or FALSE
+#' @examples
+#' is_root_output(root_output)
+#'
+#' @export
+is_root_norm <- function(root_norm) {
+
+  # get name of the input variable
+  object_name <- deparse(substitute(root_norm))
+
+  # check if input is a data.frame
+  dataframe_bool <- is.data.frame(root_norm)
+  if (!dataframe_bool) {
+    stop(paste(object_name, ' is not a data.frame', sep = ''), call. = FALSE)
+  }
+
+  # check if column Label is present
+  col_Label <- 'Label' %in% colnames(root_norm)
+  if (!col_Label) {
+    stop(paste(object_name, ' is missing the column Label', sep = ''), call. = FALSE)
+  }
+  # check if column LengthMM is present
+  col_LMM <- 'LengthMM' %in% colnames(root_norm)
+  if (!col_LMM) {
+    stop(paste(object_name, ' is missing the column LengthMM', sep = ''), call. = FALSE)
+  }
+  # check if column LengthPx is present
+  col_LPx <- 'LengthPx' %in% colnames(root_norm)
+  if (!col_LPx) {
+    stop(paste(object_name, ' is missing the column LengthPx', sep = ''), call. = FALSE)
+  }
+  # check if column Factor1 is present
+  col_LPx <- 'Factor1' %in% colnames(root_norm)
+  if (!col_LPx) {
+    stop(paste(object_name, ' is missing the column Factor1', sep = ''), call. = FALSE)
+  }
+  # check if column Factor2 is present
+  col_LPx <- 'Factor2' %in% colnames(root_norm)
+  if (!col_LPx) {
+    stop(paste(object_name, ' is missing the column Factor2', sep = ''), call. = FALSE)
+  }
+
+  # check if LengthPx is numeric
+  mmnum <- is.numeric(root_norm$LengthMM)
+  if (!mmnum) {
+    stop('The column LenghtPx needs to store numeric values!', call. = FALSE)
+  }
+
+  # check if length standard is present
+  std <- '10mm' %in% root_norm$Label
+  if (std) {
+    stop(paste('Length standard 10mm is still present! Use norm_10mm_standard to normalize your dataset?'))
+  }
+
+  # check if Labels contain hyphens
+  hyph <- any(grepl("-", root_norm$Label))
+  if (hyph == T) {
+    stop("Labels containing '-' are not allowed!", call. = TRUE)
+  }
+
+  # check if all testings are passed
+  if (all(c(dataframe_bool, col_Label, col_LMM, col_LPx, mmnum)) && !all(c(hyph, std))) {
+    return(TRUE)
+  } else {
+    stop('The present input object does not fulfill the
+             RootdetectionOutput standard.', call. = FALSE)
+  }
 }
 
 

@@ -98,7 +98,7 @@ To test if your Rootdetection Output has the right format you can use the functi
 
 ```{r}
 # this input dataset follows all the standards
-is.root_detection_output(root_output)
+is_root_output(root_output)
 
 ```
 
@@ -442,6 +442,14 @@ There are some additional features (arguments) to customize the plots to your ne
 # Additional Features
 
 The package `rootdetectR` comes with a number of additional useful functions to work with Rootdetection Outputs and other physiological measurements. 
+
+## Check a normalized Rootdetection dataset
+
+If you want to check if your normalized dataset fulfils all criteria for future analysis you can use the function `is_root_norm`. Especially if you have a dataset which does not come from the standard rootdetection procedure this function gives the possibilty to check your data.
+```{r}
+# check for normalized rootdetection standard
+is_root_norm(root_norm)
+```
 
 ## Calculate Standard Error
 
