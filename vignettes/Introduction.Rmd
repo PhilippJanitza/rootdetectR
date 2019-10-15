@@ -117,7 +117,7 @@ head(root_norm)
 ```
 
 
-## Calculate LengthMM according to 10mm standard
+## Calculate LengthMM according to customized standard
 
 If you want to add a customized length standard (different from 10mm standard described above) you can use the function `norm_cust_standard`. In addition to the function `norm_10mm_standard` you are able to change the label and the mm length described by this satndard measurements. Here the dataset `root_norm_multfac2` is used to illustrate this function.
 
@@ -516,19 +516,55 @@ head(list_of_subsets$`20_and_28`)
 head(list_of_subsets$`20_and_20_28`)
 
 ```
+<br>
+## Use of colorblind friendly colors
 
+About 8% of all males and 0.5% of all females have a color vision deficiency. This is a decreased ability to see colors or differences in colors. Therfore it is important to make sure that all readers of your publications (or all people in the audience) can detect the different colors in your plots. With `colors_wong` you can find a string containing 7 colors in hex-format optimized for colorblind individuals. The colors were proposed by Wong in following puclication: [Wong, B. (2011). Points of view: Color blindness. Nature Methods, 8(6), 441–441.](https://www.nature.com/articles/nmeth.1618)
+
+`rootdetectR` comes with the function `show_colors` to visualize colours stored in a string. 
+
+```{r}
+# colors_wong is a variable storing a string with hex-codes for 7 colourblind friendly 
+colors_wong
+
+# to visualize the colours there is a function called show_colors
+# this will plot all colours within in the strin colors_wong
+show_colors(colors_wong)
+
+# it is also possible to create strings with R colornames
+example_colors <- c('red', 'blue', 'palegreen', 'yellow3')
+show_colors(example_colors)
+```
+
+## Extract colors from a picture
+
+With the `extract_colors` function it is possible to extract the most prominent colors of a given picture. Therefore picture must be present in a raster array object. To read in picture files in the right fromat you can use the `readJPEG` or `readPNG` function from the `jpeg` or `png` package. As an example there is a raster array object included. `primroses` stors a picture of prim roses from [Wikimedia commons](https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Primeln_bunte_Farbenpracht.JPG/1024px-Primeln_bunte_Farbenpracht.JPG). With the function `extract_colors` it is possible to obtain the most prominent colors of the picture by k-means clustering. By setting `n` you define how many colors you want to obtain from the picture (default = 6).
+
+```{r}
+# to be able to plot a picture you will need to load the grid package
+library(grid)
+
+grid.raster(primroses)
+```
+```{r}
+# extract the 6 most prominent colors and store into a string
+prim_colors <- extract_colors(primroses, n =6)
+# it is also possible to show the picture containing only the 6 extracted colors
+# therefore you must set plot_out = T
+prim_colors <- extract_colors(primroses, n =6, plot_out = T)
+# you can then use show_colors to plot the extracted colors
+show_colors(prim_colors)
+```
 
 # Future Features
 
 In future versions several features will be implemented:
 
 1. Function to check if data.set is already normalized by a length standard
-2. Possibility to have other Length standards
-3. Function to remove NA and LengthPx = 0 from data.set
-4. Function to build subsets
-5. Add alternative normality tests to `plot_hist` and `check_norm` functions
-6. Add internal testing to the package
-7. add options of sorting plots - using forcats package?
+2. Function to remove NA and LengthPx = 0 from data.set
+3. Add alternative normality tests to `plot_hist` and `check_norm` functions
+4. Add internal testing to the package
+5. add options of sorting plots - using forcats package?
 
 If you have any suggestions or questions please drop an e-mail to [philipp.janitza@landw.uni-halle.de](mailto:philipp.janitza@landw.uni-halle.de) .
 
