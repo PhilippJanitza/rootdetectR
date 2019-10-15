@@ -56,7 +56,6 @@
 
 ## IDEAS
 
-# dringend Testdatensatz mit multiplen Factor2 benötigt - am besten auch mehr als 3.
 
 # normality test erweitern --> über die Factoren??
 # andere tests rein
@@ -71,5 +70,3 @@
 
 
 # Label delim für twofacaov benötigt??
-
-# Farben aus Bildern extrahieren für die Plots --> cooler Zusatz, hab ich Bock drauf --> optionales Feature (nicht exportieren??)
