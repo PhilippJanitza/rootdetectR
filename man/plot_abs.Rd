@@ -4,8 +4,9 @@
 \alias{plot_abs}
 \title{Plotting absolute data of Rootdetection standard}
 \usage{
-plot_abs(root_norm, label_delim = ";", type = "jitter", plot_n = T,
-  plot_colours, y_label = "hypocotyl length [mm]", x_label = "",
+plot_abs(root_norm, label_delim = ";", type = "jitter",
+  jitter_dot_size = 3, plot_n = T, plot_colours,
+  y_label = "hypocotyl length [mm]", x_label = "",
   legend_label = "Factor 2", size_legend_title = 12,
   size_legend_text = 10, size_x_axes = 9, size_y_axes = 9,
   size_n = 3, plot_significance = F, twofacov_output,

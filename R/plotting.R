@@ -72,8 +72,9 @@ plot_hist <- function(root_norm, draw_out = T,
 #' @title Plotting absolute data of Rootdetection standard
 #' @description Absolute data are plotted as boxplot or box-jitter-plot combination. Signifcances can be illustrated in the plot.
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param label_delim character; defin how Factor1 and Factor2 are seperated in Label
+#' @param label_delim character; define how Factor1 and Factor2 are seperated in Label
 #' @param type string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot
+#' @param jitter_dot_size number; defines the size of the dots in jitter plots
 #' @param plot_n logical; if TRUE sample size (n) will be plotted
 #' @param plot_colours vector; provide colours for the boxplot - colour vector must have the same length than Factor2
 #' @param y_label string; axes description of y-axes
@@ -128,6 +129,7 @@ plot_hist <- function(root_norm, draw_out = T,
 plot_abs <- function(root_norm,
                      label_delim = ";",
                      type = "jitter",
+                     jitter_dot_size = 2,
                      plot_n = T,
                      plot_colours,
                      y_label = 'hypocotyl length [mm]',
@@ -189,7 +191,7 @@ plot_abs <- function(root_norm,
                                                                y = root_norm$LengthMM,
                                                                colour = as.factor(root_norm$Factor2)),
                                                   position = ggplot2::position_jitter(0.2,
-                                                                                      seed = 1))} +
+                                                                                      seed = 1), size = jitter_dot_size)} +
         {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
         {if(type == 'box')ggplot2::geom_boxplot(data = root_norm,
                                                 ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM,
@@ -228,6 +230,7 @@ plot_abs <- function(root_norm,
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
 #' @param control string; name of the Factor2 control condition
 #' @param type string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot
+#' @param jitter_dot_size number; defines the size of the dots in jitter plots
 #' @param plot_colours vector; provide colours for the boxplot - colour vector must have the same length than Factor1
 #' @param y_label string; axes description of y-axes
 #' @param x_label string; axes description of x-axes
@@ -280,6 +283,7 @@ plot_abs <- function(root_norm,
 plot_rel <- function(root_norm,
                      control = 20,
                      type = "jitter",
+                     jitter_dot_size = 2,
                      plot_colours,
                      y_label = '% growth',
                      x_label = '',
@@ -328,7 +332,7 @@ plot_rel <- function(root_norm,
                 {if(type == 'jitter')ggplot2::geom_jitter(data = rel_sub,
                                                           ggplot2::aes_string(x = rel_sub$Label, y =
                                                                                   rel_sub$relative_value, colour = as.factor(rel_sub$Label)),
-                                                          position = ggplot2::position_jitter(0.2, seed = 1))} +
+                                                          position = ggplot2::position_jitter(0.2, seed = 1), size = jitter_dot_size)} +
                 {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
                 {if(type == 'box')ggplot2::geom_boxplot(data = rel_sub, ggplot2::aes_string(x =
                                                                                                 rel_sub$Label, y = rel_sub$relative_value, fill =
@@ -360,7 +364,7 @@ plot_rel <- function(root_norm,
                                                       ggplot2::aes(x = rel_root_norm$Label, y =
                                                                        rel_root_norm$relative_value, colour =
                                                                        as.factor(rel_root_norm$Label)), position =
-                                                          ggplot2::position_jitter(0.2, seed = 1))} +
+                                                          ggplot2::position_jitter(0.2, seed = 1), size = jitter_dot_size)} +
             {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
             {if(type == 'box')ggplot2::geom_boxplot(data = rel_root_norm, ggplot2::aes(x =
                                                                                            rel_root_norm$Label, y = rel_root_norm$relative_value,
