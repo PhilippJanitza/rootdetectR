@@ -5,7 +5,7 @@
 \title{Plotting absolute data of Rootdetection standard}
 \usage{
 plot_abs(root_norm, label_delim = ";", type = "jitter",
-  jitter_dot_size = 3, plot_n = T, plot_colours,
+  jitter_dot_size = 2, plot_n = T, plot_colours,
   y_label = "hypocotyl length [mm]", x_label = "",
   legend_label = "Factor 2", size_legend_title = 12,
   size_legend_text = 10, size_x_axes = 9, size_y_axes = 9,
@@ -15,9 +15,11 @@ plot_abs(root_norm, label_delim = ";", type = "jitter",
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
 
-\item{label_delim}{character; defin how Factor1 and Factor2 are seperated in Label}
+\item{label_delim}{character; define how Factor1 and Factor2 are seperated in Label}
 
 \item{type}{string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot}
+
+\item{jitter_dot_size}{number; defines the size of the dots in jitter plots}
 
 \item{plot_n}{logical; if TRUE sample size (n) will be plotted}
 

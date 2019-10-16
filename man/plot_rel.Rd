@@ -4,11 +4,12 @@
 \alias{plot_rel}
 \title{Plotting relative data of Rootdetection standard}
 \usage{
-plot_rel(root_norm, control = 20, type = "jitter", plot_colours,
-  y_label = "\% growth", x_label = "", legend_label = "Label",
-  size_legend_title = 12, size_legend_text = 10, size_x_axes = 9,
-  size_y_axes = 9, plot_significance = T, pairwise_2facaov_output,
-  letter_height = 10, size_letter = 5, angle_letter = 0)
+plot_rel(root_norm, control = 20, type = "jitter",
+  jitter_dot_size = 2, plot_colours, y_label = "\% growth",
+  x_label = "", legend_label = "Label", size_legend_title = 12,
+  size_legend_text = 10, size_x_axes = 9, size_y_axes = 9,
+  plot_significance = T, pairwise_2facaov_output, letter_height = 10,
+  size_letter = 5, angle_letter = 0)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
@@ -16,6 +17,8 @@ plot_rel(root_norm, control = 20, type = "jitter", plot_colours,
 \item{control}{string; name of the Factor2 control condition}
 
 \item{type}{string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot}
+
+\item{jitter_dot_size}{number; defines the size of the dots in jitter plots}
 
 \item{plot_colours}{vector; provide colours for the boxplot - colour vector must have the same length than Factor1}
 
