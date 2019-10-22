@@ -145,15 +145,15 @@ is_root_norm <- function(root_norm) {
 #' @title Calculate LengthMM from LengthPx for Rootdetection standard
 #' @description This function takes 10mm standard values to calculate LengthMM from LengthPx
 #' @param root_output data.frame; *.csv output from Rootdetection containing 10mm values
-#' @param sort logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2
+#' @param split logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2
 #' @param label_delim character; defines how Factor1 and Factor2 are seperated in Label
 #' @return data.frame; containing normalized length values
 #' @examples
 #' norm_10mm_standard(root_output)
-#' norm_10mm_standard(root_output, sort = FALSE)
+#' norm_10mm_standard(root_output, split = FALSE)
 #'
 #' @export
-norm_10mm_standard <- function(root_output, sort = TRUE, label_delim = ";") {
+norm_10mm_standard <- function(root_output, split = TRUE, label_delim = ";") {
 
     # transform Label to factor
     root_output$Label <- as.factor(root_output$Label)
@@ -168,8 +168,8 @@ norm_10mm_standard <- function(root_output, sort = TRUE, label_delim = ";") {
     root_output <- subset(root_output, Label != "10mm")
     root_output$Label <- droplevels(root_output$Label)
 
-    # if sort is TRUE order the columns and devide labels according to
-    if (sort == TRUE) {
+    # if split is TRUE order the columns and devide labels according to
+    if (split == TRUE) {
         root_output <- tidyr::separate(data = root_output, col = Label,
                                 into = c("Factor1", "Factor2"),
                                 sep = label_delim, remove = F)
@@ -189,7 +189,7 @@ norm_10mm_standard <- function(root_output, sort = TRUE, label_delim = ";") {
 #' @title Calculate LengthMM from LengthPx for Rootdetection standard
 #' @description This function takes customized standard values to calculate LengthMM from LengthPx. The label_standard must match the label in the data.frame. In addition the mm value of the standard must be provided.
 #' @param root_output data.frame; *.csv output from Rootdetection containing 10mm values
-#' @param sort logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2
+#' @param split logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2
 #' @param label_delim character; defines how Factor1 and Factor2 are seperated in Label
 #' @param col_label string; name of the column carring the labels (grouping variable/s)
 #' @param col_value string; name of the column carring the measuerd values in Px (depending variable)
@@ -204,7 +204,7 @@ norm_10mm_standard <- function(root_output, sort = TRUE, label_delim = ";") {
 #'
 #' @export
 norm_cust_standard <- function(root_output,
-                               sort = TRUE,
+                               split = TRUE,
                                label_delim = ';',
                                col_label = 'Label',
                                col_value = 'LengthPx',
@@ -224,8 +224,8 @@ norm_cust_standard <- function(root_output,
   root_output <- subset(root_output, Label != label_standard)
   root_output$Label <- droplevels(root_output$Label)
 
-  # if sort is TRUE order the columns and devide labels according to
-  if (sort == TRUE) {
+  # if split is TRUE order the columns and devide labels according to
+  if (split == TRUE) {
     root_output <- tidyr::separate(data = root_output, col = Label,
                                    into = c("Factor1", "Factor2"),
                                    sep = label_delim, remove = F)
