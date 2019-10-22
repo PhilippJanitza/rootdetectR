@@ -4,10 +4,12 @@
 \alias{normality_test}
 \title{Normality Test for Rootdetection standard}
 \usage{
-normality_test(root_norm)
+normality_test(root_norm, grouping = "Label")
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+
+\item{grouping}{string; determine the column storing the grouping variable (standard = Label)}
 }
 \value{
 data.frame; containing p-values for each Factor1 Facto2 combinations.

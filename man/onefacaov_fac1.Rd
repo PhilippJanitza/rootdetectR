@@ -2,15 +2,22 @@
 % Please edit documentation in R/ANOVA.R
 \name{onefacaov_fac1}
 \alias{onefacaov_fac1}
-\title{1 Factorial ANOVA Over Factor1}
+\title{1 Factorial ANOVA Over a Gouping Variable}
 \usage{
-onefacaov_fac1(root_norm, draw_out = T,
-  file_base = "1fac_ANOVA_factor1", p_value_size = 0.8)
+onefacaov_fac1(root_norm, grouping_var1 = "Factor1",
+  grouping_var2 = "Factor2", dependend_var = "LengthMM",
+  draw_out = F, file_base = "1fac_ANOVA_factor1", p_value_size = 0.8)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
 
-\item{draw_out}{logical; If TRUE Matrix containg p-values is plotted in pdf file}
+\item{grouping_var1}{string; column name of the first grouping variable}
+
+\item{grouping_var2}{string; column name of the second grouping variable to itrate over (if not existing set to NULL)}
+
+\item{dependend_var}{string; column name of the dependend variable}
+
+\item{draw_out}{logical; If TRUE matrix containg p-values is plotted in pdf file}
 
 \item{file_base}{string; file base name of the pdf output (is needed if draw_out = T)}
 
@@ -20,9 +27,10 @@ onefacaov_fac1(root_norm, draw_out = T,
 list; data.frames containg p-values for one way ANOVA over Factor 1
 }
 \description{
-The function performes a one way ANOVA over Factor1. The function iterates over Factor 2.
+The function performes a one way ANOVA over a grouping variable (Factor1). The function iterates over a second grouping variable (Factor2) if given.
 }
 \examples{
+### Usage Standard Rootdetection ###
 # get data.frame containg p-values for one way ANOVA over Factor 1
 
 root_test_norm <- norm_10mm_standard(root_output)
@@ -35,4 +43,19 @@ onefacaov_fac1(root_test_norm, draw_out = T, file_base = '1fac_ANOVA_factor1')
 # change size of printed p-values
 onefacaov_fac1(root_test_norm, draw_out = T, file_base = '1fac_ANOVA_factor1', p_value_size = 1)
 # function creates two pdf files: 1fac_ANOVA_factor1_20.pdf and 1fac_ANOVA_factor1_28.pdf
+
+
+### Usage for table containing only a single grouping variable ###
+
+# produce dataset containing only a single grouping variable
+
+root_single_var <- root_test_norm[root_test_norm$Factor2 == '20',]
+root_single_var$Factor2 <- NULL
+# rename some columns
+colnames(root_single_var)[colnames(root_single_var)=='LengthMM'] <- 'length'
+colnames(root_single_var)[colnames(root_single_var)=='Factor1'] <- 'lines'
+
+# use onefacaov_fac1 to do one way ANOVA
+onefacaov_fac1(root_single_var, grouping_var1 = 'lines', grouping_var2 = NULL, dependend_var = 'length', draw_out = F)
+
 }

@@ -10,7 +10,7 @@ rootdectR can be used to analyse the output from rootdetection software. This pa
 }
 \section{Data Processing Functions}{
 
-is.RootdetectionOutput, norm_10mm_standard, summary_stat, normality_test, rel_data, rm_outlier_df
+is_root_output, is_root_norm, norm_10mm_standard, norm_cust_standard, summary_stat, normality_test, rel_data, rm_outlier_df
 }
 
 \section{Statistics (ANOVA) Functions}{
@@ -25,6 +25,6 @@ plot_hist, plot_abs, plot_rel
 
 \section{helpful Functions}{
 
-se, rm_outlier
+se, rm_outlier, subset_fac2
 }
 

@@ -4,11 +4,19 @@
 \alias{twofacaov}
 \title{Two Way ANOVA}
 \usage{
-twofacaov(root_norm, label_delim = ";", draw_out = T,
+twofacaov(root_norm, grouping_var1 = "Factor1",
+  grouping_var2 = "Factor2", dependend_var = "LengthMM",
+  label_delim = ";", draw_out = F,
   file = "2fac_ANOVA_all_vs_all.pdf", p_value_size = 0.8)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+
+\item{grouping_var1}{string; column name of the first grouping variable (Factor1)}
+
+\item{grouping_var2}{string; column name of the second grouping variable (Factor2)}
+
+\item{dependend_var}{string; column name of the dependend variable}
 
 \item{label_delim}{character; defin how Factor1 and Factor2 are seperated in Label}
 

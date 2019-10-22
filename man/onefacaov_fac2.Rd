@@ -2,13 +2,21 @@
 % Please edit documentation in R/ANOVA.R
 \name{onefacaov_fac2}
 \alias{onefacaov_fac2}
-\title{1 Factorial ANOVA Over Factor2}
+\title{1 Factorial ANOVA Over Grouping Variable 2}
 \usage{
-onefacaov_fac2(root_norm, control = "20", draw_out = T,
-  file_base = "1fac_ANOVA_factor2", p_value_size = 0.8)
+onefacaov_fac2(root_norm, grouping_var1 = "Factor1",
+  grouping_var2 = "Factor2", dependend_var = "LengthMM",
+  control = "20", draw_out = F, file_base = "1fac_ANOVA_factor2",
+  p_value_size = 0.8)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+
+\item{grouping_var1}{string; column name of the first grouping variable (Factor1)}
+
+\item{grouping_var2}{string; column name of the second grouping variable (Factor2)}
+
+\item{dependend_var}{string; column name of the dependend variable}
 
 \item{control}{string; name of the Factor2 control condition}
 
@@ -22,10 +30,10 @@ onefacaov_fac2(root_norm, control = "20", draw_out = T,
 list; data.frames containg p-values for one way ANOVA over Factor2
 }
 \description{
-The function performes a one way ANOVA over Factor2. The function takes each control and treatment combination of Factor2 and perfomes a one way ANOVA.
+The function performes a one way ANOVA over Grouping Variable 2. The function takes each control and treatment combination of Grouping Variable 2 and perfomes a one way ANOVA.
 }
 \examples{
-# get data.frame containg p-values for one way ANOVA over Factor 2
+# get data.frame containg p-values for one way ANOVA over Grouping Variable 2
 
 root_test_norm <- norm_10mm_standard(root_output)
 onefacaov_fac2(root_test_norm, control = '20', draw_out = F)

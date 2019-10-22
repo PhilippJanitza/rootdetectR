@@ -4,10 +4,12 @@
 \alias{summary_stat}
 \title{Calculate Summary Statistics for Rootdetection standard}
 \usage{
-summary_stat(root_norm)
+summary_stat(root_norm, grouping = c("Factor1", "Factor2"))
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+
+\item{grouping}{vector; determine by name which columns should be used for grouping}
 }
 \value{
 data.frame; containing summary statistics for each Factor1 - Factor2 combination
@@ -18,5 +20,9 @@ This function calculates some summary statistics for a LengthMM normalized Rootd
 \examples{
 root_test_norm <- norm_10mm_standard(root_output)
 summary_stat(root_test_norm)
+
+# group summary by Factor 1 only
+summary_stat(root_test_norm, grouping = 'Factor1')
+
 
 }

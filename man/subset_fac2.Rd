@@ -19,6 +19,10 @@ This function splits Normalized Rootdetection Output in subsets for each Factor2
 To be functional Factor2 must contain a control and at least two other conditions (treatments)
 }
 \examples{
-# will come in next version with an data.frame containing multiple Factor2
+# create normalized data.set with multiple Factor2
+root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_standard = '20mm', standard_length_mm = '20')
+
+# create subsets for each control_treatment pair
+subset_fac2(root_norm_multfac2, control = '20')
 
 }

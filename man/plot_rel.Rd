@@ -4,15 +4,17 @@
 \alias{plot_rel}
 \title{Plotting relative data of Rootdetection standard}
 \usage{
-plot_rel(root_norm, control = 20, type = "jitter",
+plot_rel(root_norm, label_delim = ";", control = 20, type = "jitter",
   jitter_dot_size = 2, plot_colours, y_label = "\% growth",
   x_label = "", legend_label = "Label", size_legend_title = 12,
   size_legend_text = 10, size_x_axes = 9, size_y_axes = 9,
-  plot_significance = T, pairwise_2facaov_output, letter_height = 10,
-  size_letter = 5, angle_letter = 0)
+  plot_significance = F, interaction_twofacaov_output,
+  letter_height = 10, size_letter = 5, angle_letter = 0)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+
+\item{label_delim}{character; define how Factor1 and Factor2 are seperated in Label}
 
 \item{control}{string; name of the Factor2 control condition}
 
@@ -38,7 +40,7 @@ plot_rel(root_norm, control = 20, type = "jitter",
 
 \item{plot_significance}{logical; if TRUE significances will be drawn as letters}
 
-\item{pairwise_2facaov_output}{data.frame; Output of pairwise_2facaov (needed if plot_significance = T)}
+\item{interaction_twofacaov_output}{data.frame; Output of interaction_twofacaov (needed if plot_significance = T)}
 
 \item{letter_height}{numeric; defines the position of the significance letters}
 
@@ -64,12 +66,13 @@ plot_rel(root_test_norm, plot_significance = F, control = '20', type = 'jitter')
 # Plot with siginficance letters
 
 root_test_norm <- norm_10mm_standard(root_output)
-root_stat <- pairwise_2facaov(root_test_norm, draw_out = F, label_delim = ';')
+root_stat <- interaction_twofacaov(root_test_norm, draw_out = F, label_delim = ';')
 # boxplot with statistics
-plot_rel(root_test_norm, plot_significance = T, pairwise_2facaov_output = root_stat, control = '20', type = 'box')
+plot_rel(root_test_norm, plot_significance = T, interaction_twofacaov_output = root_stat, control = '20', type = 'box')
 
 # all customizable plotting parameters have a default value
 plot_rel(root_test_norm,
+         label_delim = ';',
          control = 20,
          type = "jitter",
          plot_colours = c('blue', 'red', 'orange', 'green'),
@@ -81,7 +84,7 @@ plot_rel(root_test_norm,
          size_x_axes = 9,
          size_y_axes = 9,
          plot_significance = T,
-         pairwise_2facaov_output = root_stat,
+         interaction_twofacaov_output = root_stat,
          letter_height = 10,
          size_letter = 5,
          angle_letter = 0)
