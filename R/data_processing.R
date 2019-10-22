@@ -27,11 +27,6 @@ is_root_output <- function(root_output, length_standard = '10mm') {
   if (!col_Label) {
     stop(paste(object_name, ' is missing the column Label', sep = ''), call. = FALSE)
   }
-  # check if column LengthMM is present
-  col_LMM <- 'LengthMM' %in% colnames(root_output)
-  if (!col_LMM) {
-    stop(paste(object_name, ' is missing the column LengthMM', sep = ''), call. = FALSE)
-  }
   # check if column LengthPx is present
   col_LPx <- 'LengthPx' %in% colnames(root_output)
   if (!col_LPx) {
@@ -57,7 +52,7 @@ is_root_output <- function(root_output, length_standard = '10mm') {
   }
 
   # check if all testings are passed
-  if (all(c(dataframe_bool, col_Label, col_LMM, col_LPx, pxnum, std)) && !all(c(hyph))) {
+  if (all(c(dataframe_bool, col_Label, col_LPx, pxnum, std)) && !all(c(hyph))) {
     return(TRUE)
   } else {
     stop('The present input object does not fulfill the
