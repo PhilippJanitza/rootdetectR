@@ -263,7 +263,7 @@ tw_anova <- twofacaov(root_norm, label_delim = ';', draw_out = T,
 <br><br>
 </center>
 
-## pairwise Two-Way ANOVA of treatment responses 
+## pairwise Two-Way ANOVA of treatment responses (interaction effects)
 
 To compare the change from control Factor2 (here 20°C) to each treatment Factor2 (here only 28°C) for each Factor1 (line) a pairwise Two-Way ANOVA is conducted. Afterwards a Tukey post-hoc test is done and p-values are adjusted for multiple testing by Benjamini-Hochberg correction. For each Factor2 control Factor2 treatment a matrix containing p-values is returned. The adjusted p-values from this analysis are used to print statistics in the relative plots (`plot_rel` function). For more information check the [Plots](#plot-data) section.
 
@@ -271,9 +271,9 @@ To compare the change from control Factor2 (here 20°C) to each treatment Factor
 # draw_out = F produces a matrix containing p-values from Tukey post-hoc test
 # label_delim defines how Factor1 and Factor 2 are splitted in column Label
 # in addition you need to tell the function the name of the control
-pairwise_tw_anova <- pairwise_2facaov(root_norm, control = "20", label_delim = ';', 
+interaction_tw_anova <- interaction_twofacaov(root_norm, control = "20", label_delim = ';', 
                                       draw_out = F)
-pairwise_tw_anova
+interaction_tw_anova
 ```
 <br>
 The `file_base` argument is necessary if `draw_out = T` is used to have a path and the base for the file name. For each Factor2 control (20°C) Factor2 treatment (28°C) pair a *.pdf file is created.
@@ -284,10 +284,10 @@ The `file_base` argument is necessary if `draw_out = T` is used to have a path a
 #
 # label_delim defines how Factor1 and Factor 2 are splitted in column Label
 # in addition you need to tell the function the name of the control
-pairwise_tw_anova <- pairwise_2facaov(root_norm, control = "20", label_delim = ';', 
+interaction_tw_anova <- interaction_twofacaov(root_norm, control = "20", label_delim = ';', 
                                       draw_out = T, file_base = '2fac_ANOVA_BH_corrected')
 # the argument p_value_size changes the sizes of the plotted p-value
-pairwise_tw_anova <- pairwise_2facaov(root_norm, control = "20", label_delim = ';', 
+interaction_tw_anova <- interaction_twofacaov(root_norm, control = "20", label_delim = ';', 
                                       draw_out = T, file_base = '2fac_ANOVA_BH_corrected'
                                       p_value_size = 0.8)
 ```
@@ -380,7 +380,7 @@ absolute_plot
 
 ## Plot relative data
 
-Analogous to the plots of the absolute date `rootdetectR` comes with a function to plot relative data called `plot_rel`. For this function it is also possible to plot letter encoded statistics by setting `plot_significance` to TRUE. For the relative data you need to provide the output from the `pairwise_2facaov` function. Since the `pairwise_2facaov` is only capable to compare relative data for each Factor2 control Factor2 treatment pair you will obtain multiple plots if you have more than one Factor2 treatments (more than two Factor2 in general). (If you have multiple Factor2 treatments and set plot_significance = F you will get all the data in one plot without statistics.)
+Analogous to the plots of the absolute date `rootdetectR` comes with a function to plot relative data called `plot_rel`. For this function it is also possible to plot letter encoded statistics by setting `plot_significance` to TRUE. For the relative data you need to provide the output from the `interaction_twofacaov` function. Since the `interaction_twofacaov` is only capable to compare relative data for each Factor2 control Factor2 treatment pair you will obtain multiple plots if you have more than one Factor2 treatments (more than two Factor2 in general). (If you have multiple Factor2 treatments and set plot_significance = F you will get all the data in one plot without statistics.)
 
 _Caution: The input data set is the Normalized Root Output and not the table with relative data._ The relative data is calculated within the function
 
@@ -390,13 +390,13 @@ relative_plot <- plot_rel(root_norm, plot_significance = F, type = 'jitter', con
 relative_plot
 ```
 
-To add statistics to this plot set `plot_significance = T` and add the output from the `pairwise_2facaoc`.
+To add statistics to this plot set `plot_significance = T` and add the output from the `interaction_twofacaov`.
 
 ```{r}
 # plot relative data
-pairwise_tw_anova <- pairwise_2facaov(root_norm, control = '20', label_delim = ';', draw_out = F)
+interaction_tw_anova <- interaction_twofacaov(root_norm, control = '20', label_delim = ';', draw_out = F)
 relative_plot <- plot_rel(root_norm, plot_significance = T, 
-                          pairwise_2facaov = pairwise_tw_anova, 
+                          interaction_twofacaov_output = interaction_tw_anova, 
                           type = 'jitter', control = '20', letter_height = 10)
 relative_plot
 ```
@@ -423,13 +423,13 @@ Although we have multiple Factor2 treatment levels in this example all the data 
 root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_delim = ';', 
                                          label_standard = '20mm', standard_length_mm = '20')
 
-# condcut the pairwise two way anova of the root_norm_multfac2 dataset
-pairwise_tw_anova_multfac2 <- pairwise_2facaov(root_norm_multfac2, control = '20', 
+# condcut the interaction two way anova of the root_norm_multfac2 dataset
+interaction_tw_anova_multfac2 <- interaction_twofacaov(root_norm_multfac2, control = '20', 
                                                label_delim = ';', draw_out = F)
 
 # plot relative data with multiple factor2 treatment levels with statistics
 relative_plot_multfac2 <- plot_rel(root_norm_multfac2, plot_significance = T,
-                                   pairwise_2facaov_output = pairwise_tw_anova_multfac2,
+                                   interaction_twofacaov_output = interaction_tw_anova_multfac2,
                                    type = 'jitter', control = '20', letter_height = 10)
 # calling the variable will show us that there is a list with two plots
 relative_plot_multfac2 
@@ -508,6 +508,7 @@ head(rm_outlier_df(root_norm))
 head(rm_outlier_df(root_norm, fill_na = T))
 ```
 <br>
+
 ## Create Subsets of Rootdetection Outputs by Factor2
 
 Experiments with a lot of different conditions are quite common in biological Assays. In such assays there is often a control condition and different treatments (both Factor2) applied to a variety on lines (Factor1). Some times these very big data sets are hard to handle and plots will become quite messy. Therefore `rootdetectR` has implemented the function `subset_fac2`. This function will create subsets for each Factor2 control and treatment pair.
@@ -525,6 +526,7 @@ head(list_of_subsets$`20_and_20_28`)
 
 ```
 <br>
+
 ## Use of colorblind friendly colors
 
 About 8% of all males and 0.5% of all females have a color vision deficiency. This is a decreased ability to see colors or differences in colors. Therfore it is important to make sure that all readers of your publications (or all people in the audience) can detect the different colors in your plots. With `colors_wong` you can find a string containing 7 colors in hex-format optimized for colorblind individuals. The colors were proposed by Wong in following puclication: [Wong, B. (2011). Points of view: Color blindness. Nature Methods, 8(6), 441–441.](https://www.nature.com/articles/nmeth.1618)
@@ -564,14 +566,36 @@ prim_colors <- extract_colors(primroses, n =6, plot_out = T)
 show_colors(prim_colors)
 ```
 
+## Customized ANOVA
+
+It is possible to use the ANOVA functions of `rootdetectR` with non-standard-rootdetection data tables. For all ANOVA functions (`onefacaov_fac1`, `onefacaov_fac2`, `twofacaov`, `interaction_twofacaov`) there is the possibility to adjust the columns that contain grouping and dependend variables. Just use the arguments `grouping_var1`, `grouping_var2` and `dependend_var` and call the columns containing the respective data. To conduct a simple one-way ANOVA with `rootdetectR` you can use `onefacaov_fac1` and set the `grouping_var2` to NULL. 
+
+```{r}
+# create a dataset containing only a single grouping variable (Factor1)
+root_norm <- norm_10mm_standard(root_output)
+root_norm20 <- root_norm[root_norm$Factor2 == '20',]
+root_norm20$Factor2 <- NULL
+
+# use onefacaov_fac1 to conduct an one-way ANOVA of this dataset
+# define grouping and dependend variables
+# be sure to set grouping_var2 = NULL if you have only one grouping variable
+onefacaov_fac1(root_norm20, grouping_var1 = 'Factor1', grouping_var2 = NULL, dependend_var = 'LengthMM')
+
+
+```
+
+## need to add
+tukey to matrix!!
+plot letters!!
+
+## important change
+plot_rel function with tukey matrix and not with dataframe
+
+
 # Future Features
 
 In future versions several features will be implemented:
 
-1. Function to check if data.set is already normalized by a length standard
-2. Function to remove NA and LengthPx = 0 from data.set
-3. Add alternative normality tests to `plot_hist` and `check_norm` functions
-4. Add internal testing to the package
 5. add options of sorting plots - using forcats package?
 
 If you have any suggestions or questions please drop an e-mail to [philipp.janitza@landw.uni-halle.de](mailto:philipp.janitza@landw.uni-halle.de) .
