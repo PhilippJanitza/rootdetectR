@@ -86,7 +86,6 @@ plot_hist <- function(root_norm, draw_out = T,
 #' @param size_y_axes numeric; defines size of y-axes labels
 #' @param size_n = numeric; defines size of n plotted (if plot_n = TRUE)
 #' @param plot_significance logical; if TRUE significances will be drawn as letters
-#' @param twofacaov_output data.frame; Output of twofacaov (needed if plot_significance = T)
 #' @param letter_height numeric; defines the position of the significance letters
 #' @param size_letter numeric; defines size of the significance letters
 #' @param angle_letter numeric, defines angle of significance letters
@@ -141,7 +140,6 @@ plot_abs <- function(root_norm,
                      size_y_axes = 9,
                      size_n = 3,
                      plot_significance = F,
-                     twofacov_output,
                      letter_height = 2,
                      size_letter = 5,
                      angle_letter = 0) {
@@ -150,6 +148,9 @@ plot_abs <- function(root_norm,
 
     # create table with letters only if plot_significance = T
     if (plot_significance) {
+
+        # conduct ANOVA
+        twofacov_output <- rootdetectR::twofacaov(root_norm, label_delim = label_delim)
 
         # get Letters for twofacaov output
         mat_names <- character()
@@ -241,7 +242,6 @@ plot_abs <- function(root_norm,
 #' @param size_x_axes numeric; defines size of x-axes labels
 #' @param size_y_axes numeric; defines size of y-axes labels
 #' @param plot_significance logical; if TRUE significances will be drawn as letters
-#' @param interaction_twofacaov_output data.frame; Output of interaction_twofacaov (needed if plot_significance = T)
 #' @param letter_height numeric; defines the position of the significance letters
 #' @param size_letter numeric; defines size of the significance letters
 #' @param angle_letter numeric, defines angle of significance letters
@@ -296,7 +296,6 @@ plot_rel <- function(root_norm,
                      size_x_axes = 9,
                      size_y_axes = 9,
                      plot_significance = F,
-                     interaction_twofacaov_output,
                      letter_height = 10,
                      size_letter = 5,
                      angle_letter = 0) {
@@ -304,6 +303,11 @@ plot_rel <- function(root_norm,
     rel_root_norm <- rootdetectR::rel_data(root_norm, control = control)
 
     if (plot_significance == T) {
+
+        # conduct ANOVA
+        interaction_twofacaov_output <- rootdetectR::interaction_twofacaov(root_norm,
+                                                                           control = control,
+                                                                           label_delim = label_delim)
 
         relative_plot <- list()
 
