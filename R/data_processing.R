@@ -160,6 +160,9 @@ is_root_norm <- function(root_norm) {
 #' @export
 norm_10mm_standard <- function(root_output, sort = TRUE, label_delim = ";") {
 
+    # transform Label to factor
+    root_output$Label <- as.factor(root_output$Label)
+
     # features --> change name of 10mm to something else choose length that
     # should be used as normalisation (other than 10mm)
     # calc 10mm
@@ -193,6 +196,8 @@ norm_10mm_standard <- function(root_output, sort = TRUE, label_delim = ";") {
 #' @param root_output data.frame; *.csv output from Rootdetection containing 10mm values
 #' @param sort logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2
 #' @param label_delim character; defines how Factor1 and Factor2 are seperated in Label
+#' @param col_label string; name of the column carring the labels (grouping variable/s)
+#' @param col_value string; name of the column carring the measuerd values in Px (depending variable)
 #' @param label_standard string; defines  how the standard is labled in the data.frame
 #' @param standard_length_mm numeric; defines the length (in mm) of the standard
 #' @return data.frame; containing normalized length values
@@ -203,10 +208,19 @@ norm_10mm_standard <- function(root_output, sort = TRUE, label_delim = ";") {
 #' norm_cust_standard(root_output, label_delim = ';', label_standard = '10mm', standard_length_mm = '10')
 #'
 #' @export
-norm_cust_standard <- function(root_output, sort = TRUE, label_delim = ";", label_standard = '10mm', standard_length_mm = '10') {
+norm_cust_standard <- function(root_output,
+                               sort = TRUE,
+                               label_delim = ';',
+                               col_label = 'Label',
+                               col_value = 'LengthPx',
+                               label_standard = '10mm',
+                               standard_length_mm = '10') {
 
-  # features --> change name of 10mm to something else choose length that
-  # should be used as normalisation (other than 10mm)
+
+  colnames(root_output)[colnames(root_output) == col_label] <- 'Label'
+  colnames(root_output)[colnames(root_output) == col_value] <- 'LengthPx'
+  root_output$Label <- as.factor(root_output$Label)
+
   # calc 10mm
   standard_mm <- subset(root_output, Label == label_standard)
   standard_mm_mean <- mean(standard_mm$LengthPx)
@@ -236,17 +250,22 @@ norm_cust_standard <- function(root_output, sort = TRUE, label_delim = ";", labe
 #' @title Calculate Summary Statistics for Rootdetection standard
 #' @description This function calculates some summary statistics for a LengthMM normalized Rootdetection output. Calculated values are: sample size (n), median, mean, standard deviation (sd), standard error (se)
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
+#' @param grouping vector; determine by name which columns should be used for grouping
 #' @return data.frame; containing summary statistics for each Factor1 - Factor2 combination
 #' @examples
 #' root_test_norm <- norm_10mm_standard(root_output)
 #' summary_stat(root_test_norm)
 #'
+#' # group summary by Factor 1 only
+#' summary_stat(root_test_norm, grouping = 'Factor1')
+#'
+#'
 #' @export
-summary_stat <- function(root_norm) {
+summary_stat <- function(root_norm, grouping = c('Factor1', 'Factor2')) {
 
     # wählen was man alles haben möchte??
     # check if data.frame is already normalized (containing no 10mm values)
-    sum <- plyr::ddply(root_norm, plyr::.(Factor1, Factor2), plyr::summarize,
+    sum <- plyr::ddply(root_norm, grouping, plyr::summarize,
                  n = length(LengthMM), median = median(LengthMM),
                  mean = mean(LengthMM), sd = sd(LengthMM),
                  se = se(LengthMM))
@@ -259,15 +278,21 @@ summary_stat <- function(root_norm) {
 #' @title Normality Test for Rootdetection standard
 #' @description The function performes a normality test for each Factor1 Factor 2 combination in Rootdetecion standard data.frame. Until now only Shapiro-Wilk test is implemented.
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
+#' @param grouping string; determine the column storing the grouping variable (standard = Label)
 #' @return data.frame; containing p-values for each Factor1 Facto2 combinations.
 #' @examples
 #' root_test_norm <- norm_10mm_standard(root_output)
 #' normality_test(root_test_norm)
 #'
 #' @export
-normality_test <- function(root_norm) {
+normality_test <- function(root_norm, grouping = 'Label') {
 
+  # create empty dataframe
   norm_table <- data.frame(Label = character(0), p.value = numeric(0))
+
+  # rename column in root_norm according to grouping
+  colnames(root_norm)[colnames(root_norm) == grouping] <- 'Label'
+
   for (lev in 1:length(levels(root_norm$Label))) {
 
     # create subset contain only the data for one label
@@ -276,6 +301,8 @@ normality_test <- function(root_norm) {
     norm_table <- rbind(norm_table, temp)
 
   }
+
+    colnames(norm_table)[1] <- grouping
     return(norm_table)
 }
 
