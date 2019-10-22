@@ -1,11 +1,15 @@
-#' @title 1 Factorial ANOVA Over Factor1
-#' @description The function performes a one way ANOVA over Factor1. The function iterates over Factor 2.
+#' @title 1 Factorial ANOVA Over a Gouping Variable
+#' @description The function performes a one way ANOVA over a grouping variable (Factor1). The function iterates over a second grouping variable (Factor2) if given.
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
+#' @param grouping_var1 string; column name of the first grouping variable
+#' @param grouping_var2 string; column name of the second grouping variable to itrate over (if not existing set to NULL)
+#' @param dependend_var string; column name of the dependend variable
+#' @param draw_out logical; If TRUE matrix containg p-values is plotted in pdf file
 #' @param file_base string; file base name of the pdf output (is needed if draw_out = T)
 #' @return list; data.frames containg p-values for one way ANOVA over Factor 1
 #' @param p_value_size numeric; font siz of the p-values printed in pdf file
 #' @examples
+#' ### Usage Standard Rootdetection ###
 #' # get data.frame containg p-values for one way ANOVA over Factor 1
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
@@ -18,27 +22,50 @@
 #' # change size of printed p-values
 #' onefacaov_fac1(root_test_norm, draw_out = T, file_base = '1fac_ANOVA_factor1', p_value_size = 1)
 #' # function creates two pdf files: 1fac_ANOVA_factor1_20.pdf and 1fac_ANOVA_factor1_28.pdf
+#'
+#'
+#' ### Usage for table containing only a single grouping variable ###
+#'
+#' # produce dataset containing only a single grouping variable
+#'
+#' root_single_var <- root_test_norm[root_test_norm$Factor2 == '20',]
+#' root_single_var$Factor2 <- NULL
+#' # rename some columns
+#' colnames(root_single_var)[colnames(root_single_var)=='LengthMM'] <- 'length'
+#' colnames(root_single_var)[colnames(root_single_var)=='Factor1'] <- 'lines'
+#'
+#' # use onefacaov_fac1 to do one way ANOVA
+#' onefacaov_fac1(root_single_var, grouping_var1 = 'lines', grouping_var2 = NULL, dependend_var = 'length', draw_out = F)
+#'
 #' @export
-onefacaov_fac1 <- function(root_norm, draw_out = T,
-                           file_base = "1fac_ANOVA_factor1", p_value_size = 0.8) {
+onefacaov_fac1 <- function(root_norm,
+                           grouping_var1 = 'Factor1', grouping_var2 = 'Factor2',
+                           dependend_var = 'LengthMM',
+                           draw_out = F,
+                           file_base = "1fac_ANOVA_factor1",
+                           p_value_size = 0.8) {
 
-    fac2 <- levels(as.factor(root_norm$Factor2))
-    fac1 <- levels(as.factor(root_norm$Factor1))
-    nr_fac2 <- length(fac2)
-    nr_fac1 <- length(fac1)
-    matlist <- as.list(rep(NA, nr_fac2))
+    # grouping_var2 = NULL --> no variable to loop over then:
+    if(is.null(grouping_var2)){
 
-    for (tp in 1:nr_fac2) {
-        # create subdataset with only one level of Factor2
-        data_aov <-
-          root_norm[which(root_norm$Factor2 == fac2[tp]), ]
+        # rename columns for grouping and dependend vars to match the rootdetection standard
+        colnames(root_norm)[colnames(root_norm)==grouping_var1] <- 'Factor1'
+        colnames(root_norm)[colnames(root_norm)==dependend_var] <- 'LengthMM'
+
+        # prequisites
+        fac1 <- levels(as.factor(root_norm$Factor1))
+        nr_fac1 <- length(fac1)
+        #matlist <- as.list(rep(NA, nr_fac2))
+
         # ANOVA
-        lm_aov <- lm(LengthMM ~ Factor1, data_aov, na.action = na.omit)
+        lm_aov <- lm(LengthMM ~ Factor1, root_norm, na.action = na.omit)
         pval.aov <- anova(aov(lm_aov))[1, 5]
+
         # Tukey
         tuk <- as.data.frame(TukeyHSD(aov(lm_aov), ordered = FALSE)$Factor1)
         tuk <- cbind(rownames(tuk), tuk)
         colnames(tuk)[1] <- "comparison"
+
         # get tukey comparison and put them in matrix
         mat <- matrix(NA, nrow = nr_fac1, ncol = nr_fac1)
         colnames(mat) <- fac1
@@ -46,18 +73,16 @@ onefacaov_fac1 <- function(root_norm, draw_out = T,
         rn <- rownames(tuk)
         for (j in 1:(nr_fac1 - 1)) {
             for (k in (j + 1):nr_fac1) {
-                #
                 idx <- which(paste(fac1[k], "-", fac1[j], sep = "") == rn)
-                #
                 if (length(idx) != 0) {
-                  mat[j, k] <- tuk[idx, 5]
+                    mat[j, k] <- tuk[idx, 5]
                 }
             }
         }
-        matlist[[tp]] <- mat
 
         if (draw_out) {
-            pdf(file = paste(file_base, "_", fac2[tp], ".pdf", sep = ""))
+            pdf(file = paste(file_base, ".pdf", sep = ""))
+
             # Draw the Tuky-p-value-Matrix
             col <- matrix("black", nrow = nr_fac1, ncol = nr_fac1)
             col[lower.tri(col, diag = TRUE)] <- "white"
@@ -76,27 +101,105 @@ onefacaov_fac1 <- function(root_norm, draw_out = T,
             text(sg[, 2], sg[, 1], format(c(as.vector(mat), 0.123456789),
                                           digits = 2, nsmall = 3,
                                           scientiffic = FALSE)[1:nr_fac1 ^ 2],
-                                          col = as.vector(col), cex = p_value_size)
+                 col = as.vector(col), cex = p_value_size)
             dev.off()
         }
-    }
 
-    names(matlist) <- unique(root_norm$Factor2)
-    return(matlist)
+
+        return(mat)
+
+    } else {
+        # there is a second grouping var to loop over then (grouping_var2 != NULL)
+
+        # rename columns for grouping and dependend vars to match the rootdetection standard
+        colnames(root_norm)[colnames(root_norm)==grouping_var1] <- 'Factor1'
+        colnames(root_norm)[colnames(root_norm)==grouping_var2] <- 'Factor2'
+        colnames(root_norm)[colnames(root_norm)==dependend_var] <- 'LengthMM'
+
+        # prequisites
+        fac2 <- levels(as.factor(root_norm$Factor2))
+        fac1 <- levels(as.factor(root_norm$Factor1))
+        nr_fac2 <- length(fac2)
+        nr_fac1 <- length(fac1)
+        matlist <- as.list(rep(NA, nr_fac2))
+
+        for (tp in 1:nr_fac2) {
+            # create subdataset with only one level of Factor2
+            data_aov <-
+                root_norm[which(root_norm$Factor2 == fac2[tp]), ]
+
+            # ANOVA
+            lm_aov <- lm(LengthMM ~ Factor1, data_aov, na.action = na.omit)
+            pval.aov <- anova(aov(lm_aov))[1, 5]
+
+            # Tukey
+            tuk <- as.data.frame(TukeyHSD(aov(lm_aov), ordered = FALSE)$Factor1)
+            tuk <- cbind(rownames(tuk), tuk)
+            colnames(tuk)[1] <- "comparison"
+
+            # get tukey comparison and put them in matrix
+            mat <- matrix(NA, nrow = nr_fac1, ncol = nr_fac1)
+            colnames(mat) <- fac1
+            rownames(mat) <- fac1
+            rn <- rownames(tuk)
+            for (j in 1:(nr_fac1 - 1)) {
+                for (k in (j + 1):nr_fac1) {
+                    idx <- which(paste(fac1[k], "-", fac1[j], sep = "") == rn)
+                    if (length(idx) != 0) {
+                        mat[j, k] <- tuk[idx, 5]
+                    }
+                }
+            }
+
+            # save matrix in matlist
+            matlist[[tp]] <- mat
+
+            if (draw_out) {
+                pdf(file = paste(file_base, "_", fac2[tp], ".pdf", sep = ""))
+
+                # Draw the Tuky-p-value-Matrix
+                col <- matrix("black", nrow = nr_fac1, ncol = nr_fac1)
+                col[lower.tri(col, diag = TRUE)] <- "white"
+                image(t(mat[nr_fac1:1, ]), col = c("red", "white"),
+                      breaks = c(0, 0.05, 1), axes = FALSE)
+                title(main = paste(fac2[tp], ", pval.aov = ",
+                                   round(pval.aov, 5),
+                                   sep = ""))
+                s <- seq(from = 0, to = 1, length = nr_fac1)
+                axis(1, at = s, labels = fac1, las = 2)
+                axis(2, at = s, labels = rev(fac1), las = 2)
+                abline(h = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
+                       v = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
+                       col = "grey")
+                sg <- expand.grid(rev(s), s)
+                text(sg[, 2], sg[, 1], format(c(as.vector(mat), 0.123456789),
+                                              digits = 2, nsmall = 3,
+                                              scientiffic = FALSE)[1:nr_fac1 ^ 2],
+                     col = as.vector(col), cex = p_value_size)
+                dev.off()
+            }
+        }
+
+        names(matlist) <- unique(root_norm$Factor2)
+        return(matlist)
+    }
 }
 
 
 
-#' @title 1 Factorial ANOVA Over Factor2
-#' @description The function performes a one way ANOVA over Factor2. The function takes each control and treatment combination of Factor2 and perfomes a one way ANOVA.
+#' @title 1 Factorial ANOVA Over Grouping Variable 2
+#' @description The function performes a one way ANOVA over Grouping Variable 2. The function takes each control and treatment combination of Grouping Variable 2 and perfomes a one way ANOVA.
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
+#' @param grouping_var1 string; column name of the first grouping variable (Factor1)
+#' @param grouping_var2 string; column name of the second grouping variable (Factor2)
+#' @param dependend_var string; column name of the dependend variable
 #' @param control string; name of the Factor2 control condition
 #' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
 #' @param file_base string; file base name of the pdf output (is needed if draw_out = T)
 #' @param p_value_size numeric; font siz of the p-values printed in pdf file
 #' @return list; data.frames containg p-values for one way ANOVA over Factor2
 #' @examples
-#' # get data.frame containg p-values for one way ANOVA over Factor 2
+#' # get data.frame containg p-values for one way ANOVA over Grouping Variable 2
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
 #' onefacaov_fac2(root_test_norm, control = '20', draw_out = F)
@@ -109,12 +212,18 @@ onefacaov_fac1 <- function(root_norm, draw_out = T,
 #' onefacaov_fac2(root_test_norm, control = '20', draw_out = T, file_base = '1fac_ANOVA_factor2', p_value_size = 1)
 #' # function creates a pdf file 1fac_ANOVA_factor2_28.pdf
 #' @export
-# 1 factorial ANOVA over factor2
-onefacaov_fac2 <- function(root_norm, control = '20',  draw_out = T,
+onefacaov_fac2 <- function(root_norm,
+                           grouping_var1 = 'Factor1', grouping_var2 = 'Factor2',
+                           dependend_var = 'LengthMM',
+                           control = '20',
+                           draw_out = F,
                            file_base = "1fac_ANOVA_factor2",
                            p_value_size = 0.8) {
 
-    # only last mat is returned --> list of dfs!!!
+
+    colnames(root_norm)[colnames(root_norm)==grouping_var1] <- 'Factor1'
+    colnames(root_norm)[colnames(root_norm)==grouping_var2] <- 'Factor2'
+    colnames(root_norm)[colnames(root_norm)==dependend_var] <- 'LengthMM'
 
     fac2 <- levels(as.factor(root_norm$Factor2))
     fac1 <- levels(as.factor(root_norm$Factor1))
@@ -175,6 +284,9 @@ onefacaov_fac2 <- function(root_norm, control = '20',  draw_out = T,
 #' @title Two Way ANOVA
 #' @description The function performes a two way ANOVA for Rootdetection standard
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
+#' @param grouping_var1 string; column name of the first grouping variable (Factor1)
+#' @param grouping_var2 string; column name of the second grouping variable (Factor2)
+#' @param dependend_var string; column name of the dependend variable
 #' @param label_delim character; defin how Factor1 and Factor2 are seperated in Label
 #' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
 #' @param file string; file name of the pdf output (is needed if draw_out = T)
@@ -193,9 +305,18 @@ onefacaov_fac2 <- function(root_norm, control = '20',  draw_out = T,
 #' # change size of printed p-values
 #' twofacaov(root_test_norm, label_delim = ';', draw_out = T, file = '2fac_ANOVA_all_vs_all.pdf', p_value_size = 1)
 #' @export
-twofacaov <- function(root_norm, label_delim = ";", draw_out = T,
+twofacaov <- function(root_norm,
+                      grouping_var1 = 'Factor1', grouping_var2 = 'Factor2',
+                      dependend_var = 'LengthMM',
+                      label_delim = ";",
+                      draw_out = F,
                       file = "2fac_ANOVA_all_vs_all.pdf",
                       p_value_size = 0.8) {
+
+
+    colnames(root_norm)[colnames(root_norm)==grouping_var1] <- 'Factor1'
+    colnames(root_norm)[colnames(root_norm)==grouping_var2] <- 'Factor2'
+    colnames(root_norm)[colnames(root_norm)==dependend_var] <- 'LengthMM'
 
     # model that compares all vs all
     aov_all_vs_all <- aov(LengthMM ~ Factor1 * Factor2, data = root_norm)
@@ -253,7 +374,7 @@ twofacaov <- function(root_norm, label_delim = ";", draw_out = T,
 }
 
 
-#' @title Pairwise Two Way ANOVA of Treatment Effects
+#' @title Pairwise Two Way ANOVA of Treatment (Interaction) Effects
 #' @description The function performes a two way ANOVA. It compares the treatment effect of Factor2 control to Factor2 treatment for every Factor1 (pairwise). P-values are corrected using Benjamini-Hochberg procedure.
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
 #' @param control string; name of the Factor2 control condition
@@ -261,24 +382,35 @@ twofacaov <- function(root_norm, label_delim = ";", draw_out = T,
 #' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
 #' @param file_base string; file name of the pdf output (is needed if draw_out = T)
 #' @param p_value_size numeric; font siz of the p-values printed in pdf file
-#' @return list; data.frames containg p-values for pairwise two way ANOVA for each Factor1 per Factor2 control treatment effect
+#' @return list; matrices containg p-values for pairwise two way ANOVA for each Factor1 per Factor2 control treatment effect
 #' @examples
 #' # get data.frame containg p-values for pairwise two way ANOVA
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
-#' pairwise_2facaov(root_test_norm, control = '20', label_delim = ';', draw_out = F)
+#' interaction_twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = F)
 #'
 #' # get data.frame and plot as pdf output
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
-#' twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected')
+#' interaction_twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected')
 #' # change size of printed p-values
-#' twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected', p_value_size = 1)
+#' interaction_twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected', p_value_size = 1)
 #' # function creates a pdf file 2fac_ANOVA_BH_corrected_28.pdf
 #' @export
-pairwise_2facaov <- function(root_norm, control = "20", label_delim = ";",
-                             draw_out = T, file_base =
-                             "2fac_ANOVA_BH_corrected", p_value_size = 0.8) {
+interaction_twofacaov <- function(root_norm,
+                             grouping_var1 = 'Factor1', grouping_var2 = 'Factor2',
+                             dependend_var = 'LengthMM',
+                             control = "20",
+                             label_delim = ";",
+                             draw_out = F,
+                             file_base = "2fac_ANOVA_BH_corrected",
+                             p_value_size = 0.8) {
+
+
+    colnames(root_norm)[colnames(root_norm)==grouping_var1] <- 'Factor1'
+    colnames(root_norm)[colnames(root_norm)==grouping_var2] <- 'Factor2'
+    colnames(root_norm)[colnames(root_norm)==dependend_var] <- 'LengthMM'
+
 
     root_norm$Factor1 <- as.factor(root_norm$Factor1)
     root_norm$Factor2 <- as.factor(root_norm$Factor2)
@@ -295,7 +427,7 @@ pairwise_2facaov <- function(root_norm, control = "20", label_delim = ";",
     nr_fac1 <- length(fac1)
 
 
-    dfl <- list()
+    matl <- list()
 
     for (tp in treat_position) {
         # create empty matrix with NA / as factor1 names to rows and colums
@@ -309,11 +441,11 @@ pairwise_2facaov <- function(root_norm, control = "20", label_delim = ";",
                 # create data.frame with 2 ecotypes | 1. control 2. from loops
                 d <- root_norm[which( (root_norm$Factor1 ==
                                            fac1[i] | root_norm$Factor1
-                                           == fac1[j]) &
-                                           (root_norm$Factor2
+                                       == fac1[j]) &
+                                          (root_norm$Factor2
                                            == fac2[con_position] |
-                                           root_norm$Factor2 ==
-                                           fac2[tp])), ]
+                                               root_norm$Factor2 ==
+                                               fac2[tp])), ]
                 # definiere linear model for ANOVA
                 lm_all <- lm(log2(LengthMM) ~ Factor1 * Factor2,
                              d, na.action = na.omit)
@@ -353,33 +485,15 @@ pairwise_2facaov <- function(root_norm, control = "20", label_delim = ";",
             # print p-Werte into it
             sg <- expand.grid(rev(s), s)
             text(sg[, 2], sg[, 1], cex = p_value_size, format(c(as.vector(mat),
-                 0.123456789), digits = 1, nsmall = 3,
-                 scientiffic = FALSE)[1:nr_fac1 ^ 2], col = as.vector(col))
+                                                                0.123456789), digits = 1, nsmall = 3,
+                                                              scientiffic = FALSE)[1:nr_fac1 ^ 2], col = as.vector(col))
             dev.off()
         }
 
         # Generate dataframes with p-values for each condition (for each loop)
-        # and put it in list dfl
-
-        # get names from row and col
-        rowcol <- expand.grid(rownames(mat), colnames(mat))
-        # take only the upper.tri
-        labs <- rowcol[as.vector(upper.tri(mat)), ]
-        # add condition to labels
-        labs[, 1] <- paste(labs[, 1], unique(root_norm$Factor2)[tp],
-                           sep = label_delim)
-        labs[, 2] <- paste(labs[, 2], unique(root_norm$Factor2)[tp],
-                           sep = label_delim)
-        # bind with values
-        df <- cbind(labs, mat[upper.tri(mat)])
-        # order data frame
-        df <- df[, c(2, 1, 3)]
-        # combine cells to new cell called name
-        df <- tidyr::unite(df, names, c(Var2, Var1), sep = "-", remove = TRUE)
-        colnames(df)[2] <- "p.value"
-
+        # and put it in list matl
         name <- fac2[tp]
-        dfl[[name]] <- df
+        matl[[name]] <- mat
     }
-    return(dfl)
+    return(matl)
 }
