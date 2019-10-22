@@ -228,6 +228,7 @@ plot_abs <- function(root_norm,
 #' @title Plotting relative data of Rootdetection standard
 #' @description Relative data are plotted as boxplot or box-jitter-plot combination. If Significances should be illustrated multiple plots are generated. Each Factor2 control Factor2 treatment combination will produce a plot.
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
+#' @param label_delim character; define how Factor1 and Factor2 are seperated in Label
 #' @param control string; name of the Factor2 control condition
 #' @param type string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot
 #' @param jitter_dot_size number; defines the size of the dots in jitter plots
@@ -240,7 +241,7 @@ plot_abs <- function(root_norm,
 #' @param size_x_axes numeric; defines size of x-axes labels
 #' @param size_y_axes numeric; defines size of y-axes labels
 #' @param plot_significance logical; if TRUE significances will be drawn as letters
-#' @param pairwise_2facaov_output data.frame; Output of pairwise_2facaov (needed if plot_significance = T)
+#' @param interaction_twofacaov_output data.frame; Output of interaction_twofacaov (needed if plot_significance = T)
 #' @param letter_height numeric; defines the position of the significance letters
 #' @param size_letter numeric; defines size of the significance letters
 #' @param angle_letter numeric, defines angle of significance letters
@@ -257,12 +258,13 @@ plot_abs <- function(root_norm,
 #' # Plot with siginficance letters
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
-#' root_stat <- pairwise_2facaov(root_test_norm, draw_out = F, label_delim = ';')
+#' root_stat <- interaction_twofacaov(root_test_norm, draw_out = F, label_delim = ';')
 #' # boxplot with statistics
-#' plot_rel(root_test_norm, plot_significance = T, pairwise_2facaov_output = root_stat, control = '20', type = 'box')
+#' plot_rel(root_test_norm, plot_significance = T, interaction_twofacaov_output = root_stat, control = '20', type = 'box')
 #'
 #' # all customizable plotting parameters have a default value
 #' plot_rel(root_test_norm,
+#'          label_delim = ';',
 #'          control = 20,
 #'          type = "jitter",
 #'          plot_colours = c('blue', 'red', 'orange', 'green'),
@@ -274,13 +276,14 @@ plot_abs <- function(root_norm,
 #'          size_x_axes = 9,
 #'          size_y_axes = 9,
 #'          plot_significance = T,
-#'          pairwise_2facaov_output = root_stat,
+#'          interaction_twofacaov_output = root_stat,
 #'          letter_height = 10,
 #'          size_letter = 5,
 #'          angle_letter = 0)
 #'
 #' @export
 plot_rel <- function(root_norm,
+                     label_delim = ';',
                      control = 20,
                      type = "jitter",
                      jitter_dot_size = 2,
@@ -292,8 +295,8 @@ plot_rel <- function(root_norm,
                      size_legend_text = 10,
                      size_x_axes = 9,
                      size_y_axes = 9,
-                     plot_significance = T,
-                     pairwise_2facaov_output,
+                     plot_significance = F,
+                     interaction_twofacaov_output,
                      letter_height = 10,
                      size_letter = 5,
                      angle_letter = 0) {
@@ -304,25 +307,49 @@ plot_rel <- function(root_norm,
 
         relative_plot <- list()
 
-        for (i in 1:length(pairwise_2facaov_output)) {
+        for (i in 1:length(interaction_twofacaov_output)) {
 
-            # get labels for every table
-            labs <-
-                data.frame(multcompView::multcompLetters(
-                    structure(pairwise_2facaov_output[[i]][, 2],
-                              names =
-                                  as.character(pairwise_2facaov_output[[i]][, 1])))["Letters"])
-            labs$Label <- rownames(labs)
-            y_coord <- plyr::ddply(rel_root_norm, plyr::.(Label),
-                                   plyr::summarize, y = fivenum(relative_value)[5])
-            y_coord$y <- y_coord$y + letter_height
-            plot_letter <- merge(labs, y_coord, by = "Label")
-
-
+            # create rel subsets
             rel_sub <- subset(rel_root_norm,
-                              Factor2 == names(pairwise_2facaov_output)[i])
+                              Factor2 == names(interaction_twofacaov_output)[i])
             rel_sub$Factor2 <- as.factor(rel_sub$Factor2)
             rel_sub$Factor2 <- droplevels(rel_sub$Factor2)
+
+
+
+            # create subset of ANOVA matrices
+            sub_aov <- interaction_twofacaov_output[[i]]
+
+            # get Letters from ANOVA subset
+            mat_names <- character()
+            mat_values <- numeric()
+            # loop over matrix and get names + values
+            for (j in 1:(length(row.names(sub_aov)) - 1)) {
+                for (k in (j + 1):length(colnames(sub_aov))) {
+                    v <- sub_aov[j, k]
+                    t <- paste(row.names(sub_aov)[j],
+                               colnames(sub_aov)[k], sep = "-")
+                    mat_names <- c(mat_names, t)
+                    mat_values <- c(mat_values, v)
+                }
+            }
+
+            # combine names + values
+            names(mat_values) <- mat_names
+            # get df with letters and replace : with label delim!!
+            letters <-
+                data.frame(multcompView::multcompLetters(mat_values)["Letters"])
+            letters$Label <- paste(rownames(letters), names(interaction_twofacaov_output)[i], sep = label_delim)
+
+
+            # letter 1/5 of highest value
+            y_coord <- plyr::ddply(rel_sub, plyr::.(Label), plyr::summarize,
+                                   y = fivenum(relative_value)[5])
+            y_coord$y <- y_coord$y + letter_height
+            plot_letters <- merge(letters, y_coord, by = "Label")
+
+
+
 
             # use annotate instead of geom_text() to use within a loop
             relative_plot_temp <- ggplot2::ggplot() +
@@ -346,8 +373,8 @@ plot_rel <- function(root_norm,
                                axis.text.y = ggplot2::element_text(colour = 'black', size = size_y_axes),
                                legend.title = ggplot2::element_text(size = size_legend_title),
                                legend.text = ggplot2::element_text(size = size_legend_text)) +
-                ggplot2::annotate("text", x = plot_letter$Label,
-                                  y = plot_letter$y, label = plot_letter$Letters, size = size_letter,
+                ggplot2::annotate("text", x = plot_letters$Label,
+                                  y = plot_letters$y, label = plot_letters$Letters, size = size_letter,
                                   angle = angle_letter) +
                 {if(!missing(plot_colours))ggplot2::scale_fill_manual(values = plot_colours)} +
                 {if(!missing(plot_colours))ggplot2::scale_colour_manual(values = plot_colours)}
