@@ -56,7 +56,11 @@ rm_outlier <- function(x, fill_na = F) {
 #' @param control string; name of the Factor2 control condition
 #' @return list of data.frames; each subset will be in an seperated data.frame stored in a list of data.frames
 #' @examples
-#' # will come in next version with an data.frame containing multiple Factor2
+#' # create normalized data.set with multiple Factor2
+#' root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_standard = '20mm', standard_length_mm = '20')
+#'
+#' # create subsets for each control_treatment pair
+#' subset_fac2(root_norm_multfac2, control = '20')
 #'
 #' @export
 subset_fac2 <- function(root_norm, control = '20'){
@@ -94,3 +98,99 @@ subset_fac2 <- function(root_norm, control = '20'){
   return(dfl)
 }
 
+
+
+#' @title Create rootdetectR Compatible Matrix from TukeyHSD output
+#' @description The function will create a rootdetectR compatible Matrix from TukeyHSD output. The returened matrix can be used to retrieve plotting letters or can be used directly inside the plotting functions (plot_rel, plot_abs).
+#' @param tukeyHSD_output matrix or data.frame; Output from the TukeyHSD() function.
+#' @return matrix; containing the p-values from TukeyHSD() in an appropriate format for other rootdetectR functions.
+#' @examples
+#' # conduct ANOVA and TukeyHSD
+#' root_norm <- norm_10mm_standard(root_output)
+#' aov_all_vs_all <- aov(LengthMM ~ Factor1 * Factor2, data = root_norm)
+#' tuk <- TukeyHSD(aov_all_vs_all, ordered = FALSE)$`Factor1:Factor2`
+#'
+#' # use Tukey Output to retrieve matrix
+#' tukey_to_matrix(tuk)
+#'
+#' @export
+tukey_to_matrix <- function(tukeyHSD_output) {
+
+  if(!is.data.frame(tukeyHSD_output)){
+
+    tukeyHSD_output <- as.data.frame(tukeyHSD_output)
+
+  }
+
+  temp <- data.frame(name = rownames(tukeyHSD_output), p.val = tukeyHSD_output$`p adj`)
+
+  temp_new <- tidyr::separate(temp, 'name', into = c('V1', 'V2'), sep = '-')
+  labs <- sort(unique(c(temp_new$V1, temp_new$V2)))
+  nr_labs <- length(labs)
+  # create empty matrix
+  mat <- matrix(NA, nrow = nr_labs, ncol = nr_labs)
+  colnames(mat) <- labs
+  rownames(mat) <- labs
+
+
+  for (j in 1:(nr_labs - 1)) {
+    for (k in (j + 1):nr_labs) {
+
+      # get p-values and put them into the matrix
+      idx <- which(paste(labs[j], '-', labs[k], sep = '') == temp$name)
+      if (length(idx) == 0) {
+        idx <- which(paste(labs[k], '-', labs[j], sep = '') == temp$name)
+      }
+      if (length(idx) != 0) {
+        mat[j, k] <- temp[idx, 2]
+      }
+    }
+  }
+  return(mat)
+}
+
+
+
+#' @title Create Significance Letter encoding
+#' @description The function takes a matrix as input (from rootdetectR ANOVA analysis or from tukey_to_matrix function) and returns a table with significance letters.
+#' @param tukmatrix matrix; Output from ANOVA functions (onefacaof_fac1, onefacaov_fac2, twofacaov, interaction_twofacaov)
+#' @return data.frame; containing Label and the corresponding significance letter
+#' @examples
+#' # conduct ANOVA and TukeyHSD
+#' root_norm <- norm_10mm_standard(root_output)
+#' aov_all_vs_all <- aov(LengthMM ~ Factor1 * Factor2, data = root_norm)
+#' tuk <- TukeyHSD(aov_all_vs_all, ordered = FALSE)$`Factor1:Factor2`
+#'
+#' # use Tukey Output to retrieve matrix
+#' tukey_to_matrix(tuk)
+#'
+#' # get significance_letters
+#' get_sig_letters(tuk)
+#'
+#'
+#' @export
+get_sig_letters <- function(tukmatrix){
+
+  # get Letters for twofacaov output
+  mat_names <- character()
+  mat_values <- numeric()
+  # loop over matrix and get names + values
+  for (j in 1:(length(row.names(tukmatrix)) - 1)) {
+    for (k in (j + 1):length(colnames(tukmatrix))) {
+      v <- tukmatrix[j, k]
+      t <- paste(row.names(tukmatrix)[j],
+                 colnames(tukmatrix)[k], sep = "-")
+      mat_names <- c(mat_names, t)
+      mat_values <- c(mat_values, v)
+    }
+  }
+
+  # combine names + values
+  names(mat_values) <- mat_names
+  # get df with letters and replace : with label delim!!
+  letters <-
+    data.frame(multcompView::multcompLetters(mat_values)["Letters"])
+
+  return(letters)
+
+}
