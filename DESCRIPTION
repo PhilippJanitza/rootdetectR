@@ -1,7 +1,7 @@
 Package: rootdetectR
 Type: Package
 Title: Statistical analysis of rootdetection output with R
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: person("Philipp", "Janitza", email = "philipp.janitza@landw.uni-halle.de",
                   role = c("aut", "cre"))
 Description: rootdectR can be used to analyse the output from rootdetection software. This package contains functions to visualize and statistically test data coming from rootdetection 			software. It can be used to produce pretty boxplots including statistics from ANOVA analysis.
