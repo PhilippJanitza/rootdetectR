@@ -8,8 +8,8 @@ plot_rel(root_norm, label_delim = ";", control = 20, type = "jitter",
   jitter_dot_size = 2, plot_colours, y_label = "\% growth",
   x_label = "", legend_label = "Label", size_legend_title = 12,
   size_legend_text = 10, size_x_axes = 9, size_y_axes = 9,
-  plot_significance = F, interaction_twofacaov_output,
-  letter_height = 10, size_letter = 5, angle_letter = 0)
+  plot_significance = F, letter_height = 10, size_letter = 5,
+  angle_letter = 0)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
@@ -39,8 +39,6 @@ plot_rel(root_norm, label_delim = ";", control = 20, type = "jitter",
 \item{size_y_axes}{numeric; defines size of y-axes labels}
 
 \item{plot_significance}{logical; if TRUE significances will be drawn as letters}
-
-\item{interaction_twofacaov_output}{data.frame; Output of interaction_twofacaov (needed if plot_significance = T)}
 
 \item{letter_height}{numeric; defines the position of the significance letters}
 

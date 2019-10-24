@@ -9,8 +9,8 @@ plot_abs(root_norm, label_delim = ";", type = "jitter",
   y_label = "hypocotyl length [mm]", x_label = "",
   legend_label = "Factor 2", size_legend_title = 12,
   size_legend_text = 10, size_x_axes = 9, size_y_axes = 9,
-  size_n = 3, plot_significance = F, twofacov_output,
-  letter_height = 2, size_letter = 5, angle_letter = 0)
+  size_n = 3, plot_significance = F, letter_height = 2,
+  size_letter = 5, angle_letter = 0)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
@@ -48,8 +48,6 @@ plot_abs(root_norm, label_delim = ";", type = "jitter",
 \item{size_letter}{numeric; defines size of the significance letters}
 
 \item{angle_letter}{numeric, defines angle of significance letters}
-
-\item{twofacaov_output}{data.frame; Output of twofacaov (needed if plot_significance = T)}
 }
 \value{
 plot; box or box-jitter-plot of the absolute data
