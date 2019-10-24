@@ -357,14 +357,12 @@ absolute_plot <- plot_abs(root_norm, plot_significance = F, label_delim = ';', t
 absolute_plot
 ```
 
-With `rootdetectR` it is possible to add statistics from the `twofacaov` function to this plots using Letter encoding. If `plot_significance` is set to TRUE you have to add the `twofacaov` output in the function.
+With `rootdetectR` it is possible to add statistics to this plots using Letter encoding If `plot_significance` is set to TRUE.
 
 ```{r}
-# calculate ANOVA and Tukey post-hoc for your data with Two-Way ANOVA
-tw_anova <- twofacaov(root_norm, draw_out = F)
-# use the twofacaov output in the plotting function to plot statistics
-absolute_plot <- plot_abs(root_norm, plot_significance = T, twofacov_output = tw_anova, 
-                          label_delim = ';', type = 'jitter', plot_colours = c('blue', 'red'))
+# use the twofacaov in the plotting function to plot statistics
+absolute_plot <- plot_abs(root_norm, plot_significance = T, label_delim = ';', 
+                          type = 'jitter', plot_colours = c('blue', 'red'))
 absolute_plot
 ```
 
@@ -372,15 +370,15 @@ As you can see in the output it seems like the letters are sticking directly ont
 
 ```{r}
 # increase letter heigth
-absolute_plot <- plot_abs(root_norm, plot_significance = T, twofacov_output = tw_anova, 
-                          label_delim = ';', type = 'jitter', plot_colours = c('blue', 'red'), 
+absolute_plot <- plot_abs(root_norm, plot_significance = T, label_delim = ';', 
+                          type = 'jitter', plot_colours = c('blue', 'red'), 
                           letter_height = 5)
 absolute_plot
 ```
 
 ## Plot relative data
 
-Analogous to the plots of the absolute date `rootdetectR` comes with a function to plot relative data called `plot_rel`. For this function it is also possible to plot letter encoded statistics by setting `plot_significance` to TRUE. For the relative data you need to provide the output from the `interaction_twofacaov` function. Since the `interaction_twofacaov` is only capable to compare relative data for each Factor2 control Factor2 treatment pair you will obtain multiple plots if you have more than one Factor2 treatments (more than two Factor2 in general). (If you have multiple Factor2 treatments and set plot_significance = F you will get all the data in one plot without statistics.)
+Analogous to the plots of the absolute date `rootdetectR` comes with a function to plot relative data called `plot_rel`. For this function it is also possible to plot letter encoded statistics by setting `plot_significance` to TRUE. Since the `interaction_twofacaov` is only capable to compare relative data for each Factor2 control Factor2 treatment pair you will obtain multiple plots if you have more than one Factor2 treatments (more than two Factor2 in general). (If you have multiple Factor2 treatments and set plot_significance = F you will get all the data in one plot without statistics.)
 
 _Caution: The input data set is the Normalized Root Output and not the table with relative data._ The relative data is calculated within the function
 
@@ -390,13 +388,11 @@ relative_plot <- plot_rel(root_norm, plot_significance = F, type = 'jitter', con
 relative_plot
 ```
 
-To add statistics to this plot set `plot_significance = T` and add the output from the `interaction_twofacaov`.
+To add statistics to this plot set `plot_significance = T`.
 
 ```{r}
-# plot relative data
-interaction_tw_anova <- interaction_twofacaov(root_norm, control = '20', label_delim = ';', draw_out = F)
+# plot relative data with statistics
 relative_plot <- plot_rel(root_norm, plot_significance = T, 
-                          interaction_twofacaov_output = interaction_tw_anova, 
                           type = 'jitter', control = '20', letter_height = 10)
 relative_plot
 ```
@@ -423,13 +419,9 @@ Although we have multiple Factor2 treatment levels in this example all the data 
 root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_delim = ';', 
                                          label_standard = '20mm', standard_length_mm = '20')
 
-# condcut the interaction two way anova of the root_norm_multfac2 dataset
-interaction_tw_anova_multfac2 <- interaction_twofacaov(root_norm_multfac2, control = '20', 
-                                               label_delim = ';', draw_out = F)
 
 # plot relative data with multiple factor2 treatment levels with statistics
 relative_plot_multfac2 <- plot_rel(root_norm_multfac2, plot_significance = T,
-                                   interaction_twofacaov_output = interaction_tw_anova_multfac2,
                                    type = 'jitter', control = '20', letter_height = 10)
 # calling the variable will show us that there is a list with two plots
 relative_plot_multfac2 
