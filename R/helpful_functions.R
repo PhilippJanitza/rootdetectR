@@ -194,3 +194,57 @@ get_sig_letters <- function(tukmatrix){
   return(letters)
 
 }
+
+
+#' @title Sort Labels of Normalized Rootdetection Table
+#' @description The function will sort the labels according to Controls. By defining control_fac1 and control_fac2 you can set those conditions to the first place in order.
+#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
+#' @param col_label string; name of the column carring the labels (grouping variable/s)
+#' @param control_fac1 string; name of the control condition of grouping variable1 (Factor1)
+#' @param control_fac2 string; name of the control condition of grouping variable2 (Factor2)
+#' @return data.frame; with sorted col_label
+#' @examples
+#' # Obtain normalized Rootdetection data.frame
+#' root_norm <- norm_10mm_standard(root_output)
+#'
+#' # check the labels
+#' levels(root_norm$Label)
+#'
+#' # sort setting yucOx and 28 as controls
+#' sort_label(root_norm, control_fac1 = 'yucOx', control_fac2 = '28')
+#'
+#'
+#' @export
+sort_label <- function(root_norm, col_label = 'Label', control_fac1, control_fac2){
+
+
+  colnames(root_norm)[colnames(root_norm) == col_label] <- 'Label'
+  root_norm$Label <- as.factor(root_norm$Label)
+
+  # get control positions
+  con_fac1_position <- grep(control_fac1, levels(root_norm$Label))
+  # get all other positions and put controls in first place
+  sort_fac1 <- c(levels(root_norm$Label)[con_fac1_position], levels(root_norm$Label)[-con_fac1_position])
+
+  fac1 <- unique(sub(paste(label_delim, ".*", sep = ''), '', sort_fac1))
+  fac2 <- unique(sub(paste(".*", label_delim, sep = ''), '', sort_fac1))
+
+  sorted_fac1_fac2 <- character(0)
+
+  for (i in fac1) {
+
+    temp <- sort_fac1[grep(i, sort_fac1)]
+    con_fac2_position <- grep(control_fac2, unique(sub(paste(".*", label_delim, sep = ''), '', temp)))
+    sort_fac2 <- c(temp[con_fac2_position], temp[-con_fac2_position])
+    sorted_fac1_fac2 <- c(sorted_fac1_fac2, sort_fac2)
+  }
+
+
+  root_norm$Label <- factor(root_norm$Label,levels = sorted_fac1_fac2)
+
+  colnames(root_norm)[colnames(root_norm) == 'Label'] <- col_label
+
+  return(root_norm)
+
+
+}
