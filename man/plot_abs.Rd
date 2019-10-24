@@ -5,25 +5,30 @@
 \title{Plotting absolute data of Rootdetection standard}
 \usage{
 plot_abs(root_norm, label_delim = ";", type = "jitter",
-  jitter_dot_size = 2, plot_n = T, plot_colours,
-  y_label = "hypocotyl length [mm]", x_label = "",
-  legend_label = "Factor 2", size_legend_title = 12,
-  size_legend_text = 10, size_x_axes = 9, size_y_axes = 9,
-  size_n = 3, plot_significance = F, letter_height = 2,
-  size_letter = 5, angle_letter = 0)
+  size_jitter_dot = 2, plot_n = T, plot_colours, plot_title,
+  size_plot_title = 14, y_label = "hypocotyl length [mm]",
+  x_label = "", legend_label = "Factor 2", size_legend_title = 12,
+  size_legend_text = 10, width_lines = 0.5, width_axis = 0.5,
+  size_x_axes = 9, size_y_axes = 9, size_n = 3,
+  plot_significance = F, height_letter = 2, size_letter = 5,
+  angle_letter = 0)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
 
 \item{label_delim}{character; define how Factor1 and Factor2 are seperated in Label}
 
-\item{type}{string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot}
+\item{type}{string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot,  'violin' = will produce violin plot}
 
-\item{jitter_dot_size}{number; defines the size of the dots in jitter plots}
+\item{size_jitter_dot}{number; defines the size of the dots in jitter plots}
 
 \item{plot_n}{logical; if TRUE sample size (n) will be plotted}
 
 \item{plot_colours}{vector; provide colours for the boxplot - colour vector must have the same length than Factor2}
+
+\item{plot_title}{string; defines the plot title}
+
+\item{size_plot_title}{numeric; defines size of the plot title}
 
 \item{y_label}{string; axes description of y-axes}
 
@@ -35,6 +40,10 @@ plot_abs(root_norm, label_delim = ";", type = "jitter",
 
 \item{size_legend_text}{numeric; defines size of legend text}
 
+\item{width_lines}{numeric; defines the line width of boxes or violins}
+
+\item{width_axis}{numeric; defines the line width of the axis}
+
 \item{size_x_axes}{numeric; defines size of x-axes labels}
 
 \item{size_y_axes}{numeric; defines size of y-axes labels}
@@ -43,7 +52,7 @@ plot_abs(root_norm, label_delim = ";", type = "jitter",
 
 \item{plot_significance}{logical; if TRUE significances will be drawn as letters}
 
-\item{letter_height}{numeric; defines the position of the significance letters}
+\item{height_letter}{numeric; defines the position of the significance letters}
 
 \item{size_letter}{numeric; defines size of the significance letters}
 
@@ -87,6 +96,6 @@ plot_abs(root_test_norm, plot_significance = F, type = 'jitter', plot_colours = 
                 size_x_axes = 9, size_y_axes = 9,
                 size_n = 3,
                 plot_significance = T, twofacov_output = root_stat,
-                letter_height = 5, size_letter = 5, angle_letter = 0)
+                height_letter = 5, size_letter = 5, angle_letter = 0)
 
 }

@@ -20,7 +20,7 @@
 #' plot_hist[[1]]
 #'
 #' @export
-plot_hist <- function(root_norm, draw_out = T,
+plot_hist <- function(root_norm, draw_out = F,
                       file = "data_distribution.pdf") {
     # other tests than shapiro-wilk
     plot_list <- list()
@@ -49,12 +49,12 @@ plot_hist <- function(root_norm, draw_out = T,
             {if(shap$p.value < 0.05)ggplot2::geom_histogram(color = "black", fill = "red",
                                                             breaks = brx)} +
             ggplot2::theme_classic() +
+            ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, size = 11),
+                           plot.subtitle =  ggplot2::element_text(hjust = 0.5, size = 8)) +
             ggplot2::scale_x_continuous("LengthMM") +
-            ggplot2::annotate("text", x = Inf, y = Inf,
-                              label = round(shap$p.value, digits = 4), hjust = 1,
-                              vjust = 1, size = 3) +
-            ggplot2::ggtitle(paste(unique(hist_sub$Factor1),
-                                   unique(hist_sub$Factor2, sep = " ")))
+            ggplot2::ggtitle(label = paste(unique(hist_sub$Factor1),
+                                           unique(hist_sub$Factor2, sep = " ")),
+                             subtitle =  paste('p.val =', round(shap$p.value, digits = 4)))
 
         plot_list[[lev]] <- p
     }
@@ -73,20 +73,24 @@ plot_hist <- function(root_norm, draw_out = T,
 #' @description Absolute data are plotted as boxplot or box-jitter-plot combination. Signifcances can be illustrated in the plot.
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
 #' @param label_delim character; define how Factor1 and Factor2 are seperated in Label
-#' @param type string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot
-#' @param jitter_dot_size number; defines the size of the dots in jitter plots
+#' @param type string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot,  'violin' = will produce violin plot
+#' @param size_jitter_dot number; defines the size of the dots in jitter plots
 #' @param plot_n logical; if TRUE sample size (n) will be plotted
 #' @param plot_colours vector; provide colours for the boxplot - colour vector must have the same length than Factor2
+#' @param plot_title string; defines the plot title
+#' @param size_plot_title numeric; defines size of the plot title
 #' @param y_label string; axes description of y-axes
 #' @param x_label string; axes description of x-axes
 #' @param legend_label string; title of legend
 #' @param size_legend_title numeric; defines size of legend title
 #' @param size_legend_text numeric; defines size of legend text
+#' @param width_lines numeric; defines the line width of boxes or violins
+#' @param width_axis numeric; defines the line width of the axis
 #' @param size_x_axes numeric; defines size of x-axes labels
 #' @param size_y_axes numeric; defines size of y-axes labels
 #' @param size_n = numeric; defines size of n plotted (if plot_n = TRUE)
 #' @param plot_significance logical; if TRUE significances will be drawn as letters
-#' @param letter_height numeric; defines the position of the significance letters
+#' @param height_letter numeric; defines the position of the significance letters
 #' @param size_letter numeric; defines size of the significance letters
 #' @param angle_letter numeric, defines angle of significance letters
 #' @return plot; box or box-jitter-plot of the absolute data
@@ -122,25 +126,29 @@ plot_hist <- function(root_norm, draw_out = T,
 #'                 size_x_axes = 9, size_y_axes = 9,
 #'                 size_n = 3,
 #'                 plot_significance = T, twofacov_output = root_stat,
-#'                 letter_height = 5, size_letter = 5, angle_letter = 0)
+#'                 height_letter = 5, size_letter = 5, angle_letter = 0)
 #'
 #' @export
 plot_abs <- function(root_norm,
                      label_delim = ";",
                      type = "jitter",
-                     jitter_dot_size = 2,
+                     size_jitter_dot = 2,
                      plot_n = T,
                      plot_colours,
+                     plot_title,
+                     size_plot_title = 14,
                      y_label = 'hypocotyl length [mm]',
                      x_label = '',
                      legend_label = 'Factor 2',
                      size_legend_title = 12,
                      size_legend_text = 10,
+                     width_lines = 0.5,
+                     width_axis = 0.5,
                      size_x_axes = 9,
                      size_y_axes = 9,
                      size_n = 3,
                      plot_significance = F,
-                     letter_height = 2,
+                     height_letter = 2,
                      size_letter = 5,
                      angle_letter = 0) {
 
@@ -177,7 +185,7 @@ plot_abs <- function(root_norm,
         # letter 1/5 of highest value
         y_coord <- plyr::ddply(root_norm, plyr::.(Label), plyr::summarize,
                                y = fivenum(LengthMM)[5])
-        y_coord$y <- y_coord$y + letter_height
+        y_coord$y <- y_coord$y + height_letter
         plot_letters <- merge(letters, y_coord, by = "Label")
     }
 
@@ -186,18 +194,22 @@ plot_abs <- function(root_norm,
         {if(type == 'jitter')ggplot2::geom_boxplot(data = root_norm,
                                                    ggplot2::aes(x = root_norm$Label,
                                                                 y = root_norm$LengthMM),
-                                                   outlier.shape = NA)} +
+                                                   outlier.shape = NA, lwd = width_lines)} +
         {if(type == 'jitter')ggplot2::geom_jitter(data = root_norm,
                                                   ggplot2::aes(x = root_norm$Label,
                                                                y = root_norm$LengthMM,
                                                                colour = as.factor(root_norm$Factor2)),
                                                   position = ggplot2::position_jitter(0.2,
-                                                                                      seed = 1), size = jitter_dot_size)} +
+                                                                                      seed = 1), size = size_jitter_dot)} +
         {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
         {if(type == 'box')ggplot2::geom_boxplot(data = root_norm,
                                                 ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM,
-                                                             fill = as.factor(root_norm$Factor2)))} +
+                                                             fill = as.factor(root_norm$Factor2)), lwd = width_lines)} +
         {if(type == 'box')ggplot2::labs(fill = legend_label)} +
+        {if(type == 'violin')ggplot2::geom_violin(data = root_norm,
+                                                   ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM,
+                                                                fill = as.factor(root_norm$Factor2)), lwd = width_lines)} +
+        {if(type == 'violin')ggplot2::labs(fill = legend_label)} +
         {if(plot_significance)ggplot2::geom_text(data = plot_letters,
                                                  ggplot2::aes(x = plot_letters$Label,
                                                               y = plot_letters$y,
@@ -207,14 +219,17 @@ plot_abs <- function(root_norm,
         ggplot2::theme_classic() +
         ggplot2::scale_y_continuous(name = y_label) +
         ggplot2::scale_x_discrete(name = x_label) +
+        {if(!missing(plot_title))ggplot2::ggtitle(label = plot_title)} +
         ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
                                                            hjust = 1, vjust = 1,
                                                            colour = 'black',
                                                            size = size_x_axes),
                        axis.text.y = ggplot2::element_text(colour = 'black',
                                                            size= size_y_axes),
+                       axis.line = ggplot2::element_line(size = width_axis),
                        legend.title = ggplot2::element_text(size = size_legend_title),
-                       legend.text = ggplot2::element_text(size = size_legend_text)) +
+                       legend.text = ggplot2::element_text(size = size_legend_text),
+                       plot.title = ggplot2::element_text(hjust = 0.5, size = size_plot_title)) +
         {if(plot_n)EnvStats::stat_n_text(data = root_norm,
                                          ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM),
                                          angle = 90, size = size_n)} +
@@ -226,23 +241,28 @@ plot_abs <- function(root_norm,
 
 
 
+
 #' @title Plotting relative data of Rootdetection standard
 #' @description Relative data are plotted as boxplot or box-jitter-plot combination. If Significances should be illustrated multiple plots are generated. Each Factor2 control Factor2 treatment combination will produce a plot.
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
 #' @param label_delim character; define how Factor1 and Factor2 are seperated in Label
 #' @param control string; name of the Factor2 control condition
-#' @param type string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot
-#' @param jitter_dot_size number; defines the size of the dots in jitter plots
+#' @param type string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot, 'violin' = will produce violin plot
+#' @param size_jitter_dot number; defines the size of the dots in jitter plots
 #' @param plot_colours vector; provide colours for the boxplot - colour vector must have the same length than Factor1
+#' @param plot_title string; defines the plot title
+#' @param size_plot_title numeric; defines size of the plot title
 #' @param y_label string; axes description of y-axes
 #' @param x_label string; axes description of x-axes
 #' @param legend_label string; title of legend
 #' @param size_legend_title numeric; defines size of legend title
 #' @param size_legend_text numeric; defines size of legend text
+#' @param width_lines numeric; defines the line width of boxes or violins
+#' @param width_axis numeric; defines the line width of the axis
 #' @param size_x_axes numeric; defines size of x-axes labels
 #' @param size_y_axes numeric; defines size of y-axes labels
 #' @param plot_significance logical; if TRUE significances will be drawn as letters
-#' @param letter_height numeric; defines the position of the significance letters
+#' @param height_letter numeric; defines the position of the significance letters
 #' @param size_letter numeric; defines size of the significance letters
 #' @param angle_letter numeric, defines angle of significance letters
 #' @return plot or list of plots; box or box-jitter-plot of relative data, if significance = T and multiple Factor2 treatments a list of boxplots will be generated
@@ -277,7 +297,7 @@ plot_abs <- function(root_norm,
 #'          size_y_axes = 9,
 #'          plot_significance = T,
 #'          interaction_twofacaov_output = root_stat,
-#'          letter_height = 10,
+#'          height_letter = 10,
 #'          size_letter = 5,
 #'          angle_letter = 0)
 #'
@@ -286,17 +306,21 @@ plot_rel <- function(root_norm,
                      label_delim = ';',
                      control = 20,
                      type = "jitter",
-                     jitter_dot_size = 2,
+                     size_jitter_dot = 2,
                      plot_colours,
-                     y_label = '% growth',
+                     plot_title,
+                     size_plot_title = 14,
+                     y_label = 'hypocotyl growth [%]',
                      x_label = '',
                      legend_label = 'Label',
                      size_legend_title = 12,
                      size_legend_text = 10,
+                     width_lines = 0.5,
+                     width_axis = 0.5,
                      size_x_axes = 9,
                      size_y_axes = 9,
                      plot_significance = F,
-                     letter_height = 10,
+                     height_letter = 10,
                      size_letter = 5,
                      angle_letter = 0) {
 
@@ -349,7 +373,7 @@ plot_rel <- function(root_norm,
             # letter 1/5 of highest value
             y_coord <- plyr::ddply(rel_sub, plyr::.(Label), plyr::summarize,
                                    y = fivenum(relative_value)[5])
-            y_coord$y <- y_coord$y + letter_height
+            y_coord$y <- y_coord$y + height_letter
             plot_letters <- merge(letters, y_coord, by = "Label")
 
 
@@ -359,24 +383,33 @@ plot_rel <- function(root_norm,
             relative_plot_temp <- ggplot2::ggplot() +
                 {if(type == 'jitter')ggplot2::geom_boxplot(data = rel_sub,
                                                            ggplot2::aes_string(x = rel_sub$Label, y =
-                                                                                   rel_sub$relative_value), outlier.shape = NA)} +
+                                                                                   rel_sub$relative_value), outlier.shape = NA,
+                                                           lwd = width_lines)} +
                 {if(type == 'jitter')ggplot2::geom_jitter(data = rel_sub,
                                                           ggplot2::aes_string(x = rel_sub$Label, y =
                                                                                   rel_sub$relative_value, colour = as.factor(rel_sub$Label)),
-                                                          position = ggplot2::position_jitter(0.2, seed = 1), size = jitter_dot_size)} +
+                                                          position = ggplot2::position_jitter(0.2, seed = 1), size = size_jitter_dot)} +
                 {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
                 {if(type == 'box')ggplot2::geom_boxplot(data = rel_sub, ggplot2::aes_string(x =
                                                                                                 rel_sub$Label, y = rel_sub$relative_value, fill =
-                                                                                                rel_sub$Label))} +
+                                                                                                rel_sub$Label),
+                                                        lwd = width_lines)} +
                 {if(type == 'box')ggplot2::labs(fill = legend_label)} +
+                {if(type == 'violin')ggplot2::geom_violin(data = rel_sub,
+                                                           ggplot2::aes_string(x = rel_sub$Label, y = rel_sub$relative_value,
+                                                                               fill = as.factor(rel_sub$Label)), lwd = width_lines)} +
+                {if(type == 'violin')ggplot2::labs(fill = legend_label)} +
                 ggplot2::theme_classic() +
                 ggplot2::scale_y_continuous(name = y_label) +
                 ggplot2::scale_x_discrete(name = x_label) +
+                {if(!missing(plot_title))ggplot2::ggtitle(label = plot_title)} +
                 ggplot2::theme(axis.text.x = ggplot2::element_text(angle =
                                                                        45, hjust = 1, vjust = 1, colour = 'black', size = size_x_axes),
                                axis.text.y = ggplot2::element_text(colour = 'black', size = size_y_axes),
+                               axis.line = ggplot2::element_line(size = width_axis),
                                legend.title = ggplot2::element_text(size = size_legend_title),
-                               legend.text = ggplot2::element_text(size = size_legend_text)) +
+                               legend.text = ggplot2::element_text(size = size_legend_text),
+                               plot.title = ggplot2::element_text(hjust = 0.5, size = size_plot_title)) +
                 ggplot2::annotate("text", x = plot_letters$Label,
                                   y = plot_letters$y, label = plot_letters$Letters, size = size_letter,
                                   angle = angle_letter) +
@@ -390,25 +423,34 @@ plot_rel <- function(root_norm,
         relative_plot <- ggplot2::ggplot() +
             {if(type == 'jitter')ggplot2::geom_boxplot(data = rel_root_norm,
                                                        ggplot2::aes(x = rel_root_norm$Label, y =
-                                                                        rel_root_norm$relative_value), outlier.shape = NA)} +
+                                                                        rel_root_norm$relative_value), outlier.shape = NA,
+                                                       lwd = width_lines)} +
             {if(type == 'jitter')ggplot2::geom_jitter(data = rel_root_norm,
                                                       ggplot2::aes(x = rel_root_norm$Label, y =
                                                                        rel_root_norm$relative_value, colour =
                                                                        as.factor(rel_root_norm$Label)), position =
-                                                          ggplot2::position_jitter(0.2, seed = 1), size = jitter_dot_size)} +
+                                                          ggplot2::position_jitter(0.2, seed = 1), size = size_jitter_dot)} +
             {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
             {if(type == 'box')ggplot2::geom_boxplot(data = rel_root_norm, ggplot2::aes(x =
                                                                                            rel_root_norm$Label, y = rel_root_norm$relative_value,
-                                                                                       fill = as.factor(rel_root_norm$Label)))} +
+                                                                                       fill = as.factor(rel_root_norm$Label)),
+                                                    lwd = width_lines)} +
             {if(type == 'box')ggplot2::labs(fill = legend_label)} +
+            {if(type == 'violin')ggplot2::geom_violin(data = rel_root_norm,
+                                                       ggplot2::aes(x = rel_root_norm$Label, y = rel_root_norm$relative_value,
+                                                                    fill = as.factor(rel_root_norm$Label)), lwd = width_lines)} +
+            {if(type == 'violin')ggplot2::labs(fill = legend_label)} +
             ggplot2::theme_classic() +
             ggplot2::scale_y_continuous(name = y_label) +
             ggplot2::scale_x_discrete(name = x_label) +
+            {if(!missing(plot_title))ggplot2::ggtitle(label = plot_title)} +
             ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
                                                                hjust = 1, vjust = 1, colour = 'black', size = size_x_axes),
                            axis.text.y = ggplot2::element_text(colour = 'black', size = size_y_axes),
+                           axis.line = ggplot2::element_line(size = width_axis),
                            legend.title = ggplot2::element_text(size = size_legend_title),
-                           legend.text =  ggplot2::element_text(size = size_legend_text)) +
+                           legend.text =  ggplot2::element_text(size = size_legend_text),
+                           plot.title = ggplot2::element_text(hjust = 0.5, size = size_plot_title)) +
             {if(!missing(plot_colours))ggplot2::scale_fill_manual(values = plot_colours)} +
             {if(!missing(plot_colours))ggplot2::scale_colour_manual(values = plot_colours)}
 

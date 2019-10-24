@@ -5,11 +5,12 @@
 \title{Plotting relative data of Rootdetection standard}
 \usage{
 plot_rel(root_norm, label_delim = ";", control = 20, type = "jitter",
-  jitter_dot_size = 2, plot_colours, y_label = "\% growth",
-  x_label = "", legend_label = "Label", size_legend_title = 12,
-  size_legend_text = 10, size_x_axes = 9, size_y_axes = 9,
-  plot_significance = F, letter_height = 10, size_letter = 5,
-  angle_letter = 0)
+  size_jitter_dot = 2, plot_colours, plot_title, size_plot_title = 14,
+  y_label = "hypocotyl growth [\%]", x_label = "",
+  legend_label = "Label", size_legend_title = 12,
+  size_legend_text = 10, width_lines = 0.5, width_axis = 0.5,
+  size_x_axes = 9, size_y_axes = 9, plot_significance = F,
+  height_letter = 10, size_letter = 5, angle_letter = 0)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
@@ -18,11 +19,15 @@ plot_rel(root_norm, label_delim = ";", control = 20, type = "jitter",
 
 \item{control}{string; name of the Factor2 control condition}
 
-\item{type}{string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot}
+\item{type}{string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot, 'violin' = will produce violin plot}
 
-\item{jitter_dot_size}{number; defines the size of the dots in jitter plots}
+\item{size_jitter_dot}{number; defines the size of the dots in jitter plots}
 
 \item{plot_colours}{vector; provide colours for the boxplot - colour vector must have the same length than Factor1}
+
+\item{plot_title}{string; defines the plot title}
+
+\item{size_plot_title}{numeric; defines size of the plot title}
 
 \item{y_label}{string; axes description of y-axes}
 
@@ -34,13 +39,17 @@ plot_rel(root_norm, label_delim = ";", control = 20, type = "jitter",
 
 \item{size_legend_text}{numeric; defines size of legend text}
 
+\item{width_lines}{numeric; defines the line width of boxes or violins}
+
+\item{width_axis}{numeric; defines the line width of the axis}
+
 \item{size_x_axes}{numeric; defines size of x-axes labels}
 
 \item{size_y_axes}{numeric; defines size of y-axes labels}
 
 \item{plot_significance}{logical; if TRUE significances will be drawn as letters}
 
-\item{letter_height}{numeric; defines the position of the significance letters}
+\item{height_letter}{numeric; defines the position of the significance letters}
 
 \item{size_letter}{numeric; defines size of the significance letters}
 
@@ -83,7 +92,7 @@ plot_rel(root_test_norm,
          size_y_axes = 9,
          plot_significance = T,
          interaction_twofacaov_output = root_stat,
-         letter_height = 10,
+         height_letter = 10,
          size_letter = 5,
          angle_letter = 0)
 

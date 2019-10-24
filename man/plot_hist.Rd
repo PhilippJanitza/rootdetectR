@@ -4,7 +4,7 @@
 \alias{plot_hist}
 \title{Plotting histograms and performing normailty tests}
 \usage{
-plot_hist(root_norm, draw_out = T, file = "data_distribution.pdf")
+plot_hist(root_norm, draw_out = F, file = "data_distribution.pdf")
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
