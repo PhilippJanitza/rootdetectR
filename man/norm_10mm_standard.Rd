@@ -4,12 +4,12 @@
 \alias{norm_10mm_standard}
 \title{Calculate LengthMM from LengthPx for Rootdetection standard}
 \usage{
-norm_10mm_standard(root_output, sort = TRUE, label_delim = ";")
+norm_10mm_standard(root_output, split = TRUE, label_delim = ";")
 }
 \arguments{
 \item{root_output}{data.frame; *.csv output from Rootdetection containing 10mm values}
 
-\item{sort}{logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2}
+\item{split}{logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2}
 
 \item{label_delim}{character; defines how Factor1 and Factor2 are seperated in Label}
 }
@@ -21,6 +21,6 @@ This function takes 10mm standard values to calculate LengthMM from LengthPx
 }
 \examples{
 norm_10mm_standard(root_output)
-norm_10mm_standard(root_output, sort = FALSE)
+norm_10mm_standard(root_output, split = FALSE)
 
 }

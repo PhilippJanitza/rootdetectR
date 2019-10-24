@@ -4,14 +4,14 @@
 \alias{norm_cust_standard}
 \title{Calculate LengthMM from LengthPx for Rootdetection standard}
 \usage{
-norm_cust_standard(root_output, sort = TRUE, label_delim = ";",
+norm_cust_standard(root_output, split = TRUE, label_delim = ";",
   col_label = "Label", col_value = "LengthPx",
   label_standard = "10mm", standard_length_mm = "10")
 }
 \arguments{
 \item{root_output}{data.frame; *.csv output from Rootdetection containing 10mm values}
 
-\item{sort}{logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2}
+\item{split}{logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2}
 
 \item{label_delim}{character; defines how Factor1 and Factor2 are seperated in Label}
 
