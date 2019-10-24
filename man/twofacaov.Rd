@@ -6,8 +6,9 @@
 \usage{
 twofacaov(root_norm, grouping_var1 = "Factor1",
   grouping_var2 = "Factor2", dependend_var = "LengthMM",
-  label_delim = ";", draw_out = F,
-  file = "2fac_ANOVA_all_vs_all.pdf", p_value_size = 0.8)
+  label_delim = ";", summary_plots = F, draw_out = F,
+  file = "2fac_ANOVA_all_vs_all.pdf", axis_label_size = 0.7,
+  p_value_size = 0.8)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
@@ -20,11 +21,15 @@ twofacaov(root_norm, grouping_var1 = "Factor1",
 
 \item{label_delim}{character; defin how Factor1 and Factor2 are seperated in Label}
 
+\item{summary_plots}{logical; If TRUE summary plots were printed (plot(aov))}
+
 \item{draw_out}{logical; If TRUE Matrix containg p-values is plotted in pdf file}
 
 \item{file}{string; file name of the pdf output (is needed if draw_out = T)}
 
-\item{p_value_size}{numeric; font siz of the p-values printed in pdf file}
+\item{axis_label_size}{numeric; font size of axis labels}
+
+\item{p_value_size}{numeric; font size of the p-values printed in pdf file}
 }
 \value{
 list; data.frames containg p-values for one way ANOVA over Factor2

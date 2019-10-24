@@ -4,10 +4,12 @@
 #' @param grouping_var1 string; column name of the first grouping variable
 #' @param grouping_var2 string; column name of the second grouping variable to itrate over (if not existing set to NULL)
 #' @param dependend_var string; column name of the dependend variable
+#' @param summary_plots logical; If TRUE summary plots were printed (plot(aov))
 #' @param draw_out logical; If TRUE matrix containg p-values is plotted in pdf file
 #' @param file_base string; file base name of the pdf output (is needed if draw_out = T)
 #' @return list; data.frames containg p-values for one way ANOVA over Factor 1
-#' @param p_value_size numeric; font siz of the p-values printed in pdf file
+#' @param axis_label_size numeric; font size of axis labels
+#' @param p_value_size numeric; font size of the p-values printed in pdf file
 #' @examples
 #' ### Usage Standard Rootdetection ###
 #' # get data.frame containg p-values for one way ANOVA over Factor 1
@@ -41,8 +43,10 @@
 onefacaov_fac1 <- function(root_norm,
                            grouping_var1 = 'Factor1', grouping_var2 = 'Factor2',
                            dependend_var = 'LengthMM',
+                           summary_plots = F,
                            draw_out = F,
                            file_base = "1fac_ANOVA_factor1",
+                           axis_label_size = 0.7,
                            p_value_size = 0.8) {
 
     # grouping_var2 = NULL --> no variable to loop over then:
@@ -60,6 +64,12 @@ onefacaov_fac1 <- function(root_norm,
         # ANOVA
         lm_aov <- lm(LengthMM ~ Factor1, root_norm, na.action = na.omit)
         pval.aov <- anova(aov(lm_aov))[1, 5]
+
+        if(summary_plots){
+
+            plot(aov(lm_aov))
+
+        }
 
         # Tukey
         tuk <- as.data.frame(TukeyHSD(aov(lm_aov), ordered = FALSE)$Factor1)
@@ -92,15 +102,15 @@ onefacaov_fac1 <- function(root_norm,
                                round(pval.aov, 5),
                                sep = ""))
             s <- seq(from = 0, to = 1, length = nr_fac1)
-            axis(1, at = s, labels = fac1, las = 2)
-            axis(2, at = s, labels = rev(fac1), las = 2)
+            axis(1, at = s, labels = fac1, las = 2, cex.axis = axis_label_size)
+            axis(2, at = s, labels = rev(fac1), las = 2, cex.axis = axis_label_size)
             abline(h = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
                    v = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
                    col = "grey")
             sg <- expand.grid(rev(s), s)
-            text(sg[, 2], sg[, 1], format(c(as.vector(mat), 0.123456789),
+            text(sg[, 2], sg[, 1], format(as.vector(mat),
                                           digits = 2, nsmall = 3,
-                                          scientiffic = FALSE)[1:nr_fac1 ^ 2],
+                                          scientific = T)[1:nr_fac1 ^ 2],
                  col = as.vector(col), cex = p_value_size)
             dev.off()
         }
@@ -131,6 +141,14 @@ onefacaov_fac1 <- function(root_norm,
             # ANOVA
             lm_aov <- lm(LengthMM ~ Factor1, data_aov, na.action = na.omit)
             pval.aov <- anova(aov(lm_aov))[1, 5]
+
+            if(summary_plots){
+
+                print(fac2[tp])
+                plot(aov(lm_aov))
+
+            }
+
 
             # Tukey
             tuk <- as.data.frame(TukeyHSD(aov(lm_aov), ordered = FALSE)$Factor1)
@@ -166,15 +184,15 @@ onefacaov_fac1 <- function(root_norm,
                                    round(pval.aov, 5),
                                    sep = ""))
                 s <- seq(from = 0, to = 1, length = nr_fac1)
-                axis(1, at = s, labels = fac1, las = 2)
-                axis(2, at = s, labels = rev(fac1), las = 2)
+                axis(1, at = s, labels = fac1, las = 2,  cex.axis = axis_label_size)
+                axis(2, at = s, labels = rev(fac1), las = 2,  cex.axis = axis_label_size)
                 abline(h = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
                        v = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
                        col = "grey")
                 sg <- expand.grid(rev(s), s)
-                text(sg[, 2], sg[, 1], format(c(as.vector(mat), 0.123456789),
+                text(sg[, 2], sg[, 1], format(as.vector(mat),
                                               digits = 2, nsmall = 3,
-                                              scientiffic = FALSE)[1:nr_fac1 ^ 2],
+                                              scientific = TRUE)[1:nr_fac1 ^ 2],
                      col = as.vector(col), cex = p_value_size)
                 dev.off()
             }
@@ -194,9 +212,11 @@ onefacaov_fac1 <- function(root_norm,
 #' @param grouping_var2 string; column name of the second grouping variable (Factor2)
 #' @param dependend_var string; column name of the dependend variable
 #' @param control string; name of the Factor2 control condition
+#' @param summary_plots logical; If TRUE summary plots were printed (plot(aov))
 #' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
 #' @param file_base string; file base name of the pdf output (is needed if draw_out = T)
-#' @param p_value_size numeric; font siz of the p-values printed in pdf file
+#' @param axis_label_size numeric; font size of axis labels
+#' @param p_value_size numeric; font size of the p-values printed in pdf file
 #' @return list; data.frames containg p-values for one way ANOVA over Factor2
 #' @examples
 #' # get data.frame containg p-values for one way ANOVA over Grouping Variable 2
@@ -216,8 +236,10 @@ onefacaov_fac2 <- function(root_norm,
                            grouping_var1 = 'Factor1', grouping_var2 = 'Factor2',
                            dependend_var = 'LengthMM',
                            control = '20',
+                           summary_plots = F,
                            draw_out = F,
                            file_base = "1fac_ANOVA_factor2",
+                           axis_label_size = 0.7,
                            p_value_size = 0.8) {
 
 
@@ -243,14 +265,22 @@ onefacaov_fac2 <- function(root_norm,
         for (i in 1:nr_fac1) {
             # for each factor1: get control and one single treatment
             d <- root_norm[which(root_norm$Factor1 == fac1[i] &
-                                         (root_norm$Factor2 ==
-                                            fac2[con_position] |
-                                            root_norm$Factor2 ==
-                                            fac2[tp])), ]
+                                     (root_norm$Factor2 ==
+                                          fac2[con_position] |
+                                          root_norm$Factor2 ==
+                                          fac2[tp])), ]
             # ANOVA
             lm_all <- lm(LengthMM ~ Factor2, d, na.action = na.omit)
             aov_all <- aov(lm_all)
             mat[1, i] <- anova(aov_all)[1, 5]
+
+            # print summary if summar_plots = T
+            if (summary_plots) {
+
+                print(paste(fac1[i], fac2[con_position], 'vs.', fac2[tp]))
+                plot(aov_all)
+
+            }
 
             # add mat to list with name
             name <- fac2[tp]
@@ -265,13 +295,16 @@ onefacaov_fac2 <- function(root_norm,
                     width = 6, height = 2.5)
                 image(t(mat), col = c("red", "white"), breaks = c(0, 0.05, 1),
                       axes = FALSE)
-                title(main = fac2[tp])
+                title(main = paste(fac2[con_position], 'vs.', fac2[tp]))
                 s <- seq(from = 0, to = 1, length = nr_fac1)
-                axis(1, at = s, labels = fac1, las = 2)
-                axis(2, at = s[1], labels = "pval", las = 2)
+                axis(1, at = s, labels = fac1, las = 2, cex.axis = axis_label_size)
+                axis(2, at = s[1], labels = "pval", las = 2, cex.axis = axis_label_size)
                 abline(v = c(s - (s[2] - s[1]) / 2, s[nr_fac1] +
-                               (s[2] - s[1]) / 2), col = "grey")
-                text(s, s[1], round(as.vector(mat), 3), cex = p_value_size)
+                                 (s[2] - s[1]) / 2), col = "grey")
+                text(s, s[1], format(as.vector(mat),
+                                     digits = 2, nsmall = 3,
+                                     scientific = TRUE)[1:nr_fac1 ^ 2],
+                     cex = p_value_size)
                 dev.off()
             }
         }
@@ -288,9 +321,11 @@ onefacaov_fac2 <- function(root_norm,
 #' @param grouping_var2 string; column name of the second grouping variable (Factor2)
 #' @param dependend_var string; column name of the dependend variable
 #' @param label_delim character; defin how Factor1 and Factor2 are seperated in Label
+#' @param summary_plots logical; If TRUE summary plots were printed (plot(aov))
 #' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
 #' @param file string; file name of the pdf output (is needed if draw_out = T)
-#' @param p_value_size numeric; font siz of the p-values printed in pdf file
+#' @param axis_label_size numeric; font size of axis labels
+#' @param p_value_size numeric; font size of the p-values printed in pdf file
 #' @return list; data.frames containg p-values for one way ANOVA over Factor2
 #' @examples
 #' # get data.frame containg p-values for one way ANOVA over Factor 2
@@ -309,8 +344,10 @@ twofacaov <- function(root_norm,
                       grouping_var1 = 'Factor1', grouping_var2 = 'Factor2',
                       dependend_var = 'LengthMM',
                       label_delim = ";",
+                      summary_plots = F,
                       draw_out = F,
                       file = "2fac_ANOVA_all_vs_all.pdf",
+                      axis_label_size = 0.7,
                       p_value_size = 0.8) {
 
 
@@ -320,6 +357,12 @@ twofacaov <- function(root_norm,
 
     # model that compares all vs all
     aov_all_vs_all <- aov(LengthMM ~ Factor1 * Factor2, data = root_norm)
+
+    # summary plots
+    if(summary_plots){
+        plot(aov_all_vs_all)
+    }
+
     # tukey post hoc test
     tuk <- as.data.frame(TukeyHSD(aov_all_vs_all,
                                   ordered = FALSE)$`Factor1:Factor2`)
@@ -337,11 +380,11 @@ twofacaov <- function(root_norm,
             # get p-values and put them into the matrix
             idx <- which(paste(gsub(label_delim, ":", labs[k]), "-",
                                gsub(label_delim, ":", labs[j]), sep = "") ==
-                               rn)
+                             rn)
             if (length(idx) == 0) {
                 idx <- which(paste(gsub(label_delim, ":", labs[j]), "-",
                                    gsub(label_delim, ":", labs[k]), sep = "")
-                                   == rn)
+                             == rn)
             }
             #
             if (length(idx) != 0) {
@@ -358,16 +401,16 @@ twofacaov <- function(root_norm,
               breaks = c(0, 0.05, 1), axes = FALSE)
         title(main = "ANOVA all vs all")
         s <- seq(from = 0, to = 1, length = nr_labs)
-        axis(1, at = s, labels = labs, las = 2, cex.axis = 0.6)
-        axis(2, at = s, labels = rev(labs), las = 2, cex.axis = 0.6)
+        axis(1, at = s, labels = labs, las = 2, cex.axis = axis_label_size)
+        axis(2, at = s, labels = rev(labs), las = 2, cex.axis = axis_label_size)
         abline(h = c(s - (s[2] - s[1]) / 2, s[nr_labs] + (s[2] - s[1]) / 2), v =
-                 c(s - (s[2] - s[1]) / 2, s[nr_labs] + (s[2] - s[1]) / 2),
-                 col = "grey")
+                   c(s - (s[2] - s[1]) / 2, s[nr_labs] + (s[2] - s[1]) / 2),
+               col = "grey")
         sg <- expand.grid(rev(s), s)
-        text(sg[, 2], sg[, 1], format(c(as.vector(mat), 0.123456789),
+        text(sg[, 2], sg[, 1], format(as.vector(mat),
                                       digits = 2, nsmall = 3,
-                                      scientiffic = FALSE)[1:nr_labs ^ 2],
-                                      col = as.vector(col), cex = p_value_size)
+                                      scientific = TRUE)[1:nr_labs ^ 2],
+             col = as.vector(col), cex = p_value_size)
         dev.off()
     }
     return(mat)
@@ -381,7 +424,8 @@ twofacaov <- function(root_norm,
 #' @param label_delim character; defin how Factor1 and Factor2 are seperated in Label
 #' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
 #' @param file_base string; file name of the pdf output (is needed if draw_out = T)
-#' @param p_value_size numeric; font siz of the p-values printed in pdf file
+#' @param axis_label_size numeric; font size of axis labels
+#' @param p_value_size numeric; font size of the p-values printed in pdf file
 #' @return list; matrices containg p-values for pairwise two way ANOVA for each Factor1 per Factor2 control treatment effect
 #' @examples
 #' # get data.frame containg p-values for pairwise two way ANOVA
@@ -404,6 +448,7 @@ interaction_twofacaov <- function(root_norm,
                              label_delim = ";",
                              draw_out = F,
                              file_base = "2fac_ANOVA_BH_corrected",
+                             axis_label_size = 0.7,
                              p_value_size = 0.8) {
 
 
@@ -476,17 +521,16 @@ interaction_twofacaov <- function(root_norm,
             title(main = paste("treatment effect ", control, " vs ", fac2[tp]))
             # axis label
             s <- seq(from = 0, to = 1, length = nr_fac1)
-            axis(1, at = s, labels = fac1, las = 1, cex.axis = 0.8)
-            axis(2, at = s, labels = rev(fac1), las = 1, cex.axis = 0.8)
+            axis(1, at = s, labels = fac1, las = 1, cex.axis = axis_label_size)
+            axis(2, at = s, labels = rev(fac1), las = 1, cex.axis = axis_label_size)
             # grid lines
             abline(h = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
                    v = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
                    col = "grey")
             # print p-Werte into it
             sg <- expand.grid(rev(s), s)
-            text(sg[, 2], sg[, 1], cex = p_value_size, format(c(as.vector(mat),
-                                                                0.123456789), digits = 1, nsmall = 3,
-                                                              scientiffic = FALSE)[1:nr_fac1 ^ 2], col = as.vector(col))
+            text(sg[, 2], sg[, 1], cex = p_value_size, format(as.vector(mat), digits = 1, nsmall = 3,
+                                                              scientific = TRUE)[1:nr_fac1 ^ 2], col = as.vector(col))
             dev.off()
         }
 

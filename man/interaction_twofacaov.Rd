@@ -7,7 +7,8 @@
 interaction_twofacaov(root_norm, grouping_var1 = "Factor1",
   grouping_var2 = "Factor2", dependend_var = "LengthMM",
   control = "20", label_delim = ";", draw_out = F,
-  file_base = "2fac_ANOVA_BH_corrected", p_value_size = 0.8)
+  file_base = "2fac_ANOVA_BH_corrected", axis_label_size = 0.7,
+  p_value_size = 0.8)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
@@ -20,7 +21,9 @@ interaction_twofacaov(root_norm, grouping_var1 = "Factor1",
 
 \item{file_base}{string; file name of the pdf output (is needed if draw_out = T)}
 
-\item{p_value_size}{numeric; font siz of the p-values printed in pdf file}
+\item{axis_label_size}{numeric; font size of axis labels}
+
+\item{p_value_size}{numeric; font size of the p-values printed in pdf file}
 }
 \value{
 list; matrices containg p-values for pairwise two way ANOVA for each Factor1 per Factor2 control treatment effect

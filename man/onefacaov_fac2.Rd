@@ -6,7 +6,8 @@
 \usage{
 onefacaov_fac2(root_norm, grouping_var1 = "Factor1",
   grouping_var2 = "Factor2", dependend_var = "LengthMM",
-  control = "20", draw_out = F, file_base = "1fac_ANOVA_factor2",
+  control = "20", summary_plots = F, draw_out = F,
+  file_base = "1fac_ANOVA_factor2", axis_label_size = 0.7,
   p_value_size = 0.8)
 }
 \arguments{
@@ -20,11 +21,15 @@ onefacaov_fac2(root_norm, grouping_var1 = "Factor1",
 
 \item{control}{string; name of the Factor2 control condition}
 
+\item{summary_plots}{logical; If TRUE summary plots were printed (plot(aov))}
+
 \item{draw_out}{logical; If TRUE Matrix containg p-values is plotted in pdf file}
 
 \item{file_base}{string; file base name of the pdf output (is needed if draw_out = T)}
 
-\item{p_value_size}{numeric; font siz of the p-values printed in pdf file}
+\item{axis_label_size}{numeric; font size of axis labels}
+
+\item{p_value_size}{numeric; font size of the p-values printed in pdf file}
 }
 \value{
 list; data.frames containg p-values for one way ANOVA over Factor2
