@@ -1,0 +1,179 @@
+---
+title: "Short Introduction"
+author: "Philipp Janitza"
+date: "`r Sys.Date()`"
+fig_caption: yes
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Short Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=6, 
+  fig.height=6
+)
+```
+
+
+# Installation
+
+Make sure you have the latest version of R and R Studio.
+
+First you need to install some perquisites:
+
+```r
+install.packages(c('knitr', 'rmarkdown', 'jpeg', 'png', 'devtools'))
+```
+
+After installing all prerequisites you can install `rootdetectR` from github.
+
+```r
+library(devtools)
+# install from github
+install_github("PhilippJanitza/rootdetectR", build_vignettes = TRUE)
+```
+
+After the installation the package can be loaded within R.
+
+```{r setup}
+library(rootdetectR)
+```
+
+# Introduction
+
+This tutorial is showing how `rootdetectR` can be used to conduct a standard analysis of a Rootdetection output. To be able to run the following script the data set should fulfill following specifications:
+
+- The delimiter of labels should be ';'
+- the data set should contain a length standard called '10mm' (measuring of 1 cm)
+- hyphens (-) in labels are not allowed
+- if performing TIHE TIRE Assay and grouping variable 2 is '20' and '28' they don't need to be provided to functions
+
+
+# Simple Data Analysis
+
+```r
+# set your working directory and read in your data
+setwd('/paht/to/your/workingdir')
+
+# read in your rootdetection output table
+my_dataset <- read.csv(file = '/path/to/rootdetection/output.csv')
+```
+```{r}
+# In this example we will use a data set included in the package
+my_dataset <- root_output
+
+# check input data
+is_root_output(my_dataset)
+
+# remove measurements with length 0
+my_dataset <- my_dataset[!my_dataset$LengthPx == 0,]
+# calculate LengthMM by length standard 10mm
+my_dataset <- norm_10mm_standard(my_dataset)
+# calculate relative data
+my_dataset_rel <- rel_data(my_dataset, control = '20')
+# calculate summary satistics
+s_stat <-summary_stat(my_dataset)
+# show summary statistics
+s_stat
+```
+```r
+# save the created tables to working dir
+write.csv(my_dataset, file = 'absolute_data.csv')
+write.csv(my_dataset_rel, file = 'relative_data.csv')
+write.csv(s_stat, file = 'summary_statistics.csv')
+
+plot_hist(my_dataset, draw_out = T)
+```
+<br>
+<center>
+![](histograms.pdf.png)
+<br>
+<p style="font-size:12px;">histograms.pdf</p>
+</center>
+
+```r
+# One-way Anova over Factor1
+ow_anova_factor1 <- onefacaov_fac1(my_dataset, draw_out = T)
+```
+
+<br>
+<center>
+![](1fac_ANOVA_factor1_20.pdf.png)
+<br>
+<p style="font-size:12px;">1fac_ANOVA_factor1_20.pdf</p>
+<br>
+![](1fac_ANOVA_factor1_28.pdf.png)
+<br>
+<p style="font-size:12px;">1fac_ANOVA_factor1_28.pdf</p>
+<br><br>
+</center>
+
+```r
+# One-way Anova over Factor2 control treatment combinations
+ow_anova_factor2 <- onefacaov_fac2(my_dataset, control = '20', draw_out = T)
+```
+
+<br>
+<center>
+![](1fac_ANOVA_factor2_28.pdf.png)
+<br>
+<p style="font-size:12px;">1fac_ANOVA_factor2_28.pdf</p>
+<br><br>
+</center>
+
+```r
+# Two-Way ANOVA all vs all
+tw_anova <- twofacaov(my_dataset, label_delim = ';', draw_out = T)
+```
+
+<br>
+<center>
+![](2fac_ANOVA_all_vs_all.pdf.png)
+<br>
+<p style="font-size:12px;">2fac_ANOVA_all_vs_all.pdf</p>
+<br><br>
+</center>
+
+```r
+# Two-Way ANOVA of Interaction Effect
+tw_anova_interaction <- interaction_twofacaov(my_dataset, label_delim = ';', 
+                                              control = '20', draw_out = T)
+```
+<br><br>
+<center>
+![](2fac_ANOVA_BH_corrected_20_vs_28.pdf.png)
+<br>
+<p style="font-size:12px;">2fac_ANOVA_BH_corrected_20_vs_28.pdf</p>
+<br><br>
+</center>
+
+```{r}
+# plot absolute data as jitter plot
+absolute_plot <- plot_abs(my_dataset, plot_significance = T, label_delim = ';', 
+                          height_letter = 5, plot_colours = c('cornflowerblue', 'indianred'))
+absolute_plot
+```
+```r
+# save absolute plot as pdf
+pdf(absolute_plot.pdf)
+absolute_plot
+dev.off()
+```
+
+```{r}
+# plot relative data
+relative_plot <- plot_rel(my_dataset, plot_significance = T, 
+                          control = '20', size_jitter_dot = 3)
+relative_plot
+```
+```r
+# save relative plot as pdf
+pdf(relative_plot.pdf)
+relative_plot
+dev.off()
+```
