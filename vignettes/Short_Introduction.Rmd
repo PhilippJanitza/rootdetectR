@@ -56,6 +56,8 @@ This tutorial is showing how `rootdetectR` can be used to conduct a standard ana
 
 # Simple Data Analysis
 
+First you will need to set the working directory and read in your Rootdetection table.
+
 ```r
 # set your working directory and read in your data
 setwd('/paht/to/your/workingdir')
@@ -63,6 +65,8 @@ setwd('/paht/to/your/workingdir')
 # read in your rootdetection output table
 my_dataset <- read.csv(file = '/path/to/rootdetection/output.csv')
 ```
+Then we will check the input data and calculate normalized LengthMM, relative data and summary statistics.
+
 ```{r}
 # In this example we will use a data set included in the package
 my_dataset <- root_output
@@ -81,20 +85,30 @@ s_stat <-summary_stat(my_dataset)
 # show summary statistics
 s_stat
 ```
+
+We will save all the created data as *.csv tables.
+
 ```r
 # save the created tables to working dir
 write.csv(my_dataset, file = 'absolute_data.csv')
 write.csv(my_dataset_rel, file = 'relative_data.csv')
 write.csv(s_stat, file = 'summary_statistics.csv')
+```
 
+Then we can check the data distribution and test for normality and save the output to a pdf file. (You can change the name by setting file = yourfilename.pdf as an argument to the function)
+ 
+```r
 plot_hist(my_dataset, draw_out = T)
 ```
+
 <br>
 <center>
 ![](histograms.pdf.png)
 <br>
 <p style="font-size:12px;">histograms.pdf</p>
 </center>
+
+`rootdetectR` can perfome several ANOVA + Tukey post-hoc analysis and print the p-values as matrix plots in pdf files. You can change the name of output pdfs by setting the arguments file or file_base.
 
 ```r
 # One-way Anova over Factor1
@@ -152,6 +166,8 @@ tw_anova_interaction <- interaction_twofacaov(my_dataset, label_delim = ';',
 <br><br>
 </center>
 
+At least we will produce plots of absolute and relative data. Here only the standard plots are shown but there is a lot of customization possible. For more information check out the manual by typing ?plot_abs or ?plot_rel in your R console.
+
 ```{r}
 # plot absolute data as jitter plot
 absolute_plot <- plot_abs(my_dataset, plot_significance = T, label_delim = ';', 
@@ -166,7 +182,7 @@ dev.off()
 ```
 
 ```{r}
-# plot relative data
+# plot relative data as jitter plot
 relative_plot <- plot_rel(my_dataset, plot_significance = T, 
                           control = '20', size_jitter_dot = 3)
 relative_plot
