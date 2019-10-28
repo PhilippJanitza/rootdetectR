@@ -2,25 +2,26 @@
 % Please edit documentation in R/data_processing.R
 \name{norm_10mm_standard}
 \alias{norm_10mm_standard}
-\title{Calculate LengthMM from LengthPx for Rootdetection standard}
+\title{Normalize Rootdetection Output According To Standard}
 \usage{
 norm_10mm_standard(root_output, split = TRUE, label_delim = ";")
 }
 \arguments{
-\item{root_output}{data.frame; *.csv output from Rootdetection containing 10mm values}
+\item{root_output}{data.frame; *.csv output from Rootdetection containing standard values ('10mm')}
 
-\item{split}{logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2}
+\item{split}{logical; if TRUE data.frame is sorted and Label is split in Factor1 and Factor2 (necessary for standard procedure)}
 
-\item{label_delim}{character; defines how Factor1 and Factor2 are seperated in Label}
+\item{label_delim}{character; defines how Factor1 and Factor2 are separated in Label}
 }
 \value{
-data.frame; containing normalized length values
+data.frame; Rootdetection data set,containing normalized length values
 }
 \description{
-This function takes 10mm standard values to calculate LengthMM from LengthPx
+This function transforms Rootdetection output (*.csv as list) to a normalized Rootdetection data set.
+Therefore the function calculates the length in mm (LengthMM) from length in pixel (LengthPx).
+The standard measurements has to be labeled as '10mm' and has to store pixel values representing 10 mm.
 }
 \examples{
 norm_10mm_standard(root_output)
 norm_10mm_standard(root_output, split = FALSE)
-
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_processing.R
 \name{is_root_output}
 \alias{is_root_output}
-\title{Test Input data.frame for Rootdetection Output standard}
+\title{Test Input Data.frame For Rootdetection Output}
 \usage{
 is_root_output(root_output, length_standard = "10mm")
 }
@@ -13,14 +13,18 @@ is_root_output(root_output, length_standard = "10mm")
 logical; TRUE or FALSE
 }
 \description{
-The function tests wether a given object fulfils all criteria of a standard rootdetection output. These standards are:
+The function tests whether a given object fulfills all criteria of a standard Rootdetection output. These standards are:
+
 - The object has to be a data.frame
-- The columns Label, LengthMM and LengthPx needs to be present
+
+- The columns Label and LengthPx needs to be present
+
 - LengthPx needs to store numeric values
+
 - A length standard needs to be present (default = 10mm) - can be changed by argument length_standard
+
 - hyphens (-) in Labels are not allowed
 }
 \examples{
 is_root_output(root_output)
-
 }

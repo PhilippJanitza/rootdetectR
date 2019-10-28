@@ -1,7 +1,8 @@
 #' @title Extract Color From Picture
-#' @description The function extractes the n most prominent Colors of a given Picture (jpeg or png format). The picture must be loaded with readPNG() or readJPEG() from the packages 'png' or 'jpeg'.
-#' To extract the most prominent colors kmeans clustering algorithm is used. The n-value must be provided by the user (standard is 6).
-#' @param image matrix; must contain colour information for each pixel of the picture. (use readPNG or readJPEG functions to obtain the right data structure)
+#' @description The function extracts the most prominent Colors of a given Picture (jpeg or png format) by kmeans clustering algorithm.
+#' The picture must be loaded with readPNG() or readJPEG() from the packages 'png' or 'jpeg'.
+#' With n the user can set the number of clusters (colors to be extracted). The standard value is 6.
+#' @param image matrix; must contain color information for each pixel of the picture. (use readPNG or readJPEG functions to obtain the right data structure)
 #' @param n numeric; Number of colors to be extracted from the picture
 #' @param plot_out logical; If TRUE a plot of the picture containing only the extracted colors will be generated
 #' @return data.frame; containing the extracted colors (r,g and b value and the corresponding hex code)
@@ -13,7 +14,6 @@
 #' # show the picture with the reduced number of colors
 #'
 #'extract_colors(primroses, n = 4, plot_out = T)
-#'
 #' @export
 extract_colors <- function(image, n = 6, plot_out = F){
 
@@ -66,18 +66,10 @@ extract_colors <- function(image, n = 6, plot_out = F){
 
 
 #' @title Show Color Palette
-#' @description Plotting a vector containing hex encoded colors. The function will return a plot showing all the colors that are stored in a vector.
-#' @param x vector; must contain hex encoded colors
+#' @description Plotting a vector containing hex encoded or standard R colors. The function will return a plot showing all the colors that are stored in a vector.
+#' @param x vector; must contain hex encoded or standard R colors
 #' @return plot; showing the colors in an example plot
 #' @examples
-#' # extract the 4 most prominent colors from the example picture primroses
-#'
-#' primroses_colors <- extract_colors(primroses, n = 4)
-#'
-#' # show the color palette
-#'
-#' show_colors(primroses_colors$rgb)
-#'
 #' # show the color palette for colorblind individuals
 #' show_colors(colors_wong)
 #'

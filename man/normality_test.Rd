@@ -2,23 +2,28 @@
 % Please edit documentation in R/data_processing.R
 \name{normality_test}
 \alias{normality_test}
-\title{Normality Test for Rootdetection standard}
+\title{Normality Test For Normalized Rootdetection Data Set}
 \usage{
-normality_test(root_norm, grouping = "Label")
+normality_test(root_norm, col_grouping = "Label",
+  col_value = "LengthMM")
 }
 \arguments{
-\item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+\item{root_norm}{data.frame; normalized Rootdetection data set}
 
-\item{grouping}{string; determine the column storing the grouping variable (standard = Label)}
+\item{col_grouping}{string; name of the column that should be used as grouping variable (Label)}
+
+\item{col_value}{string; name of the column containing values (dependent variable) (LengthMM)}
 }
 \value{
-data.frame; containing p-values for each Factor1 Facto2 combinations.
+data.frame; containing p-values for each grouping variable
 }
 \description{
-The function performes a normality test for each Factor1 Factor 2 combination in Rootdetecion standard data.frame. Until now only Shapiro-Wilk test is implemented.
+The function performs a Shapiro-Wilk test of normality of dependent variable (LengthMM) for each grouping variable (Label).
+A data.frame containing p-values obtained from the Shapiro-Wilk test for each grouping variable (Label) is returned.
 }
 \examples{
-root_test_norm <- norm_10mm_standard(root_output)
-normality_test(root_test_norm)
+# normalize Rootdetection Output
+root_norm <- norm_10mm_standard(root_output)
 
+normality_test(root_norm)
 }

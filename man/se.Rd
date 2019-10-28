@@ -7,7 +7,7 @@
 se(x)
 }
 \arguments{
-\item{x}{a numeric vector}
+\item{x}{numeric vector}
 }
 \value{
 numeric value; standard error of vector x
@@ -18,5 +18,4 @@ This function calculates the standard error for a numeric-vector x. NA values wi
 \examples{
 x <- 1:20
 se(x)
-
 }

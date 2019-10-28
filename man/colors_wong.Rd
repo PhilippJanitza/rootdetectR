@@ -4,12 +4,12 @@
 \name{colors_wong}
 \alias{colors_wong}
 \title{Color Palette For Colorblind Individuals.}
-\format{A vector containg hex-codes for 7 colors}
+\format{A vector containing hex-codes for 7 colors}
 \usage{
 colors_wong
 }
 \description{
-A String storing a color palette with 7 colors optimized for colorblind individuals in hex-format. The colors were proposed by Wong in following puclication:
+A String storing a color palette with 7 colors optimized for colorblind individuals in hex-format. The colors were proposed by Wong in following publication:
 Wong, B. (2011). Points of view: Color blindness. Nature Methods, 8(6), 441–441. doi:10.1038/nmeth.1618.
 }
 \keyword{datasets}

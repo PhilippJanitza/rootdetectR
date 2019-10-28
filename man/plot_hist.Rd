@@ -2,14 +2,14 @@
 % Please edit documentation in R/plotting.R
 \name{plot_hist}
 \alias{plot_hist}
-\title{Plotting histograms and performing normailty tests}
+\title{Plotting Histograms}
 \usage{
 plot_hist(root_norm, draw_out = F, file = "data_distribution.pdf")
 }
 \arguments{
-\item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+\item{root_norm}{data.frame; normalized Rootdetection data set}
 
-\item{draw_out}{logical; TRUE = prints plot in pdf file, False = no pdf output}
+\item{draw_out}{logical; TRUE = prints plot in pdf file, FALSE = no pdf output}
 
 \item{file}{string; filename of the pdf output}
 }
@@ -17,21 +17,21 @@ plot_hist(root_norm, draw_out = F, file = "data_distribution.pdf")
 list; containg the p-values of shapiro-wilk test for each element
 }
 \description{
-The function performes a shapiro-wilk normality test for each Factor1 Factor 2 combination in Rootdetecion standard data.frame and plots a histogram for each containing the p-value from shaprio-wilk test and colour coding - green = normaly distributed; red = not normaly distributed.
+The function produces histogram plots for each grouping varibale 1 and 2 combinations (Factor1 and Factor2).
+In addition a Shapiro-Wilk test of normaility is performed and p-value is plotted in the subtititle of the plots.
+Also there is colour coding - green = normaly distributed according to Shapiro-Wilk test; red = not normaly distributed according to Shapiro-Wilk test
 }
 \examples{
-#Only produce list of plots:
+# produce list of plots:
 
-root_test_norm <- norm_10mm_standard(root_output)
-plot_hist(root_test_norm, draw_out = F)
-#To view the first plot in R:
+root_norm <- norm_10mm_standard(root_output)
+plot_hist(root_norm, draw_out = F)
+# view the first plot in R:
 plot_hist[[1]]
 
-#Produce plots and print as pdf
-
-root_test_norm <- norm_10mm_standard(root_output)
-plot_hist(root_test_norm, draw_out = T, file = 'test_plot_histograms.pdf')
-#To view the first plot in R:
+# produce list of plots and print as pdf
+root_norm <- norm_10mm_standard(root_output)
+plot_hist(root_norm, draw_out = T, file = 'test_plot_histograms.pdf')
+# view the first plot in R:
 plot_hist[[1]]
-
 }

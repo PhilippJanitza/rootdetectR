@@ -2,12 +2,12 @@
 % Please edit documentation in R/helpful_functions.R
 \name{get_sig_letters}
 \alias{get_sig_letters}
-\title{Create Significance Letter encoding}
+\title{Create Significance Letter Encoding}
 \usage{
 get_sig_letters(tukmatrix)
 }
 \arguments{
-\item{tukmatrix}{matrix; Output from ANOVA functions (onefacaof_fac1, onefacaov_fac2, twofacaov, interaction_twofacaov)}
+\item{tukmatrix}{matrix; Output from ANOVA functions (onefacaof_fac1, onefacaov_fac2, twofacaov, interaction_twofacaov) or tukey_to_matrix function}
 }
 \value{
 data.frame; containing Label and the corresponding significance letter
@@ -21,11 +21,9 @@ root_norm <- norm_10mm_standard(root_output)
 aov_all_vs_all <- aov(LengthMM ~ Factor1 * Factor2, data = root_norm)
 tuk <- TukeyHSD(aov_all_vs_all, ordered = FALSE)$`Factor1:Factor2`
 
-# use Tukey Output to retrieve matrix
-tukey_to_matrix(tuk)
+# use Tukey Output to retrieve an appropriate matrix
+tuk_mat <- tukey_to_matrix(tuk)
 
-# get significance_letters
-get_sig_letters(tuk)
-
-
+# obtain significance_letters
+get_sig_letters(tuk_mat)
 }

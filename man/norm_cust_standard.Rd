@@ -2,37 +2,38 @@
 % Please edit documentation in R/data_processing.R
 \name{norm_cust_standard}
 \alias{norm_cust_standard}
-\title{Calculate LengthMM from LengthPx for Rootdetection standard}
+\title{Normalize Rootdetection Output According To Customized Standard}
 \usage{
 norm_cust_standard(root_output, split = TRUE, label_delim = ";",
   col_label = "Label", col_value = "LengthPx",
   label_standard = "10mm", standard_length_mm = "10")
 }
 \arguments{
-\item{root_output}{data.frame; *.csv output from Rootdetection containing 10mm values}
+\item{root_output}{data.frame; *.csv output from Rootdetection containing length standard values}
 
-\item{split}{logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2}
+\item{split}{logical; if TRUE data.frame is sorted and label is split in Factor1 and Factor2 (necessary for standard procedure)}
 
-\item{label_delim}{character; defines how Factor1 and Factor2 are seperated in Label}
+\item{label_delim}{character; defines how Factor1 and Factor2 are separated in Label}
 
-\item{col_label}{string; name of the column carring the labels (grouping variable/s)}
+\item{col_label}{string; name of the column that should be used as grouping variable (Label)}
 
-\item{col_value}{string; name of the column carring the measuerd values in Px (depending variable)}
+\item{col_value}{string; name of the column containing the measured values in pixel (depending variable) (LengthMM)}
 
-\item{label_standard}{string; defines  how the standard is labled in the data.frame}
+\item{label_standard}{string; defines  how the length standard is labeled in col_label}
 
 \item{standard_length_mm}{numeric; defines the length (in mm) of the standard}
 }
 \value{
-data.frame; containing normalized length values
+data.frame; Rootdetection data set, containing normalized length values
 }
 \description{
-This function takes customized standard values to calculate LengthMM from LengthPx. The label_standard must match the label in the data.frame. In addition the mm value of the standard must be provided.
+This function transforms Rootdetection output (*.csv as list) to a normalized Rootdetection data set.
+Compared to norm_10mm_standard function you can adjust several parameters defining the standard to obtain a normalized Rootdection data set.
+Therefore label_standard must match the label of your length standard measurements in the data.frame. In addition the exact mm value of the length standard must be provided.
 }
 \examples{
-# use data_set with standard 10mm label
-# add label_standard and standard_length_mm
-
-norm_cust_standard(root_output, label_delim = ';', label_standard = '10mm', standard_length_mm = '10')
-
+# use data_set with standard called '20mm' and 20 mm measured
+norm_cust_standard(root_output_multfac2, label_delim = ';',
+                   col_label = 'Label', col_value = 'LengthPx',
+                   label_standard = '20mm', standard_length_mm = '20')
 }

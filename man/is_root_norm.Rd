@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_processing.R
 \name{is_root_norm}
 \alias{is_root_norm}
-\title{Test Input data.frame for normalized Rootdetection standard}
+\title{Test Input Data.frame For Normalized Rootdetection Data Set}
 \usage{
 is_root_norm(root_norm)
 }
@@ -13,14 +13,22 @@ is_root_norm(root_norm)
 logical; TRUE or FALSE
 }
 \description{
-The function tests wether a given object fulfils all criteria of a normalized rootdetection dataset. These standards are:
+The function tests whether a given object fulfills all criteria of a normalized Rootdetection data set. These standards are:
+
 - The object has to be a data.frame
+
 - The columns Label, LengthMM and LengthPx, Factor1 and Factor2 needs to be present
+
 - LengthMM needs to store numeric values
+
 - No length standard must be present
+
 - hyphens (-) in Labels are not allowed
 }
 \examples{
-is_root_output(root_output)
+# normalize root_output
+root_norm <- norm_10mm_standard(root_output)
 
+# check data set for normalization
+is_root_norm(root_norm)
 }

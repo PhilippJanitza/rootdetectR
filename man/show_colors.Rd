@@ -7,23 +7,15 @@
 show_colors(x)
 }
 \arguments{
-\item{x}{vector; must contain hex encoded colors}
+\item{x}{vector; must contain hex encoded or standard R colors}
 }
 \value{
 plot; showing the colors in an example plot
 }
 \description{
-Plotting a vector containing hex encoded colors. The function will return a plot showing all the colors that are stored in a vector.
+Plotting a vector containing hex encoded or standard R colors. The function will return a plot showing all the colors that are stored in a vector.
 }
 \examples{
-# extract the 4 most prominent colors from the example picture primroses
-
-primroses_colors <- extract_colors(primroses, n = 4)
-
-# show the color palette
-
-show_colors(primroses_colors$rgb)
-
 # show the color palette for colorblind individuals
 show_colors(colors_wong)
 

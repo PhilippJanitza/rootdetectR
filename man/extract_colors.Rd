@@ -7,7 +7,7 @@
 extract_colors(image, n = 6, plot_out = F)
 }
 \arguments{
-\item{image}{matrix; must contain colour information for each pixel of the picture. (use readPNG or readJPEG functions to obtain the right data structure)}
+\item{image}{matrix; must contain color information for each pixel of the picture. (use readPNG or readJPEG functions to obtain the right data structure)}
 
 \item{n}{numeric; Number of colors to be extracted from the picture}
 
@@ -17,8 +17,9 @@ extract_colors(image, n = 6, plot_out = F)
 data.frame; containing the extracted colors (r,g and b value and the corresponding hex code)
 }
 \description{
-The function extractes the n most prominent Colors of a given Picture (jpeg or png format). The picture must be loaded with readPNG() or readJPEG() from the packages 'png' or 'jpeg'.
-To extract the most prominent colors kmeans clustering algorithm is used. The n-value must be provided by the user (standard is 6).
+The function extracts the most prominent Colors of a given Picture (jpeg or png format) by kmeans clustering algorithm.
+The picture must be loaded with readPNG() or readJPEG() from the packages 'png' or 'jpeg'.
+With n the user can set the number of clusters (colors to be extracted). The standard value is 6.
 }
 \examples{
 # extract the 4 most prominent colors from the example picture primroses
@@ -28,5 +29,4 @@ extract_colors(primroses, n = 4)
 # show the picture with the reduced number of colors
 
 extract_colors(primroses, n = 4, plot_out = T)
-
 }

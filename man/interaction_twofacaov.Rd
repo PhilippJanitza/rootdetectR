@@ -2,46 +2,56 @@
 % Please edit documentation in R/ANOVA.R
 \name{interaction_twofacaov}
 \alias{interaction_twofacaov}
-\title{Pairwise Two Way ANOVA of Treatment (Interaction) Effects}
+\title{Pairwise Two-Way ANOVA Of Interaction (Treatment) Effects}
 \usage{
-interaction_twofacaov(root_norm, grouping_var1 = "Factor1",
-  grouping_var2 = "Factor2", dependend_var = "LengthMM",
-  control = "20", label_delim = ";", draw_out = F,
+interaction_twofacaov(root_norm, col_grouping1 = "Factor1",
+  col_grouping2 = "Factor2", col_value = "LengthMM", control = "20",
+  label_delim = ";", draw_out = F,
   file_base = "2fac_ANOVA_BH_corrected", axis_label_size = 0.7,
   p_value_size = 0.8)
 }
 \arguments{
-\item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+\item{root_norm}{data.frame; normalized Rootdetection data set}
 
-\item{control}{string; name of the Factor2 control condition}
+\item{col_grouping1}{string; column name of the first grouping variable (Factor1)}
 
-\item{label_delim}{character; defin how Factor1 and Factor2 are seperated in Label}
+\item{col_grouping2}{string; column name of the second grouping variable (Factor2)}
 
-\item{draw_out}{logical; If TRUE Matrix containg p-values is plotted in pdf file}
+\item{col_value}{string; name of the column containing values (dependent variable) (LengthMM)}
+
+\item{control}{string; name of the grouping variable 2 (Factor2) control condition}
+
+\item{label_delim}{character; defines how Factor1 and Factor2 are separated in Label}
+
+\item{draw_out}{logical; If TRUE Matrix containing p-values is plotted in pdf file}
 
 \item{file_base}{string; file name of the pdf output (is needed if draw_out = T)}
 
 \item{axis_label_size}{numeric; font size of axis labels}
 
 \item{p_value_size}{numeric; font size of the p-values printed in pdf file}
+
+\item{col_label}{string; column name of label (combining grouping variable 1 and 2 separated by delimiter)}
+
+\item{label_delim}{character; defines how Factor1 and Factor2 are separated in Label}
 }
 \value{
 list; matrices containg p-values for pairwise two way ANOVA for each Factor1 per Factor2 control treatment effect
 }
 \description{
-The function performes a two way ANOVA. It compares the treatment effect of Factor2 control to Factor2 treatment for every Factor1 (pairwise). P-values are corrected using Benjamini-Hochberg procedure.
+The function performs a pairwise two-way ANOVA of interaction effects of Factor2 control to Factor2 treatment for every Factor1.
+The p-values are adjusted using Benjamini-Hochberg correction procedure.
+#' Caution: In the actual version it is necessary to provide a Label column (grouping variable 1 and 2 separated by label delimiter (label_delim)) in addition to grouping variable 1 and 2 necessary.
 }
 \examples{
-# get data.frame containg p-values for pairwise two way ANOVA
+# get data.frame containing p-values for pairwise two-way ANOVA of interaction effects
 
-root_test_norm <- norm_10mm_standard(root_output)
-interaction_twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = F)
+root_norm <- norm_10mm_standard(root_output)
+interaction_twofacaov(root_norm, control = '20', label_delim = ';', draw_out = F)
 
 # get data.frame and plot as pdf output
 
-root_test_norm <- norm_10mm_standard(root_output)
-interaction_twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected')
-# change size of printed p-values
-interaction_twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected', p_value_size = 1)
+root_norm <- norm_10mm_standard(root_output)
+interaction_twofacaov(root_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected')
 # function creates a pdf file 2fac_ANOVA_BH_corrected_28.pdf
 }

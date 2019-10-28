@@ -1,33 +1,31 @@
 #' @title Calculate Standard Error
 #' @description This function calculates the standard error for a numeric-vector x. NA values will be removed.
-#' @param x a numeric vector
+#' @param x numeric vector
 #' @return numeric value; standard error of vector x
 #' @examples
 #' x <- 1:20
 #' se(x)
-#'
 #' @export
 se <- function(x) sd(x, na.rm = T) / sqrt(length(na.omit(x)))
 
 
 
 #' @title Remove Outlier
-#' @description This function removes outlier from a vector and returns either a vector without the outliers or replaces the outliers with NA.
-#' Outliers are defined as 1.5 x IQR. Caution: NAs already present in the input vector will be removed.
+#' @description This function removes outlier from a vector or replaced outliers by NA.
+#' According to box plots the function defines outliers as 1.5 x IQR. Caution: NAs already present in the input vector will be removed first.
 #' @param x numeric vector
-#' @param fill.na logical; If TRUE all outliers present in x will be replaced by NA. If False all outliers will be deleted.
+#' @param fill.na logical; If TRUE all outliers present in x will be replaced by NA. If FALSE all outliers will be deleted.
 #' @return numeric vector; without outliers or outliers replaced by NA
 #' @examples
 #' # get some example vector
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' test_vector <- root_test_norm[root_test_norm$Label == 'weitar1_1;28',]
+#' root_norm <- norm_10mm_standard(root_output)
+#' x <- root_norm[root_norm$Label == 'weitar1_1;28',]
 #'
-#' # just delete outliers
-#' rm_outlier(test_vector, fill_na = F)
+#' # delete outliers
+#' rm_outlier(x, fill_na = F)
 #'
 #' # replace outliers with NA
-#' rm_outlier(test_vector, fill_na = T)
-#'
+#' rm_outlier(x, fill_na = T)
 #' @export
 rm_outlier <- function(x, fill_na = F) {
 
@@ -49,19 +47,18 @@ rm_outlier <- function(x, fill_na = F) {
 
 
 
-#' @title Create subsets by Factor2
-#' @description This function splits Normalized Rootdetection Output in subsets for each Factor2 control and treatment pair.
-#' To be functional Factor2 must contain a control and at least two other conditions (treatments)
-#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param control string; name of the Factor2 control condition
-#' @return list of data.frames; each subset will be in an seperated data.frame stored in a list of data.frames
+#' @title Create Subsets Of Normalized Rootdetection Standard Data Set By Factor2
+#' @description This function creates subsets for each grouping variable 2 (Factor2) control and treatment pair of a normalized Rootdetection data set.
+#' (At least two treatment conditions are required)
+#' @param root_norm data.frame; normalized Rootdetection data set
+#' @param control string; name of the grouping variable 2 (Factor2) control condition
+#' @return list of data.frames; each subset will be in an separated data.frame stored in a list
 #' @examples
 #' # create normalized data.set with multiple Factor2
 #' root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_standard = '20mm', standard_length_mm = '20')
 #'
 #' # create subsets for each control_treatment pair
 #' subset_fac2(root_norm_multfac2, control = '20')
-#'
 #' @export
 subset_fac2 <- function(root_norm, control = '20'){
 
@@ -100,10 +97,11 @@ subset_fac2 <- function(root_norm, control = '20'){
 
 
 
-#' @title Create rootdetectR Compatible Matrix from TukeyHSD output
-#' @description The function will create a rootdetectR compatible Matrix from TukeyHSD output. The returened matrix can be used to retrieve plotting letters or can be used directly inside the plotting functions (plot_rel, plot_abs).
+#' @title Create Matrix From TukeyHSD Output
+#' @description The function will create a rootdetectR compatible Matrix from TukeyHSD output.
+#' The returened matrix can be used to retrieve plotting letters with the get_sig_letters function from rootdetectR.
 #' @param tukeyHSD_output matrix or data.frame; Output from the TukeyHSD() function.
-#' @return matrix; containing the p-values from TukeyHSD() in an appropriate format for other rootdetectR functions.
+#' @return matrix; containing p-values from TukeyHSD() in an appropriate format for other rootdetectR functions.
 #' @examples
 #' # conduct ANOVA and TukeyHSD
 #' root_norm <- norm_10mm_standard(root_output)
@@ -112,7 +110,6 @@ subset_fac2 <- function(root_norm, control = '20'){
 #'
 #' # use Tukey Output to retrieve matrix
 #' tukey_to_matrix(tuk)
-#'
 #' @export
 tukey_to_matrix <- function(tukeyHSD_output) {
 
@@ -151,9 +148,9 @@ tukey_to_matrix <- function(tukeyHSD_output) {
 
 
 
-#' @title Create Significance Letter encoding
+#' @title Create Significance Letter Encoding
 #' @description The function takes a matrix as input (from rootdetectR ANOVA analysis or from tukey_to_matrix function) and returns a table with significance letters.
-#' @param tukmatrix matrix; Output from ANOVA functions (onefacaof_fac1, onefacaov_fac2, twofacaov, interaction_twofacaov)
+#' @param tukmatrix matrix; Output from ANOVA functions (onefacaof_fac1, onefacaov_fac2, twofacaov, interaction_twofacaov) or tukey_to_matrix function
 #' @return data.frame; containing Label and the corresponding significance letter
 #' @examples
 #' # conduct ANOVA and TukeyHSD
@@ -161,13 +158,11 @@ tukey_to_matrix <- function(tukeyHSD_output) {
 #' aov_all_vs_all <- aov(LengthMM ~ Factor1 * Factor2, data = root_norm)
 #' tuk <- TukeyHSD(aov_all_vs_all, ordered = FALSE)$`Factor1:Factor2`
 #'
-#' # use Tukey Output to retrieve matrix
-#' tukey_to_matrix(tuk)
+#' # use Tukey Output to retrieve an appropriate matrix
+#' tuk_mat <- tukey_to_matrix(tuk)
 #'
-#' # get significance_letters
-#' get_sig_letters(tuk)
-#'
-#'
+#' # obtain significance_letters
+#' get_sig_letters(tuk_mat)
 #' @export
 get_sig_letters <- function(tukmatrix){
 
@@ -196,26 +191,29 @@ get_sig_letters <- function(tukmatrix){
 }
 
 
-#' @title Sort Labels of Normalized Rootdetection Table
-#' @description The function will sort the labels according to Controls. By defining control_fac1 and control_fac2 you can set those conditions to the first place in order.
-#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param col_label string; name of the column carring the labels (grouping variable/s)
+
+#' @title Sort Grouping Variable Of Normalized Rootdetection Data Set
+#' @description The function will sort the grouping variable (Label) according to Controls for plotting.
+#' By defining control_fac1 and control_fac2 you can set the corresponding grouping variable (label) to the first place in order.
+#' Caution: The column that should be ordered must be organized as a factor.
+#' @param root_norm data.frame; normalized Rootdetection data set
+#' @param label_delim character; defines how Factor1 and Factor2 are separated in Label
+#' @param col_label string; name of the column carring the grouping variable (Label)
 #' @param control_fac1 string; name of the control condition of grouping variable1 (Factor1)
 #' @param control_fac2 string; name of the control condition of grouping variable2 (Factor2)
 #' @return data.frame; with sorted col_label
 #' @examples
-#' # Obtain normalized Rootdetection data.frame
+#' # obtain normalized Rootdetection data.frame
 #' root_norm <- norm_10mm_standard(root_output)
 #'
-#' # check the labels
+#' # check the default sorting of the grouping variable (Labels)
+#' # sorted alphabetically by default
 #' levels(root_norm$Label)
 #'
-#' # sort setting yucOx and 28 as controls
+#' # change order of levels by setting yucOx and 28 as controls
 #' sort_label(root_norm, control_fac1 = 'yucOx', control_fac2 = '28')
-#'
-#'
 #' @export
-sort_label <- function(root_norm, col_label = 'Label', control_fac1, control_fac2){
+sort_label <- function(root_norm, label_delim = ';', col_label = 'Label', control_fac1, control_fac2){
 
 
   colnames(root_norm)[colnames(root_norm) == col_label] <- 'Label'
@@ -242,7 +240,9 @@ sort_label <- function(root_norm, col_label = 'Label', control_fac1, control_fac
 
   root_norm$Label <- factor(root_norm$Label,levels = sorted_fac1_fac2)
 
+  root_norm$Label <- as.factor(root_norm$Label)
   colnames(root_norm)[colnames(root_norm) == 'Label'] <- col_label
+
 
   return(root_norm)
 

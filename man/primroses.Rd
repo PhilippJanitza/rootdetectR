@@ -13,7 +13,6 @@ Picture of primroses loaded with 'jpeg' package. Picture made by 3268zauber~comm
 }
 \examples{
 # show picture in R using grid package
-
 grid.raster(primroses)
 }
 \keyword{datasets}

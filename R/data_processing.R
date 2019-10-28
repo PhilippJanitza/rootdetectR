@@ -1,15 +1,19 @@
-#' @title Test Input data.frame for Rootdetection Output standard
-#' @description The function tests wether a given object fulfils all criteria of a standard rootdetection output. These standards are:
+#' @title Test Input Data.frame For Rootdetection Output
+#' @description The function tests whether a given object fulfills all criteria of a standard Rootdetection output. These standards are:
+#'
 #' - The object has to be a data.frame
-#' - The columns Label, LengthMM and LengthPx needs to be present
+#'
+#' - The columns Label and LengthPx needs to be present
+#'
 #' - LengthPx needs to store numeric values
+#'
 #' - A length standard needs to be present (default = 10mm) - can be changed by argument length_standard
+#'
 #' - hyphens (-) in Labels are not allowed
 #' @param root_output data.frame; output *.csv (list) from Rootdetection
 #' @return logical; TRUE or FALSE
 #' @examples
 #' is_root_output(root_output)
-#'
 #' @export
 is_root_output <- function(root_output, length_standard = '10mm') {
 
@@ -62,19 +66,26 @@ is_root_output <- function(root_output, length_standard = '10mm') {
 
 
 
-
-#' @title Test Input data.frame for normalized Rootdetection standard
-#' @description The function tests wether a given object fulfils all criteria of a normalized rootdetection dataset. These standards are:
+#' @title Test Input Data.frame For Normalized Rootdetection Data Set
+#' @description The function tests whether a given object fulfills all criteria of a normalized Rootdetection data set. These standards are:
+#'
 #' - The object has to be a data.frame
+#'
 #' - The columns Label, LengthMM and LengthPx, Factor1 and Factor2 needs to be present
+#'
 #' - LengthMM needs to store numeric values
+#'
 #' - No length standard must be present
+#'
 #' - hyphens (-) in Labels are not allowed
 #' @param root_output data.frame; output *.csv (list) from Rootdetection
 #' @return logical; TRUE or FALSE
 #' @examples
-#' is_root_output(root_output)
+#' # normalize root_output
+#' root_norm <- norm_10mm_standard(root_output)
 #'
+#' # check data set for normalization
+#' is_root_norm(root_norm)
 #' @export
 is_root_norm <- function(root_norm) {
 
@@ -142,16 +153,17 @@ is_root_norm <- function(root_norm) {
 
 
 
-#' @title Calculate LengthMM from LengthPx for Rootdetection standard
-#' @description This function takes 10mm standard values to calculate LengthMM from LengthPx
-#' @param root_output data.frame; *.csv output from Rootdetection containing 10mm values
-#' @param split logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2
-#' @param label_delim character; defines how Factor1 and Factor2 are seperated in Label
-#' @return data.frame; containing normalized length values
+#' @title Normalize Rootdetection Output According To Standard
+#' @description This function transforms Rootdetection output (*.csv as list) to a normalized Rootdetection data set.
+#' Therefore the function calculates the length in mm (LengthMM) from length in pixel (LengthPx).
+#' The standard measurements has to be labeled as '10mm' and has to store pixel values representing 10 mm.
+#' @param root_output data.frame; *.csv output from Rootdetection containing standard values ('10mm')
+#' @param split logical; if TRUE data.frame is sorted and Label is split in Factor1 and Factor2 (necessary for standard procedure)
+#' @param label_delim character; defines how Factor1 and Factor2 are separated in Label
+#' @return data.frame; Rootdetection data set,containing normalized length values
 #' @examples
 #' norm_10mm_standard(root_output)
 #' norm_10mm_standard(root_output, split = FALSE)
-#'
 #' @export
 norm_10mm_standard <- function(root_output, split = TRUE, label_delim = ";") {
 
@@ -186,22 +198,23 @@ norm_10mm_standard <- function(root_output, split = TRUE, label_delim = ";") {
 
 
 
-#' @title Calculate LengthMM from LengthPx for Rootdetection standard
-#' @description This function takes customized standard values to calculate LengthMM from LengthPx. The label_standard must match the label in the data.frame. In addition the mm value of the standard must be provided.
-#' @param root_output data.frame; *.csv output from Rootdetection containing 10mm values
-#' @param split logical; if TRUE data.frame is sorted and Label splitted in Factor1 and Factor2
-#' @param label_delim character; defines how Factor1 and Factor2 are seperated in Label
-#' @param col_label string; name of the column carring the labels (grouping variable/s)
-#' @param col_value string; name of the column carring the measuerd values in Px (depending variable)
-#' @param label_standard string; defines  how the standard is labled in the data.frame
+#' @title Normalize Rootdetection Output According To Customized Standard
+#' @description This function transforms Rootdetection output (*.csv as list) to a normalized Rootdetection data set.
+#' Compared to norm_10mm_standard function you can adjust several parameters defining the standard to obtain a normalized Rootdection data set.
+#' Therefore label_standard must match the label of your length standard measurements in the data.frame. In addition the exact mm value of the length standard must be provided.
+#' @param root_output data.frame; *.csv output from Rootdetection containing length standard values
+#' @param split logical; if TRUE data.frame is sorted and label is split in Factor1 and Factor2 (necessary for standard procedure)
+#' @param label_delim character; defines how Factor1 and Factor2 are separated in Label
+#' @param col_label string; name of the column that should be used as grouping variable (Label)
+#' @param col_value string; name of the column containing the measured values in pixel (depending variable) (LengthMM)
+#' @param label_standard string; defines  how the length standard is labeled in col_label
 #' @param standard_length_mm numeric; defines the length (in mm) of the standard
-#' @return data.frame; containing normalized length values
+#' @return data.frame; Rootdetection data set, containing normalized length values
 #' @examples
-#' # use data_set with standard 10mm label
-#' # add label_standard and standard_length_mm
-#'
-#' norm_cust_standard(root_output, label_delim = ';', label_standard = '10mm', standard_length_mm = '10')
-#'
+#' # use data_set with standard called '20mm' and 20 mm measured
+#' norm_cust_standard(root_output_multfac2, label_delim = ';',
+#'                    col_label = 'Label', col_value = 'LengthPx',
+#'                    label_standard = '20mm', standard_length_mm = '20')
 #' @export
 norm_cust_standard <- function(root_output,
                                split = TRUE,
@@ -242,25 +255,29 @@ norm_cust_standard <- function(root_output,
 
 
 
-#' @title Calculate Summary Statistics for Rootdetection standard
-#' @description This function calculates some summary statistics for a LengthMM normalized Rootdetection output. Calculated values are: sample size (n), median, mean, standard deviation (sd), standard error (se)
-#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param grouping vector; determine by name which columns should be used for grouping
+#' @title Calculate Summary Statistics for Normalized Rootdetection Data Set
+#' @description This function calculates sample size (n), median, mean, standard deviation (sd) and standard error (se) according to grouping variable/s
+#' (Factor1 and Factor2) and a dependent variable (LengthMM).
+#' @param root_norm data.frame; normalized Rootdetection data set
+#' @param col_grouping string or vector; name of the column/s that should be used as grouping variable/s (Label or c(Factor1, Factor2))
+#' @param col_value string; name of the column containing values (dependent variable) (LengthMM)
 #' @return data.frame; containing summary statistics for each Factor1 - Factor2 combination
 #' @examples
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' summary_stat(root_test_norm)
+#' # normalize Rootdetection Output
+#' root_norm <- norm_10mm_standard(root_output)
 #'
-#' # group summary by Factor 1 only
-#' summary_stat(root_test_norm, grouping = 'Factor1')
+#' # calculate summary statistic of standard Rootdetection data set
+#' summary_stat(root_norm)
 #'
-#'
+#' # calculate summary statistic grouped by Factor 1 only
+#' summary_stat(root_norm, col_grouping = 'Factor1', col_value = 'LengthMM')
 #' @export
-summary_stat <- function(root_norm, grouping = c('Factor1', 'Factor2')) {
+summary_stat <- function(root_norm, col_grouping = c('Factor1', 'Factor2'), col_value = 'LengthMM') {
 
-    # wählen was man alles haben möchte??
-    # check if data.frame is already normalized (containing no 10mm values)
-    sum <- plyr::ddply(root_norm, grouping, plyr::summarize,
+
+  colnames(root_norm)[colnames(root_norm) == col_value] <- 'LengthMM'
+
+  sum <- plyr::ddply(root_norm, col_grouping, plyr::summarize,
                  n = length(LengthMM), median = median(LengthMM),
                  mean = mean(LengthMM), sd = sd(LengthMM),
                  se = se(LengthMM))
@@ -270,23 +287,29 @@ summary_stat <- function(root_norm, grouping = c('Factor1', 'Factor2')) {
 
 
 
-#' @title Normality Test for Rootdetection standard
-#' @description The function performes a normality test for each Factor1 Factor 2 combination in Rootdetecion standard data.frame. Until now only Shapiro-Wilk test is implemented.
-#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param grouping string; determine the column storing the grouping variable (standard = Label)
-#' @return data.frame; containing p-values for each Factor1 Facto2 combinations.
+#' @title Normality Test For Normalized Rootdetection Data Set
+#' @description The function performs a Shapiro-Wilk test of normality of dependent variable (LengthMM) for each grouping variable (Label).
+#' A data.frame containing p-values obtained from the Shapiro-Wilk test for each grouping variable (Label) is returned.
+#' @param root_norm data.frame; normalized Rootdetection data set
+#' @param col_grouping string; name of the column that should be used as grouping variable (Label)
+#' @param col_value string; name of the column containing values (dependent variable) (LengthMM)
+#' @return data.frame; containing p-values for each grouping variable
 #' @examples
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' normality_test(root_test_norm)
+#' # normalize Rootdetection Output
+#' root_norm <- norm_10mm_standard(root_output)
 #'
+#' normality_test(root_norm)
 #' @export
-normality_test <- function(root_norm, grouping = 'Label') {
+normality_test <- function(root_norm, col_grouping = 'Label', col_value = 'LengthMM') {
 
   # create empty dataframe
   norm_table <- data.frame(Label = character(0), p.value = numeric(0))
 
   # rename column in root_norm according to grouping
-  colnames(root_norm)[colnames(root_norm) == grouping] <- 'Label'
+  colnames(root_norm)[colnames(root_norm) == col_grouping] <- 'Label'
+  colnames(root_norm)[colnames(root_norm) == col_value] <- 'LengthMM'
+
+  root_norm$Label <- as.factor(root_norm$Label)
 
   for (lev in 1:length(levels(root_norm$Label))) {
 
@@ -297,23 +320,28 @@ normality_test <- function(root_norm, grouping = 'Label') {
 
   }
 
-    colnames(norm_table)[1] <- grouping
+    colnames(norm_table)[1] <- col_grouping
     return(norm_table)
 }
 
 
 
-#' @title Create Relative data from Rootdetection standard
-#' @description The function takes the control values of Factor2 and calculates the relative data for the other Factor2
-#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @return data.frame; containing data for each Factor2 relative to Factor2 control
+#' @title Calculate Relative Data Of Normalized Rootdetection Data Set
+#' @description
+#' The input must be a Normalized Rootdetection Data Set with columns Factor1, Factor2 and LengthMM present.
+#' The function calculates values of grouping variable 2 (Factor2) treatments relative to the median of grouping variable 2 (Factor2) control.
+#' Therefore for each grouping variable 1 (Factor1) the median of grouping variable 2 (Factor2) control is used to calculate relative values.
+#' @param root_norm data.frame; normalized Rootdetection data set
+#' @param control string; name of the grouping variable 2 (Factor2) control condition
+#' @return data.frame; containing data for each grouping variable 1 (Factor1) and grouping variable 2 (Factor2) treatments relative to grouping variable 2 (Factor2) control
 #' @examples
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' rel_data(root_test_norm)
+#' # normalize Rootdetection Output
+#' root_norm <- norm_10mm_standard(root_output)
 #'
+#' rel_data(root_norm)
 #' @export
 rel_data <- function(root_norm, control = "20") {
-    # create subset containing only mock (control) data
+    # create subset containing only control data
     # (name of the control was assigned in the beginning)
     rel_table_mock <- subset(root_norm, Factor2 == control)
     # calc median for all levels of Factor 1 an save to LengthMM_median_control
@@ -334,21 +362,29 @@ rel_data <- function(root_norm, control = "20") {
 }
 
 
-#' @title Remove Outlier from Rootdetection standard
-#' @description The function removes or replaces outliers for every Factor1 Factor2 (Label) combination. Outliers are defined as 1.5 x IQR.
-#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param fill_na logical; If TRUE all outliers present in x will be replaced by NA. If False all outliers will be deleted.
+
+#' @title Remove Outlier from Normalized Rootdetection Data Set
+#' @description The function removes or replaces outliers for every grouping variable (Label) present in a Normalized Rootdetection Data Set.
+#' According to outlier definition in box plots the function defines outliers as 1.5 x IQR.
+#' @param root_norm data.frame; normalized Rootdetection data set
+#' @param col_grouping string; name of the column that should be used as grouping variable (Label)
+#' @param col_value string; name of the column containing values (dependent variable) (LengthMM)
+#' @param fill_na logical; If TRUE all outliers present in col_value will be replaced by NA. If FALSE all outliers will be removed.
 #' @return data.frame; containing data without outliers or outliers replaced by NA
 #' @examples
-#' root_test_norm <- norm_10mm_standard(root_output)
+#' # normalize Rootdetection Output
+#' root_norm <- norm_10mm_standard(root_output)
 #'
 #' # transform outliers to NA
-#' rm_outlier_df(root_test_norm, fill_na = T)
+#' rm_outlier_df(root_norm, fill_na = T)
 #' # remove outliers
-#' rm_outlier_df(root_test_norm, fill_na = F)
-#'
+#' rm_outlier_df(root_norm, fill_na = F)
 #' @export
-rm_outlier_df <- function(root_norm, fill_na = F) {
+rm_outlier_df <- function(root_norm, col_grouping = 'Label', col_value = 'LengthMM', fill_na = F) {
+
+  colnames(root_norm)[colnames(root_norm) == col_grouping] <- 'Label'
+  colnames(root_norm)[colnames(root_norm) == col_value] <- 'LengthMM'
+
   # remove all NAs before from LengthMM
   root_norm <- root_norm[!is.na(root_norm$LengthMM),]
 
@@ -367,5 +403,9 @@ rm_outlier_df <- function(root_norm, fill_na = F) {
   if(fill_na == F){
     final <- final[!is.na(final$LengthMM),]
   }
+
+  colnames(final)[colnames(final) == 'Label'] <- col_grouping
+  colnames(final)[colnames(final) == 'LengthMM'] <- col_value
+
   return(final)
 }

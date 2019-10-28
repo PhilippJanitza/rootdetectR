@@ -9,24 +9,23 @@ rm_outlier(x, fill_na = F)
 \arguments{
 \item{x}{numeric vector}
 
-\item{fill.na}{logical; If TRUE all outliers present in x will be replaced by NA. If False all outliers will be deleted.}
+\item{fill.na}{logical; If TRUE all outliers present in x will be replaced by NA. If FALSE all outliers will be deleted.}
 }
 \value{
 numeric vector; without outliers or outliers replaced by NA
 }
 \description{
-This function removes outlier from a vector and returns either a vector without the outliers or replaces the outliers with NA.
-Outliers are defined as 1.5 x IQR. Caution: NAs already present in the input vector will be removed.
+This function removes outlier from a vector or replaced outliers by NA.
+According to box plots the function defines outliers as 1.5 x IQR. Caution: NAs already present in the input vector will be removed first.
 }
 \examples{
 # get some example vector
-root_test_norm <- norm_10mm_standard(root_output)
-test_vector <- root_test_norm[root_test_norm$Label == 'weitar1_1;28',]
+root_norm <- norm_10mm_standard(root_output)
+x <- root_norm[root_norm$Label == 'weitar1_1;28',]
 
-# just delete outliers
-rm_outlier(test_vector, fill_na = F)
+# delete outliers
+rm_outlier(x, fill_na = F)
 
 # replace outliers with NA
-rm_outlier(test_vector, fill_na = T)
-
+rm_outlier(x, fill_na = T)
 }

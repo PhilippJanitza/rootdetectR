@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpful_functions.R
 \name{tukey_to_matrix}
 \alias{tukey_to_matrix}
-\title{Create rootdetectR Compatible Matrix from TukeyHSD output}
+\title{Create Matrix From TukeyHSD Output}
 \usage{
 tukey_to_matrix(tukeyHSD_output)
 }
@@ -10,10 +10,11 @@ tukey_to_matrix(tukeyHSD_output)
 \item{tukeyHSD_output}{matrix or data.frame; Output from the TukeyHSD() function.}
 }
 \value{
-matrix; containing the p-values from TukeyHSD() in an appropriate format for other rootdetectR functions.
+matrix; containing p-values from TukeyHSD() in an appropriate format for other rootdetectR functions.
 }
 \description{
-The function will create a rootdetectR compatible Matrix from TukeyHSD output. The returened matrix can be used to retrieve plotting letters or can be used directly inside the plotting functions (plot_rel, plot_abs).
+The function will create a rootdetectR compatible Matrix from TukeyHSD output.
+The returened matrix can be used to retrieve plotting letters with the get_sig_letters function from rootdetectR.
 }
 \examples{
 # conduct ANOVA and TukeyHSD
@@ -23,5 +24,4 @@ tuk <- TukeyHSD(aov_all_vs_all, ordered = FALSE)$`Factor1:Factor2`
 
 # use Tukey Output to retrieve matrix
 tukey_to_matrix(tuk)
-
 }

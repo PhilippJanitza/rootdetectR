@@ -3,7 +3,7 @@
 \docType{data}
 \name{root_output_multfac2}
 \alias{root_output_multfac2}
-\title{Rootdetection Output of an example study with multiple Factor2}
+\title{Rootdetection Output Of An Example Study With Multiple Grouping Variable 2 Levels}
 \format{A data frame with 213 rows of  6 variables:
 \describe{
   \item{Nr}{Number given by Rootdetection}
@@ -17,7 +17,9 @@
 root_output_multfac2
 }
 \description{
-A dataset containing measured _Arabidopsis thaliana_ wild-type (Col-0 and Ws2) and mutant (D31 and D64) seedling roots measured at 20 °C and 28°C. One part of the plants was grown at 20°C or 28°C for 8 days. Another batch was transferred after 4 days from 20°C to 28°C for another 4 days.
-The columns labeled with '20mm' contains the length standard in colum LengthPx. In this dataset a different length standard is used (2cm are measured and are labled as 20mm).
+A dataset containing measured _Arabidopsis thaliana_ wild-type (Col-0 and Ws2) and mutant (D31 and D64) seedling roots measured at 20 °C and 28°C.
+One part of the plants was grown at 20°C or 28°C for 8 days. Another batch was transferred after 4 days from 20°C to 28°C for another 4 days.
+The rows labeled with '20mm' in column Label contain the length standard in column LengthPx.
+In this dataset a different length standard is used (2cm are measured and are labeled as 20mm).
 }
 \keyword{datasets}

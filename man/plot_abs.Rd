@@ -2,31 +2,31 @@
 % Please edit documentation in R/plotting.R
 \name{plot_abs}
 \alias{plot_abs}
-\title{Plotting absolute data of Rootdetection standard}
+\title{Plotting Absolute Data Of Normalized Rootdetection Data Set}
 \usage{
 plot_abs(root_norm, label_delim = ";", type = "jitter",
   size_jitter_dot = 2, plot_n = T, plot_colours, plot_title,
   size_plot_title = 14, y_label = "hypocotyl length [mm]",
-  x_label = "", legend_label = "Factor 2", size_legend_title = 12,
+  x_label = "", legend_label = "condition", size_legend_title = 12,
   size_legend_text = 10, width_lines = 0.5, width_axis = 0.5,
   size_x_axes = 9, size_y_axes = 9, size_n = 3,
   plot_significance = F, height_letter = 2, size_letter = 5,
   angle_letter = 0)
 }
 \arguments{
-\item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+\item{root_norm}{data.frame; normalized Rootdetection data set}
 
-\item{label_delim}{character; define how Factor1 and Factor2 are seperated in Label}
+\item{label_delim}{character; define how Factor1 and Factor2 are separated in Label}
 
-\item{type}{string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot,  'violin' = will produce violin plot}
+\item{type}{string; "box" = will produce box plot, 'jitter' = will produce combination of box and jitter plot,  'violin' = will produce violin plot}
 
 \item{size_jitter_dot}{number; defines the size of the dots in jitter plots}
 
 \item{plot_n}{logical; if TRUE sample size (n) will be plotted}
 
-\item{plot_colours}{vector; provide colours for the boxplot - colour vector must have the same length than Factor2}
+\item{plot_colours}{vector; provide colours for the plot - color vector must have the same length than grouping variable 2 (Factor2)}
 
-\item{plot_title}{string; defines the plot title}
+\item{plot_title}{string; sets a plot title}
 
 \item{size_plot_title}{numeric; defines size of the plot title}
 
@@ -50,7 +50,7 @@ plot_abs(root_norm, label_delim = ";", type = "jitter",
 
 \item{size_n}{= numeric; defines size of n plotted (if plot_n = TRUE)}
 
-\item{plot_significance}{logical; if TRUE significances will be drawn as letters}
+\item{plot_significance}{logical; if TRUE significance will be drawn as letters}
 
 \item{height_letter}{numeric; defines the position of the significance letters}
 
@@ -59,43 +59,41 @@ plot_abs(root_norm, label_delim = ";", type = "jitter",
 \item{angle_letter}{numeric, defines angle of significance letters}
 }
 \value{
-plot; box or box-jitter-plot of the absolute data
+plot; box, box jitter or violin plot of the absolute data
 }
 \description{
-Absolute data are plotted as boxplot or box-jitter-plot combination. Signifcances can be illustrated in the plot.
+Absolute data are plotted as box plot, box and jitter plot combination or violin plot.
+Signifcances can be illustrated by letter encoding. There are a lot of possibilities to adjust the visualization.
 }
 \examples{
-# Plot without significance
+# plot without significance letters
 
-root_test_norm <- norm_10mm_standard(root_output)
-# boxplot
-plot_abs(root_test_norm, plot_significance = F, type = 'box')
-# jitterplot
-plot_abs(root_test_norm, plot_significance = F, type = 'jitter')
+root_norm <- norm_10mm_standard(root_output)
+# box plot
+plot_abs(root_norm, type = 'box')
+# box and jitter plot
+plot_abs(root_norm, type = 'jitter')
+# violin plot
+plot_abs(root_norm, type = 'violin')
+# provide own colours (standard r colours or hex-code) - must have the same length than grouping variable 2 level(root_test_norm$Factor2)
+plot_abs(root_norm, plot_colours = c('dodgerblue3', 'firebrick2'))
 
-# Plot with siginficance letters
+# plot with significance letters
 
-root_test_norm <- norm_10mm_standard(root_output)
-root_stat <- twofacaov(root_test_norm, draw_out = F)
-# boxplot with statistics
-plot_abs(root_test_norm, plot_significance = T, twofacaov_output = root_stat, type = 'box')
-
-# provide own colours (ggplot2-colours or hex-code) - must have the same length than level(root_test_norm$Factor2)
-root_test_norm <- norm_10mm_standard(root_test)
-plot_abs(root_test_norm, plot_significance = F, type = 'jitter', plot_colours = c('dodgerblue3', 'firebrick2'))
+root_norm <- norm_10mm_standard(root_output)
+plot_abs(root_norm, plot_significance = T)
 
 # all customizable plotting parameters have a default value
-
  plot_abs_short(root_test_norm,
                 label_delim = ';',
-                type = 'jitter',
+                type = 'jitter', size_jitter_dot = 2,
                 plot_n = T,
                 plot_colours = c('cornflowerblue', 'coral2'),
+                plot_title = 'My Plot', size_plot_title = 14,
                 y_label = 'length mm', x_label = '',
                 legend_label = 'condition', size_legend_title = 12, size_legend_text = 10,
+                width_lines = 0.5, width_axis = 0.5,
                 size_x_axes = 9, size_y_axes = 9,
                 size_n = 3,
-                plot_significance = T, twofacov_output = root_stat,
-                height_letter = 5, size_letter = 5, angle_letter = 0)
-
+                plot_significance = T, height_letter = 5, size_letter = 5, angle_letter = 0)
 }

@@ -2,27 +2,33 @@
 % Please edit documentation in R/data_processing.R
 \name{rm_outlier_df}
 \alias{rm_outlier_df}
-\title{Remove Outlier from Rootdetection standard}
+\title{Remove Outlier from Normalized Rootdetection Data Set}
 \usage{
-rm_outlier_df(root_norm, fill_na = F)
+rm_outlier_df(root_norm, col_grouping = "Label",
+  col_value = "LengthMM", fill_na = F)
 }
 \arguments{
-\item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+\item{root_norm}{data.frame; normalized Rootdetection data set}
 
-\item{fill_na}{logical; If TRUE all outliers present in x will be replaced by NA. If False all outliers will be deleted.}
+\item{col_grouping}{string; name of the column that should be used as grouping variable (Label)}
+
+\item{col_value}{string; name of the column containing values (dependent variable) (LengthMM)}
+
+\item{fill_na}{logical; If TRUE all outliers present in col_value will be replaced by NA. If FALSE all outliers will be removed.}
 }
 \value{
 data.frame; containing data without outliers or outliers replaced by NA
 }
 \description{
-The function removes or replaces outliers for every Factor1 Factor2 (Label) combination. Outliers are defined as 1.5 x IQR.
+The function removes or replaces outliers for every grouping variable (Label) present in a Normalized Rootdetection Data Set.
+According to outlier definition in box plots the function defines outliers as 1.5 x IQR.
 }
 \examples{
-root_test_norm <- norm_10mm_standard(root_output)
+# normalize Rootdetection Output
+root_norm <- norm_10mm_standard(root_output)
 
 # transform outliers to NA
-rm_outlier_df(root_test_norm, fill_na = T)
+rm_outlier_df(root_norm, fill_na = T)
 # remove outliers
-rm_outlier_df(root_test_norm, fill_na = F)
-
+rm_outlier_df(root_norm, fill_na = F)
 }

@@ -1,60 +1,56 @@
-#' @title 1 Factorial ANOVA Over a Gouping Variable
-#' @description The function performes a one way ANOVA over a grouping variable (Factor1). The function iterates over a second grouping variable (Factor2) if given.
-#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param grouping_var1 string; column name of the first grouping variable
-#' @param grouping_var2 string; column name of the second grouping variable to itrate over (if not existing set to NULL)
-#' @param dependend_var string; column name of the dependend variable
-#' @param summary_plots logical; If TRUE summary plots were printed (plot(aov))
-#' @param draw_out logical; If TRUE matrix containg p-values is plotted in pdf file
-#' @param file_base string; file base name of the pdf output (is needed if draw_out = T)
-#' @return list; data.frames containg p-values for one way ANOVA over Factor 1
-#' @param axis_label_size numeric; font size of axis labels
-#' @param p_value_size numeric; font size of the p-values printed in pdf file
+#' @title One-way ANOVA Over Grouping Variable 1
+#' @description The function performs a one-way ANOVA and Tukey post-hoc test over grouping variable 1 (Factor1). The function iterates over a second grouping variable (Factor2) if given.
+#' @param root_norm data.frame; normalized Rootdetection data set
+#' @param col_grouping1 string; name of the column that should be used as grouping variable 1 (Factor1)
+#' @param col_grouping2 string; name of the column that should be used as grouping variable 2 (Factor2) to iterate over, can be set to NULL if not existing
+#' @param col_value  string; name of the column containing values (dependent variable) (LengthMM)
+#' @param summary_plots logical; If TRUE summary (plot(aov)) will be plotted
+#' @param draw_out logical; If TRUE a matrix containing p-values is plotted in a pdf file
+#' @param file_base string; file base name of the pdf output (is needed if draw_out = TRUE)
+#' @param axis_label_size numeric; font size of axis labels in pdf file (if draw_out = TRUE)
+#' @param p_value_size numeric; font size of p-values in pdf file (if draw_out = TRUE)
+#' @return list; data.frames containing p-values of one-way ANOVA and Tukey post-hoc over grouping variable 1 (Factor1)
 #' @examples
 #' ### Usage Standard Rootdetection ###
-#' # get data.frame containg p-values for one way ANOVA over Factor 1
 #'
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' onefacaov_fac1(root_test_norm, draw_out = F)
+#' # get data.frame containg p-values from one-way ANOVA and Tukey post-hoc test over grouping variable 1
+#' root_norm <- norm_10mm_standard(root_output)
+#' onefacaov_fac1(root_norm, draw_out = F)
 #'
-#' # get data.frame and plot as pdf output
+#' # plot p-value matrix as pdf output
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
 #' onefacaov_fac1(root_test_norm, draw_out = T, file_base = '1fac_ANOVA_factor1')
-#' # change size of printed p-values
-#' onefacaov_fac1(root_test_norm, draw_out = T, file_base = '1fac_ANOVA_factor1', p_value_size = 1)
 #' # function creates two pdf files: 1fac_ANOVA_factor1_20.pdf and 1fac_ANOVA_factor1_28.pdf
 #'
 #'
 #' ### Usage for table containing only a single grouping variable ###
 #'
-#' # produce dataset containing only a single grouping variable
-#'
+#' # produce example data set containing only a single grouping variable
 #' root_single_var <- root_test_norm[root_test_norm$Factor2 == '20',]
 #' root_single_var$Factor2 <- NULL
 #' # rename some columns
 #' colnames(root_single_var)[colnames(root_single_var)=='LengthMM'] <- 'length'
 #' colnames(root_single_var)[colnames(root_single_var)=='Factor1'] <- 'lines'
 #'
-#' # use onefacaov_fac1 to do one way ANOVA
-#' onefacaov_fac1(root_single_var, grouping_var1 = 'lines', grouping_var2 = NULL, dependend_var = 'length', draw_out = F)
-#'
+#' # use onefacaov_fac1 to conduct one-way ANOVA
+#' onefacaov_fac1(root_single_var, col_grouping1 = 'lines', col_grouping2 = NULL, col_value = 'length')
 #' @export
 onefacaov_fac1 <- function(root_norm,
-                           grouping_var1 = 'Factor1', grouping_var2 = 'Factor2',
-                           dependend_var = 'LengthMM',
+                           col_grouping1 = 'Factor1', col_grouping2 = 'Factor2',
+                           col_value = 'LengthMM',
                            summary_plots = F,
                            draw_out = F,
                            file_base = "1fac_ANOVA_factor1",
                            axis_label_size = 0.7,
                            p_value_size = 0.8) {
 
-    # grouping_var2 = NULL --> no variable to loop over then:
-    if(is.null(grouping_var2)){
+    # col_grouping2 = NULL --> no variable to loop over then:
+    if(is.null(col_grouping2)){
 
         # rename columns for grouping and dependend vars to match the rootdetection standard
-        colnames(root_norm)[colnames(root_norm)==grouping_var1] <- 'Factor1'
-        colnames(root_norm)[colnames(root_norm)==dependend_var] <- 'LengthMM'
+        colnames(root_norm)[colnames(root_norm)==col_grouping1] <- 'Factor1'
+        colnames(root_norm)[colnames(root_norm)==col_value] <- 'LengthMM'
 
         # prequisites
         fac1 <- levels(as.factor(root_norm$Factor1))
@@ -119,12 +115,12 @@ onefacaov_fac1 <- function(root_norm,
         return(mat)
 
     } else {
-        # there is a second grouping var to loop over then (grouping_var2 != NULL)
+        # there is a second grouping var to loop over then (col_grouping2 != NULL)
 
         # rename columns for grouping and dependend vars to match the rootdetection standard
-        colnames(root_norm)[colnames(root_norm)==grouping_var1] <- 'Factor1'
-        colnames(root_norm)[colnames(root_norm)==grouping_var2] <- 'Factor2'
-        colnames(root_norm)[colnames(root_norm)==dependend_var] <- 'LengthMM'
+        colnames(root_norm)[colnames(root_norm)==col_grouping1] <- 'Factor1'
+        colnames(root_norm)[colnames(root_norm)==col_grouping2] <- 'Factor2'
+        colnames(root_norm)[colnames(root_norm)==col_value] <- 'LengthMM'
 
         # prequisites
         fac2 <- levels(as.factor(root_norm$Factor2))
@@ -205,36 +201,32 @@ onefacaov_fac1 <- function(root_norm,
 
 
 
-#' @title 1 Factorial ANOVA Over Grouping Variable 2
-#' @description The function performes a one way ANOVA over Grouping Variable 2. The function takes each control and treatment combination of Grouping Variable 2 and perfomes a one way ANOVA.
-#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param grouping_var1 string; column name of the first grouping variable (Factor1)
-#' @param grouping_var2 string; column name of the second grouping variable (Factor2)
-#' @param dependend_var string; column name of the dependend variable
-#' @param control string; name of the Factor2 control condition
-#' @param summary_plots logical; If TRUE summary plots were printed (plot(aov))
-#' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
-#' @param file_base string; file base name of the pdf output (is needed if draw_out = T)
-#' @param axis_label_size numeric; font size of axis labels
-#' @param p_value_size numeric; font size of the p-values printed in pdf file
-#' @return list; data.frames containg p-values for one way ANOVA over Factor2
+#' @title One-way ANOVA Over Grouping Variable 2 Treatments
+#' @description The function performs a one-way ANOVA and Tukey post-hoc test over grouping variable 2 (Factor2).
+#' The function takes each control + treatment combination of grouping variable 2 and perfoms a one-way ANOVA iterating over grouping Variable 1 (Factor1).
+#' @param root_norm data.frame; normalized Rootdetection data set
+#' @param col_grouping1 string; name of the column that should be used as grouping variable 1 (Factor1)
+#' @param col_grouping2 string; name of the column that should be used as grouping variable 2 (Factor2)
+#' @param col_value  string; name of the column containing values (dependent variable) (LengthMM)
+#' @param control string; name of the grouping variable 2 (Factor2) control condition
+#' @param summary_plots logical; If TRUE summary (plot(aov)) will be plotted
+#' @param draw_out logical; If TRUE a matrix containing p-values is plotted in a pdf file
+#' @param file_base string; file base name of the pdf output (is needed if draw_out = TRUE)
+#' @param axis_label_size numeric; font size of axis labels in pdf file (if draw_out = TRUE)
+#' @param p_value_size numeric; font size of p-values in pdf file (if draw_out = TRUE)
+#' @return list; data.frames containing p-values for one-way ANOVA and Tukey post-hoc over grouping variable 2 (Factor2)
 #' @examples
-#' # get data.frame containg p-values for one way ANOVA over Grouping Variable 2
+#' # get data.frame containg p-values for one-way ANOVA and Tukey post-hoc over grouping variable 2 (Factor2)
+#' root_norm <- norm_10mm_standard(root_output)
+#' onefacaov_fac2(root_norm, control = '20', draw_out = F)
 #'
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' onefacaov_fac2(root_test_norm, control = '20', draw_out = F)
-#'
-#' # get data.frame and plot as pdf output
-#'
-#' root_test_norm <- norm_10mm_standard(root_output)
+#' # plot p-value matrix as pdf output
 #' onefacaov_fac2(root_test_norm, control = '20', draw_out = T, file_base = '1fac_ANOVA_factor2')
-#' # change size of printed p-values
-#' onefacaov_fac2(root_test_norm, control = '20', draw_out = T, file_base = '1fac_ANOVA_factor2', p_value_size = 1)
 #' # function creates a pdf file 1fac_ANOVA_factor2_28.pdf
 #' @export
 onefacaov_fac2 <- function(root_norm,
-                           grouping_var1 = 'Factor1', grouping_var2 = 'Factor2',
-                           dependend_var = 'LengthMM',
+                           col_grouping1 = 'Factor1', col_grouping2 = 'Factor2',
+                           col_value = 'LengthMM',
                            control = '20',
                            summary_plots = F,
                            draw_out = F,
@@ -243,9 +235,9 @@ onefacaov_fac2 <- function(root_norm,
                            p_value_size = 0.8) {
 
 
-    colnames(root_norm)[colnames(root_norm)==grouping_var1] <- 'Factor1'
-    colnames(root_norm)[colnames(root_norm)==grouping_var2] <- 'Factor2'
-    colnames(root_norm)[colnames(root_norm)==dependend_var] <- 'LengthMM'
+    colnames(root_norm)[colnames(root_norm)==col_grouping1] <- 'Factor1'
+    colnames(root_norm)[colnames(root_norm)==col_grouping2] <- 'Factor2'
+    colnames(root_norm)[colnames(root_norm)==col_value] <- 'LengthMM'
 
     fac2 <- levels(as.factor(root_norm$Factor2))
     fac1 <- levels(as.factor(root_norm$Factor1))
@@ -314,35 +306,37 @@ onefacaov_fac2 <- function(root_norm,
 
 
 
-#' @title Two Way ANOVA
-#' @description The function performes a two way ANOVA for Rootdetection standard
-#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param grouping_var1 string; column name of the first grouping variable (Factor1)
-#' @param grouping_var2 string; column name of the second grouping variable (Factor2)
-#' @param dependend_var string; column name of the dependend variable
-#' @param label_delim character; defin how Factor1 and Factor2 are seperated in Label
+#' @title Two-Way ANOVA Over Grouping Variable 1 And 2
+#' @description The function performs a two way ANOVA and Tukey post-hoc test for normalized Rootdetection standard over grouping variable 1 and 2 (Factor1 and Factor2).
+#' Caution: In the actual version it is necessary to provide a Label column (grouping variable 1 and 2 separated by label delimiter (label_delim)) in addition to grouping variable 1 and 2 necessary.
+#' @param root_norm data.frame; normalized Rootdetection data set
+#' @param col_grouping1 string; column name of the first grouping variable (Factor1)
+#' @param col_grouping2 string; column name of the second grouping variable (Factor2)
+#' @param col_value string; name of the column containing values (dependent variable) (LengthMM)
+#' @param col_label string; column name of label (combining grouping variable 1 and 2 separated by delimiter)
+#' @param label_delim character; defines how Factor1 and Factor2 are separated in Label
 #' @param summary_plots logical; If TRUE summary plots were printed (plot(aov))
-#' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
+#' @param draw_out logical; If TRUE Matrix containing p-values is plotted in pdf file
 #' @param file string; file name of the pdf output (is needed if draw_out = T)
 #' @param axis_label_size numeric; font size of axis labels
 #' @param p_value_size numeric; font size of the p-values printed in pdf file
-#' @return list; data.frames containg p-values for one way ANOVA over Factor2
+#' @return list; data.frames containing p-values for one-way ANOVA and Tukey post-hoc over grouping variable 1 and 2 (Factor1 and Factor2)
 #' @examples
-#' # get data.frame containg p-values for one way ANOVA over Factor 2
+#' # get data.frame containing p-values for two-way ANOVA and Tukey post-hoc over grouping variable 1 and 2 (Factor1 and Factor2)
 #'
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' twofacaov(root_test_norm, label_delim = ';', draw_out = F)
+#' root_norm <- norm_10mm_standard(root_output)
+#' twofacaov(root_norm, label_delim = ';', draw_out = F)
 #'
 #' # get data.frame and plot as pdf output
 #'
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' twofacaov(root_test_norm, label_delim = ';', draw_out = T, file = '2fac_ANOVA_all_vs_all.pdf')
-#' # change size of printed p-values
-#' twofacaov(root_test_norm, label_delim = ';', draw_out = T, file = '2fac_ANOVA_all_vs_all.pdf', p_value_size = 1)
+#' root_norm <- norm_10mm_standard(root_output)
+#' twofacaov(root_norm, label_delim = ';', draw_out = T, file = '2fac_ANOVA_all_vs_all.pdf')
+#' #' # function creates a pdf file 2fac_ANOVA_all_vs_all.pdf
 #' @export
 twofacaov <- function(root_norm,
-                      grouping_var1 = 'Factor1', grouping_var2 = 'Factor2',
-                      dependend_var = 'LengthMM',
+                      col_grouping1 = 'Factor1', col_grouping2 = 'Factor2',
+                      col_value = 'LengthMM',
+                      col_label = 'Label',
                       label_delim = ";",
                       summary_plots = F,
                       draw_out = F,
@@ -351,9 +345,10 @@ twofacaov <- function(root_norm,
                       p_value_size = 0.8) {
 
 
-    colnames(root_norm)[colnames(root_norm)==grouping_var1] <- 'Factor1'
-    colnames(root_norm)[colnames(root_norm)==grouping_var2] <- 'Factor2'
-    colnames(root_norm)[colnames(root_norm)==dependend_var] <- 'LengthMM'
+    colnames(root_norm)[colnames(root_norm)==col_grouping1] <- 'Factor1'
+    colnames(root_norm)[colnames(root_norm)==col_grouping2] <- 'Factor2'
+    colnames(root_norm)[colnames(root_norm)==col_value] <- 'LengthMM'
+    colnames(root_norm)[colnames(root_norm)==col_label] <- 'Label'
 
     # model that compares all vs all
     aov_all_vs_all <- aov(LengthMM ~ Factor1 * Factor2, data = root_norm)
@@ -417,33 +412,39 @@ twofacaov <- function(root_norm,
 }
 
 
-#' @title Pairwise Two Way ANOVA of Treatment (Interaction) Effects
-#' @description The function performes a two way ANOVA. It compares the treatment effect of Factor2 control to Factor2 treatment for every Factor1 (pairwise). P-values are corrected using Benjamini-Hochberg procedure.
-#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param control string; name of the Factor2 control condition
-#' @param label_delim character; defin how Factor1 and Factor2 are seperated in Label
-#' @param draw_out logical; If TRUE Matrix containg p-values is plotted in pdf file
+
+#' @title Pairwise Two-Way ANOVA Of Interaction (Treatment) Effects
+#' @description The function performs a pairwise two-way ANOVA of interaction effects of Factor2 control to Factor2 treatment for every Factor1.
+#' The p-values are adjusted using Benjamini-Hochberg correction procedure.
+#' #' Caution: In the actual version it is necessary to provide a Label column (grouping variable 1 and 2 separated by label delimiter (label_delim)) in addition to grouping variable 1 and 2 necessary.
+#' @param root_norm data.frame; normalized Rootdetection data set
+#' @param col_grouping1 string; column name of the first grouping variable (Factor1)
+#' @param col_grouping2 string; column name of the second grouping variable (Factor2)
+#' @param col_value string; name of the column containing values (dependent variable) (LengthMM)
+#' @param col_label string; column name of label (combining grouping variable 1 and 2 separated by delimiter)
+#' @param label_delim character; defines how Factor1 and Factor2 are separated in Label
+#' @param control string; name of the grouping variable 2 (Factor2) control condition
+#' @param label_delim character; defines how Factor1 and Factor2 are separated in Label
+#' @param draw_out logical; If TRUE Matrix containing p-values is plotted in pdf file
 #' @param file_base string; file name of the pdf output (is needed if draw_out = T)
 #' @param axis_label_size numeric; font size of axis labels
 #' @param p_value_size numeric; font size of the p-values printed in pdf file
 #' @return list; matrices containg p-values for pairwise two way ANOVA for each Factor1 per Factor2 control treatment effect
 #' @examples
-#' # get data.frame containg p-values for pairwise two way ANOVA
+#' # get data.frame containing p-values for pairwise two-way ANOVA of interaction effects
 #'
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' interaction_twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = F)
+#' root_norm <- norm_10mm_standard(root_output)
+#' interaction_twofacaov(root_norm, control = '20', label_delim = ';', draw_out = F)
 #'
 #' # get data.frame and plot as pdf output
 #'
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' interaction_twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected')
-#' # change size of printed p-values
-#' interaction_twofacaov(root_test_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected', p_value_size = 1)
+#' root_norm <- norm_10mm_standard(root_output)
+#' interaction_twofacaov(root_norm, control = '20', label_delim = ';', draw_out = T, file_base = '2fac_ANOVA_BH_corrected')
 #' # function creates a pdf file 2fac_ANOVA_BH_corrected_28.pdf
 #' @export
 interaction_twofacaov <- function(root_norm,
-                             grouping_var1 = 'Factor1', grouping_var2 = 'Factor2',
-                             dependend_var = 'LengthMM',
+                             col_grouping1 = 'Factor1', col_grouping2 = 'Factor2',
+                             col_value = 'LengthMM',
                              control = "20",
                              label_delim = ";",
                              draw_out = F,
@@ -452,9 +453,9 @@ interaction_twofacaov <- function(root_norm,
                              p_value_size = 0.8) {
 
 
-    colnames(root_norm)[colnames(root_norm)==grouping_var1] <- 'Factor1'
-    colnames(root_norm)[colnames(root_norm)==grouping_var2] <- 'Factor2'
-    colnames(root_norm)[colnames(root_norm)==dependend_var] <- 'LengthMM'
+    colnames(root_norm)[colnames(root_norm)==col_grouping1] <- 'Factor1'
+    colnames(root_norm)[colnames(root_norm)==col_grouping2] <- 'Factor2'
+    colnames(root_norm)[colnames(root_norm)==col_value] <- 'LengthMM'
 
 
     root_norm$Factor1 <- as.factor(root_norm$Factor1)

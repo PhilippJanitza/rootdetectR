@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting.R
 \name{plot_rel}
 \alias{plot_rel}
-\title{Plotting relative data of Rootdetection standard}
+\title{Plotting Relative Data Of Normalized Rootdetection Data Set}
 \usage{
 plot_rel(root_norm, label_delim = ";", control = 20, type = "jitter",
   size_jitter_dot = 2, plot_colours, plot_title, size_plot_title = 14,
@@ -59,7 +59,7 @@ plot_rel(root_norm, label_delim = ";", control = 20, type = "jitter",
 plot or list of plots; box or box-jitter-plot of relative data, if significance = T and multiple Factor2 treatments a list of boxplots will be generated
 }
 \description{
-Relative data are plotted as boxplot or box-jitter-plot combination. If Significances should be illustrated multiple plots are generated. Each Factor2 control Factor2 treatment combination will produce a plot.
+Relative data is plotted as boxplot or box-jitter-plot combination. If Significances should be illustrated multiple plots are generated. Each Factor2 control Factor2 treatment combination will produce a plot.
 }
 \examples{
 # Plot without significance

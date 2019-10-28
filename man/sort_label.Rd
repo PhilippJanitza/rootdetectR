@@ -2,14 +2,17 @@
 % Please edit documentation in R/helpful_functions.R
 \name{sort_label}
 \alias{sort_label}
-\title{Sort Labels of Normalized Rootdetection Table}
+\title{Sort Grouping Variable Of Normalized Rootdetection Data Set}
 \usage{
-sort_label(root_norm, col_label = "Label", control_fac1, control_fac2)
+sort_label(root_norm, label_delim = ";", col_label = "Label",
+  control_fac1, control_fac2)
 }
 \arguments{
-\item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+\item{root_norm}{data.frame; normalized Rootdetection data set}
 
-\item{col_label}{string; name of the column carring the labels (grouping variable/s)}
+\item{label_delim}{character; defines how Factor1 and Factor2 are separated in Label}
+
+\item{col_label}{string; name of the column carring the grouping variable (Label)}
 
 \item{control_fac1}{string; name of the control condition of grouping variable1 (Factor1)}
 
@@ -19,17 +22,18 @@ sort_label(root_norm, col_label = "Label", control_fac1, control_fac2)
 data.frame; with sorted col_label
 }
 \description{
-The function will sort the labels according to Controls. By defining control_fac1 and control_fac2 you can set those conditions to the first place in order.
+The function will sort the grouping variable (Label) according to Controls for plotting.
+By defining control_fac1 and control_fac2 you can set the corresponding grouping variable (label) to the first place in order.
+Caution: The column that should be ordered must be organized as a factor.
 }
 \examples{
-# Obtain normalized Rootdetection data.frame
+# obtain normalized Rootdetection data.frame
 root_norm <- norm_10mm_standard(root_output)
 
-# check the labels
+# check the default sorting of the grouping variable (Labels)
+# sorted alphabetically by default
 levels(root_norm$Label)
 
-# sort setting yucOx and 28 as controls
+# change order of levels by setting yucOx and 28 as controls
 sort_label(root_norm, control_fac1 = 'yucOx', control_fac2 = '28')
-
-
 }

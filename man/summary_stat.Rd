@@ -2,27 +2,32 @@
 % Please edit documentation in R/data_processing.R
 \name{summary_stat}
 \alias{summary_stat}
-\title{Calculate Summary Statistics for Rootdetection standard}
+\title{Calculate Summary Statistics for Normalized Rootdetection Data Set}
 \usage{
-summary_stat(root_norm, grouping = c("Factor1", "Factor2"))
+summary_stat(root_norm, col_grouping = c("Factor1", "Factor2"),
+  col_value = "LengthMM")
 }
 \arguments{
-\item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+\item{root_norm}{data.frame; normalized Rootdetection data set}
 
-\item{grouping}{vector; determine by name which columns should be used for grouping}
+\item{col_grouping}{string or vector; name of the column/s that should be used as grouping variable/s (Label or c(Factor1, Factor2))}
+
+\item{col_value}{string; name of the column containing values (dependent variable) (LengthMM)}
 }
 \value{
 data.frame; containing summary statistics for each Factor1 - Factor2 combination
 }
 \description{
-This function calculates some summary statistics for a LengthMM normalized Rootdetection output. Calculated values are: sample size (n), median, mean, standard deviation (sd), standard error (se)
+This function calculates sample size (n), median, mean, standard deviation (sd) and standard error (se) according to grouping variable/s
+(Factor1 and Factor2) and a dependent variable (LengthMM).
 }
 \examples{
-root_test_norm <- norm_10mm_standard(root_output)
-summary_stat(root_test_norm)
+# normalize Rootdetection Output
+root_norm <- norm_10mm_standard(root_output)
 
-# group summary by Factor 1 only
-summary_stat(root_test_norm, grouping = 'Factor1')
+# calculate summary statistic of standard Rootdetection data set
+summary_stat(root_norm)
 
-
+# calculate summary statistic grouped by Factor 1 only
+summary_stat(root_norm, col_grouping = 'Factor1', col_value = 'LengthMM')
 }

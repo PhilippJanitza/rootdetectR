@@ -2,21 +2,21 @@
 % Please edit documentation in R/helpful_functions.R
 \name{subset_fac2}
 \alias{subset_fac2}
-\title{Create subsets by Factor2}
+\title{Create Subsets Of Normalized Rootdetection Standard Data Set By Factor2}
 \usage{
 subset_fac2(root_norm, control = "20")
 }
 \arguments{
-\item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+\item{root_norm}{data.frame; normalized Rootdetection data set}
 
-\item{control}{string; name of the Factor2 control condition}
+\item{control}{string; name of the grouping variable 2 (Factor2) control condition}
 }
 \value{
-list of data.frames; each subset will be in an seperated data.frame stored in a list of data.frames
+list of data.frames; each subset will be in an separated data.frame stored in a list
 }
 \description{
-This function splits Normalized Rootdetection Output in subsets for each Factor2 control and treatment pair.
-To be functional Factor2 must contain a control and at least two other conditions (treatments)
+This function creates subsets for each grouping variable 2 (Factor2) control and treatment pair of a normalized Rootdetection data set.
+(At least two treatment conditions are required)
 }
 \examples{
 # create normalized data.set with multiple Factor2
@@ -24,5 +24,4 @@ root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_standard = 
 
 # create subsets for each control_treatment pair
 subset_fac2(root_norm_multfac2, control = '20')
-
 }

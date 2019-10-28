@@ -1,24 +1,24 @@
-#' @title Plotting histograms and performing normailty tests
-#' @description The function performes a shapiro-wilk normality test for each Factor1 Factor 2 combination in Rootdetecion standard data.frame and plots a histogram for each containing the p-value from shaprio-wilk test and colour coding - green = normaly distributed; red = not normaly distributed.
-#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param draw_out logical; TRUE = prints plot in pdf file, False = no pdf output
+#' @title Plotting Histograms
+#' @description The function produces histogram plots for each grouping varibale 1 and 2 combinations (Factor1 and Factor2).
+#' In addition a Shapiro-Wilk test of normaility is performed and p-value is plotted in the subtititle of the plots.
+#' Also there is colour coding - green = normaly distributed according to Shapiro-Wilk test; red = not normaly distributed according to Shapiro-Wilk test
+#' @param root_norm data.frame; normalized Rootdetection data set
+#' @param draw_out logical; TRUE = prints plot in pdf file, FALSE = no pdf output
 #' @param file string; filename of the pdf output
 #' @return list; containg the p-values of shapiro-wilk test for each element
 #' @examples
-#' #Only produce list of plots:
+#' # produce list of plots:
 #'
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' plot_hist(root_test_norm, draw_out = F)
-#' #To view the first plot in R:
+#' root_norm <- norm_10mm_standard(root_output)
+#' plot_hist(root_norm, draw_out = F)
+#' # view the first plot in R:
 #' plot_hist[[1]]
 #'
-#' #Produce plots and print as pdf
-#'
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' plot_hist(root_test_norm, draw_out = T, file = 'test_plot_histograms.pdf')
-#' #To view the first plot in R:
+#' # produce list of plots and print as pdf
+#' root_norm <- norm_10mm_standard(root_output)
+#' plot_hist(root_norm, draw_out = T, file = 'test_plot_histograms.pdf')
+#' # view the first plot in R:
 #' plot_hist[[1]]
-#'
 #' @export
 plot_hist <- function(root_norm, draw_out = F,
                       file = "data_distribution.pdf") {
@@ -69,15 +69,16 @@ plot_hist <- function(root_norm, draw_out = F,
 
 
 
-#' @title Plotting absolute data of Rootdetection standard
-#' @description Absolute data are plotted as boxplot or box-jitter-plot combination. Signifcances can be illustrated in the plot.
-#' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
-#' @param label_delim character; define how Factor1 and Factor2 are seperated in Label
-#' @param type string; "box" = will produce Boxplot, 'jitter' = will produce combination of box and jitter plot,  'violin' = will produce violin plot
+#' @title Plotting Absolute Data Of Normalized Rootdetection Data Set
+#' @description Absolute data are plotted as box plot, box and jitter plot combination or violin plot.
+#' Signifcances can be illustrated by letter encoding. There are a lot of possibilities to adjust the visualization.
+#' @param root_norm data.frame; normalized Rootdetection data set
+#' @param label_delim character; define how Factor1 and Factor2 are separated in Label
+#' @param type string; "box" = will produce box plot, 'jitter' = will produce combination of box and jitter plot,  'violin' = will produce violin plot
 #' @param size_jitter_dot number; defines the size of the dots in jitter plots
 #' @param plot_n logical; if TRUE sample size (n) will be plotted
-#' @param plot_colours vector; provide colours for the boxplot - colour vector must have the same length than Factor2
-#' @param plot_title string; defines the plot title
+#' @param plot_colours vector; provide colours for the plot - color vector must have the same length than grouping variable 2 (Factor2)
+#' @param plot_title string; sets a plot title
 #' @param size_plot_title numeric; defines size of the plot title
 #' @param y_label string; axes description of y-axes
 #' @param x_label string; axes description of x-axes
@@ -89,45 +90,42 @@ plot_hist <- function(root_norm, draw_out = F,
 #' @param size_x_axes numeric; defines size of x-axes labels
 #' @param size_y_axes numeric; defines size of y-axes labels
 #' @param size_n = numeric; defines size of n plotted (if plot_n = TRUE)
-#' @param plot_significance logical; if TRUE significances will be drawn as letters
+#' @param plot_significance logical; if TRUE significance will be drawn as letters
 #' @param height_letter numeric; defines the position of the significance letters
 #' @param size_letter numeric; defines size of the significance letters
 #' @param angle_letter numeric, defines angle of significance letters
-#' @return plot; box or box-jitter-plot of the absolute data
+#' @return plot; box, box jitter or violin plot of the absolute data
 #' @examples
-#' # Plot without significance
+#' # plot without significance letters
 #'
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' # boxplot
-#' plot_abs(root_test_norm, plot_significance = F, type = 'box')
-#' # jitterplot
-#' plot_abs(root_test_norm, plot_significance = F, type = 'jitter')
+#' root_norm <- norm_10mm_standard(root_output)
+#' # box plot
+#' plot_abs(root_norm, type = 'box')
+#' # box and jitter plot
+#' plot_abs(root_norm, type = 'jitter')
+#' # violin plot
+#' plot_abs(root_norm, type = 'violin')
+#' # provide own colours (standard r colours or hex-code) - must have the same length than grouping variable 2 level(root_test_norm$Factor2)
+#' plot_abs(root_norm, plot_colours = c('dodgerblue3', 'firebrick2'))
 #'
-#' # Plot with siginficance letters
+#' # plot with significance letters
 #'
-#' root_test_norm <- norm_10mm_standard(root_output)
-#' root_stat <- twofacaov(root_test_norm, draw_out = F)
-#' # boxplot with statistics
-#' plot_abs(root_test_norm, plot_significance = T, twofacaov_output = root_stat, type = 'box')
-#'
-#' # provide own colours (ggplot2-colours or hex-code) - must have the same length than level(root_test_norm$Factor2)
-#' root_test_norm <- norm_10mm_standard(root_test)
-#' plot_abs(root_test_norm, plot_significance = F, type = 'jitter', plot_colours = c('dodgerblue3', 'firebrick2'))
+#' root_norm <- norm_10mm_standard(root_output)
+#' plot_abs(root_norm, plot_significance = T)
 #'
 #' # all customizable plotting parameters have a default value
-#'
 #'  plot_abs_short(root_test_norm,
 #'                 label_delim = ';',
-#'                 type = 'jitter',
+#'                 type = 'jitter', size_jitter_dot = 2,
 #'                 plot_n = T,
 #'                 plot_colours = c('cornflowerblue', 'coral2'),
+#'                 plot_title = 'My Plot', size_plot_title = 14,
 #'                 y_label = 'length mm', x_label = '',
 #'                 legend_label = 'condition', size_legend_title = 12, size_legend_text = 10,
+#'                 width_lines = 0.5, width_axis = 0.5,
 #'                 size_x_axes = 9, size_y_axes = 9,
 #'                 size_n = 3,
-#'                 plot_significance = T, twofacov_output = root_stat,
-#'                 height_letter = 5, size_letter = 5, angle_letter = 0)
-#'
+#'                 plot_significance = T, height_letter = 5, size_letter = 5, angle_letter = 0)
 #' @export
 plot_abs <- function(root_norm,
                      label_delim = ";",
@@ -139,7 +137,7 @@ plot_abs <- function(root_norm,
                      size_plot_title = 14,
                      y_label = 'hypocotyl length [mm]',
                      x_label = '',
-                     legend_label = 'Factor 2',
+                     legend_label = 'condition',
                      size_legend_title = 12,
                      size_legend_text = 10,
                      width_lines = 0.5,
@@ -242,8 +240,17 @@ plot_abs <- function(root_norm,
 
 
 
-#' @title Plotting relative data of Rootdetection standard
-#' @description Relative data are plotted as boxplot or box-jitter-plot combination. If Significances should be illustrated multiple plots are generated. Each Factor2 control Factor2 treatment combination will produce a plot.
+
+
+
+
+
+
+
+
+
+#' @title Plotting Relative Data Of Normalized Rootdetection Data Set
+#' @description Relative data is plotted as boxplot or box-jitter-plot combination. If Significances should be illustrated multiple plots are generated. Each Factor2 control Factor2 treatment combination will produce a plot.
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
 #' @param label_delim character; define how Factor1 and Factor2 are seperated in Label
 #' @param control string; name of the Factor2 control condition

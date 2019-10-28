@@ -2,21 +2,26 @@
 % Please edit documentation in R/data_processing.R
 \name{rel_data}
 \alias{rel_data}
-\title{Create Relative data from Rootdetection standard}
+\title{Calculate Relative Data Of Normalized Rootdetection Data Set}
 \usage{
 rel_data(root_norm, control = "20")
 }
 \arguments{
-\item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}
+\item{root_norm}{data.frame; normalized Rootdetection data set}
+
+\item{control}{string; name of the grouping variable 2 (Factor2) control condition}
 }
 \value{
-data.frame; containing data for each Factor2 relative to Factor2 control
+data.frame; containing data for each grouping variable 1 (Factor1) and grouping variable 2 (Factor2) treatments relative to grouping variable 2 (Factor2) control
 }
 \description{
-The function takes the control values of Factor2 and calculates the relative data for the other Factor2
+The input must be a Normalized Rootdetection Data Set with columns Factor1, Factor2 and LengthMM present.
+The function calculates values of grouping variable 2 (Factor2) treatments relative to the median of grouping variable 2 (Factor2) control.
+Therefore for each grouping variable 1 (Factor1) the median of grouping variable 2 (Factor2) control is used to calculate relative values.
 }
 \examples{
-root_test_norm <- norm_10mm_standard(root_output)
-rel_data(root_test_norm)
+# normalize Rootdetection Output
+root_norm <- norm_10mm_standard(root_output)
 
+rel_data(root_norm)
 }
