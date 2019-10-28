@@ -65,7 +65,7 @@ library('devtools')
 After installing all prerequisites you can install `rootdetectR` from github.
 
 ```r
-#install from github
+# install from github
 install_github("PhilippJanitza/rootdetectR", build_vignettes = TRUE)
 ```
 
@@ -306,7 +306,7 @@ interaction_tw_anova <- interaction_twofacaov(root_norm, control = "20", label_d
 <p style="font-size:12px;">2fac_ANOVA_BH_corrected_20_vs_28.pdf</p>
 <br><br>
 </center>
-All ANOVA Analysis can be used adjusted to non Rootdetection data sets by adjusting  `col_grouping1`, `col_grouping2` and `col_value` to define grouping and dependet variables.
+All ANOVA Analysis can be used adjusted to non Rootdetection data sets by adjusting  `col_grouping1`, `col_grouping2` and `col_value` to define grouping and dependent variables.
 
 # Plot data
 
@@ -403,7 +403,7 @@ relative_plot <- plot_rel(root_norm, plot_significance = F, type = 'jitter', con
 relative_plot
 ```
 
-To add statistics to this plot set `plot_significance = T`. The pairwise ANOVA of interaction effects (interaction_twofacaof) is run internally.
+To add statistics to this plot set `plot_significance = T`. The pairwise ANOVA of interaction effects (interaction_twofacaov) is run internally.
 
 ```{r}
 # plot relative data with statistics
@@ -621,7 +621,7 @@ get_sig_letters(tuk_mat)
 
 ## Sorting The Levels of Label
 
-In most experiments several conditions are compared to a control condition. Therfore it is advantageous for data representation to show the control conditions in first place. `rootdetectR` has a function to set the control conditions of both grouping variables (Factor1 and Factor2) to set those in the first place in the plots. 
+In most experiments several conditions are compared to a control condition. Therefore it is advantageous for data representation to show the control conditions in first place. `rootdetectR` has a function to set the control conditions of both grouping variables (Factor1 and Factor2) to set those in the first place in the plots. 
 
 ```{r}
 # check sorting of labels 
@@ -635,7 +635,7 @@ root_norm <- sort_label(root_norm, label_delim = ';', control_fac1 = 'yucOx', co
 levels(root_norm$Label)
 ```
 
-For more advanced sorting of lables a vector containing all the lines in rigth order must be provided with basic r code.
+For more advanced sorting of labels a vector containing all the lines in right order must be provided with basic r code.
 
 ```{r}
 # check sorting of labels 
@@ -654,7 +654,7 @@ levels(root_norm$Label)
 
 # Future Features
 
-Future versions will have some improvements and additional funtcions.
+Future versions will have some improvements and additional functions.
 
 If you have any suggestions or questions please drop an e-mail to [philipp.janitza@landw.uni-halle.de](mailto:philipp.janitza@landw.uni-halle.de) .
 
