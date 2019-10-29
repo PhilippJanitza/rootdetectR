@@ -16,12 +16,16 @@ To install rootdetectR from github the package devtools is required.
 if('devtools' %in% rownames(installed.packages()) == FALSE) {install.packages('devtools')}
 library('devtools')
 
-#install from github
+# install from github
 install_github("PhilippJanitza/rootdetectR", build_vignettes = TRUE)
 ```
 
 To view the vignette in R type:
 
 ```r
-vignette('Introduction', package = 'rootdetectR')
+# Advanced and Detailed Documentation
+vignette('Advanced_Introduction', package = 'rootdetectR')
+
+# Short Introduction
+vignette('Short_Introduction', package = 'rootdetectR')
 ```
