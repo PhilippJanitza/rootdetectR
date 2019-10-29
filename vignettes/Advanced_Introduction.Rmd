@@ -78,8 +78,13 @@ library(rootdetectR)
 To view the vignette in R type:
 
 ```r
-vignette('Introduction', package = 'rootdetectR')
+# Advanced and Detailed Documentation
+vignette('Advanced_Introduction', package = 'rootdetectR')
+
+# Short Introduction
+vignette('Short_Introduction', package = 'rootdetectR')
 ```
+
 
 # Data Processing
 
