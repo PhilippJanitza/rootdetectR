@@ -19,9 +19,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-Detailed (Advanced) manual for `rootdetectR 0.1.0`
+Detailed (Advanced) manual for `rootdetectR 0.9.1`
+
 
 # Table of Contents
+
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [Process Data](#data-processing)
@@ -29,6 +31,7 @@ Detailed (Advanced) manual for `rootdetectR 0.1.0`
 5. [Plots](#plot-data)
 6. [Additional Features](#additional-features)
 7. [Future Features](#future-features)
+
 
 # Introduction
 
@@ -40,7 +43,6 @@ To illustrate the standard analysis pipeline an example data set called `root_ou
 
 The `rootdetectR` package comes with another data set for some more complex analysis. The data set called `root_output_multfac2` consists of root measurements of _A. thaliana_ plants (2 wild type strains and 2 mutants) grown under 3 different conditions on ATS plates: 8 days under 20°C, 8 days under 28°C and a shift experiment with 4 days 20°C and subsequently 4 days under 28°C. The length standard of this experiment is labeled with '20mm' and describes standard measurements of 20mm.
 
-<br>
 
 # Installation
 
@@ -88,7 +90,8 @@ vignette('Short_Introduction', package = 'rootdetectR')
 
 # Data Processing
 
-## Check Data
+## Check Raw Data
+
 The package comes with an example data set to illustrates the structure of an *.csv output file from Rootdetection. Make sure your data set is matching all the criteria needed for the package.
 
 ```{r}
@@ -99,7 +102,7 @@ data("root_output")
 head(root_output)
 ```
 
-To test if your Rootdetection Output has the right format you can use the function `is_rootdetection_output`. Several conditions must be fulfilled to be a data set that can be handled by `rootdetectR`. The data must be in a data.frame containing at least following columns: Label, LenghtPx and LengthMM. The column names must be exactly the same as in the example (check cases). The column LengthPx must contain numerical values and the 10mm Label must be present to calculate the length values in mm (LengthMM).
+To test if your Rootdetection Output has the right format you can use the function `is_rootdetection_output`. Several conditions must be fulfilled to be a data set that can be handled by `rootdetectR`. The data must be in a data.frame containing at least following columns: Label, LenghtPx and LengthMM. The column names must be exactly the same as in the example (check cases). The column LengthPx must contain numerical values and the Label '10mm' must be present to calculate the length values in mm (LengthMM). If the length standard is not labeld as '10mm' it is possible to provide the name of the length standard by setting `length_standard`. 
 
 ```{r}
 # this input dataset follows all the standards
@@ -112,7 +115,7 @@ The function returns a logical variable. If R prints TRUE your input data set fo
 
 ## Calculate LengthMM according to 10mm standard
 
-In standard Rootdetection Assays you should include some standard measurements defined by the label 10mm. The function `norm_10mm_standard` is using the LengthPx values from the label '10mm' to calculate a length standard. This standard is used to calculate LengthMM for all lines and afterwards the 10mm standard is deleted from the data table. In addition the label is split into Factor1 and Factor2 by `label_delim`. This normalization and splitting procedure must be done with every assay since camera focus and settings will change between different experiments. For all following functions you will need the output (Normalized Rootdetection Output) from this function.
+In standard Rootdetection Assays you should include some standard measurements defined by the label 10mm. The function `norm_10mm_standard` is using the LengthPx values from the label '10mm' to calculate a length standard. This standard is used to calculate LengthMM for all lines and afterwards the 10mm standard is deleted from the data table. In addition the label is split into Factor1 and Factor2 by `label_delim`. This normalization and splitting procedure must be done with every assay since camera focus and settings will change between different experiments. For all following functions you will need the output (Normalized Rootdetection Output) from this function. In addition it is possible to avoid the splitting of the label by setting `split = FALSE`.
 
 ```{r}
 # calculate LengthMM for all lines
@@ -134,7 +137,22 @@ root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_delim = ';'
 head(root_norm_multfac2)
 ```
 
-In addition it is possible to adjust the column names of the combined grouping variable (standard = Label) and the dependent variable (standard = LengthMM).
+In addition it is possible to adjust the column names of the combined grouping variable (standard = Label) by setting `col_label` and the dependent variable (standard = LengthPx) by setting `col_value`.
+
+
+## Check Normalized Data
+
+Analogous to the `is_root_output` function there is a function to check length standard normalized data sets for fulfilling the criteria for following data processing and analysis. Therefore the data must be in a data.frame containing at least following columns: Label and LengthMM. The column names must be exactly the same as in the example (check cases). The column LengthMM must contain numerical values and the length standard must not be present.
+
+```{r}
+# calculate LengthMM for all lines
+root_norm <- norm_10mm_standard(root_output, label_delim = ';')
+
+is_root_norm(root_norm)
+```
+
+The function returns a logical variable. If R prints TRUE your input data set follows all the standards of a normalized Rootdetection data set.
+
 
 ## Calculate Relative Data
 
@@ -164,7 +182,8 @@ sum_s <- summary_stat(root_norm)
 sum_s
 ```
 
-It is possible to use the function with non Rootdetection data sets by adjusting the arguments `col_grouping` and `col_value` for column names storing grouping and dependent variables.
+It is possible to use the function with non Rootdetection data sets by adjusting the arguments `col_grouping` to set column names of the grouping variables and `col_value` to set the column name of the dependent variable.
+
 
 ## Test for normality
 
@@ -243,6 +262,11 @@ ow_anova_factor2 <- onefacaov_fac2(root_norm, control = '20', draw_out = T,
 <br><br>
 </center>
 
+It is possible to use the function with non Rootdetection data sets by adjusting some arguments of the functions. The Arguments `col_grouping1` and `col_grouping2` can be used to set the column names of two grouping variables and `col_value` to set the column name of dependent variable.
+
+In addition it is possible to add ANOVA summary plots to the generated pdf files by setting `summary_plots = TRUE`.
+
+
 ## Two-Way ANOVA
 
 To compare all lines and all conditions among each other a Two-Way ANOVA is a suitable statistical analysis. The function `twofacaov` implemented in `rootdetectR` is able to compare all lines from a Normalized Rootdetection Output by a Two-Way ANOVA and a Tukey post-hoc test. The function will return a matrix containing p-values for all comparisons. Values obtained from this analysis are used as input to print statistics in plots of the absolute data (`abs_plot` function). For more information check the [Plots](#plot-data) section.
@@ -275,6 +299,10 @@ tw_anova <- twofacaov(root_norm, label_delim = ';', draw_out = T,
 <p style="font-size:12px;">2fac_ANOVA_all_vs_all.pdf</p>
 <br><br>
 </center>
+
+As described for one-way ANOVA analysis the function `twofacaov` can be used for non Rootdetection standard data sets by setting `col_grouping1`, `col_grouping2` and `col_value`.
+In addition it is possible to add ANOVA summary plots to the generated pdf files by setting `summary_plots = TRUE`.
+
 
 ## pairwise Two-Way ANOVA of treatment responses (interaction effects)
 
@@ -311,11 +339,14 @@ interaction_tw_anova <- interaction_twofacaov(root_norm, control = "20", label_d
 <p style="font-size:12px;">2fac_ANOVA_BH_corrected_20_vs_28.pdf</p>
 <br><br>
 </center>
-All ANOVA Analysis can be used adjusted to non Rootdetection data sets by adjusting  `col_grouping1`, `col_grouping2` and `col_value` to define grouping and dependent variables.
+Also this ANOVA analysis can be used with non Rootdetection data sets by adjusting  `col_grouping1`, `col_grouping2` and `col_value` to define grouping and dependent variables.
+_Caution: For the `interaction_twofacaov` it is NOT possible to generate summary plots._ 
+
 
 # Plot data
 
 To visualize the data obtained from Rootdetection the `rootdetectR` package comes with several plot features to produce publication ready data visualization using the `ggplot2` package. The plot functions of `rootdetectR` are also able to illustrate significance among several lines within the plot using a Letter code. 
+
 
 ## Histogram plots
 
@@ -343,6 +374,7 @@ plot_hist(root_norm, draw_out = T, file = 'data_distribution.pdf')
 <br>
 <p style="font-size:12px;">histograms.pdf</p>
 </center>
+
 
 ## Plot absolute data
 
@@ -395,6 +427,7 @@ absolute_plot <- plot_abs(root_norm, plot_significance = T, label_delim = ';',
                           height_letter = 5)
 absolute_plot
 ```
+
 
 ## Plot relative data
 
@@ -451,17 +484,11 @@ As we have two Factor2 treatments there are two plots are produced with `plot_re
 
 There are some additional features (arguments) to customize the plots to your needs. For more information on customization of legend elements, axes elements, plotting of sample size, letter elements, coloring etc. just check out the man file by typing `?plot_rel` after loading the package. 
 
+
 # Additional Features
 
 The package `rootdetectR` comes with a number of additional useful functions to work with Rootdetection Outputs and other physiological measurements. 
 
-## Check a normalized Rootdetection data set
-
-If you want to check if your normalized data set fulfills all criteria for future analysis you can use the function `is_root_norm`. Especially if you have a data set which does not come from the standard rootdetection procedure this function gives the possibility to check your data.
-```{r}
-# check for normalized rootdetection standard
-is_root_norm(root_norm)
-```
 
 ## Calculate Standard Error
 
@@ -474,6 +501,7 @@ col0_20_measurments <- root_norm[root_norm$Label == 'Col_0;20',]$LengthMM
 # calculate Standard Error
 se(col0_20_measurments)
 ```
+
 
 ## Remove Outlier
 
@@ -521,6 +549,7 @@ head(rm_outlier_df(root_norm, fill_na = T))
 ```
 <br>
 
+
 ## Create Subsets of Rootdetection Outputs by Factor2
 
 Experiments with a lot of different conditions are quite common in biological Assays. In such assays there is often a control condition and different treatments (both Factor2) applied to a variety on lines (Factor1). Some times these very big data sets are hard to handle and plots will become quite messy. Therefore `rootdetectR` has implemented the function `subset_fac2`. This function will create subsets for each Factor2 control and treatment pair.
@@ -538,6 +567,7 @@ head(list_of_subsets$`20_and_20_28`)
 
 ```
 <br>
+
 
 ## Use of colorblind friendly colors
 
@@ -557,6 +587,7 @@ show_colors(colors_wong)
 example_colors <- c('red', 'blue', 'palegreen', 'yellow3')
 show_colors(example_colors)
 ```
+
 
 ## Extract colors from a picture
 
@@ -578,7 +609,8 @@ prim_colors <- extract_colors(primroses, n =6, plot_out = T)
 show_colors(prim_colors)
 ```
 
-## Customized ANOVA
+
+## Customized One-Way ANOVA with single grouping variable
 
 It is possible to use the ANOVA functions of `rootdetectR` with non-standard-rootdetection data tables. For all ANOVA functions (`onefacaov_fac1`, `onefacaov_fac2`, `twofacaov`, `interaction_twofacaov`) there is the possibility to adjust the columns that contain grouping and depended variables. Just use the arguments `grouping_var1`, `grouping_var2` and `dependend_var` and call the columns containing the respective data. To conduct a simple one-way ANOVA with `rootdetectR` you can use `onefacaov_fac1` and set the `grouping_var2` to NULL. 
 
@@ -592,9 +624,8 @@ root_norm20$Factor2 <- NULL
 # define grouping and dependend variables
 # be sure to set grouping_var2 = NULL if you have only one grouping variable
 onefacaov_fac1(root_norm20, col_grouping1 = 'Factor1', col_grouping2 = NULL, col_value = 'LengthMM')
-
-
 ```
+
 
 ## Create Significance Letters
 
@@ -623,6 +654,7 @@ tuk_mat <- tukey_to_matrix(tuk)
 # obtain significance_letters
 get_sig_letters(tuk_mat)
 ```
+
 
 ## Sorting The Levels of Label
 
@@ -661,5 +693,5 @@ levels(root_norm$Label)
 
 Future versions will have some improvements and additional functions.
 
-If you have any suggestions or questions please drop an e-mail to [philipp.janitza@landw.uni-halle.de](mailto:philipp.janitza@landw.uni-halle.de) .
+If you have any suggestions, questions or want to report a bug please drop an e-mail to [philipp.janitza@landw.uni-halle.de](mailto:philipp.janitza@landw.uni-halle.de).
 
