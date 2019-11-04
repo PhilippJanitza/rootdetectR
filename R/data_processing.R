@@ -11,6 +11,7 @@
 #'
 #' - hyphens (-) in Labels are not allowed
 #' @param root_output data.frame; output *.csv (list) from Rootdetection
+#' @param length_standard string; set name of the standard
 #' @return logical; TRUE or FALSE
 #' @examples
 #' is_root_output(root_output)

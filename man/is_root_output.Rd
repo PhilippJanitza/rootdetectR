@@ -8,6 +8,8 @@ is_root_output(root_output, length_standard = "10mm")
 }
 \arguments{
 \item{root_output}{data.frame; output *.csv (list) from Rootdetection}
+
+\item{length_standard}{string; set name of the standard}
 }
 \value{
 logical; TRUE or FALSE
