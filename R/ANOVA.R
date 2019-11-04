@@ -61,12 +61,6 @@ onefacaov_fac1 <- function(root_norm,
         lm_aov <- lm(LengthMM ~ Factor1, root_norm, na.action = na.omit)
         pval.aov <- anova(aov(lm_aov))[1, 5]
 
-        if(summary_plots){
-
-            plot(aov(lm_aov))
-
-        }
-
         # Tukey
         tuk <- as.data.frame(TukeyHSD(aov(lm_aov), ordered = FALSE)$Factor1)
         tuk <- cbind(rownames(tuk), tuk)
@@ -108,6 +102,11 @@ onefacaov_fac1 <- function(root_norm,
                                           digits = 2, nsmall = 3,
                                           scientific = T)[1:nr_fac1 ^ 2],
                  col = as.vector(col), cex = p_value_size)
+
+            if(summary_plots){
+                plot(aov(lm_aov))
+            }
+
             dev.off()
         }
 
@@ -137,14 +136,6 @@ onefacaov_fac1 <- function(root_norm,
             # ANOVA
             lm_aov <- lm(LengthMM ~ Factor1, data_aov, na.action = na.omit)
             pval.aov <- anova(aov(lm_aov))[1, 5]
-
-            if(summary_plots){
-
-                print(fac2[tp])
-                plot(aov(lm_aov))
-
-            }
-
 
             # Tukey
             tuk <- as.data.frame(TukeyHSD(aov(lm_aov), ordered = FALSE)$Factor1)
@@ -190,6 +181,11 @@ onefacaov_fac1 <- function(root_norm,
                                               digits = 2, nsmall = 3,
                                               scientific = TRUE)[1:nr_fac1 ^ 2],
                      col = as.vector(col), cex = p_value_size)
+
+                if(summary_plots){
+                    plot(aov(lm_aov))
+                }
+
                 dev.off()
             }
         }
@@ -266,14 +262,6 @@ onefacaov_fac2 <- function(root_norm,
             aov_all <- aov(lm_all)
             mat[1, i] <- anova(aov_all)[1, 5]
 
-            # print summary if summar_plots = T
-            if (summary_plots) {
-
-                print(paste(fac1[i], fac2[con_position], 'vs.', fac2[tp]))
-                plot(aov_all)
-
-            }
-
             # add mat to list with name
             name <- fac2[tp]
             matl[[name]] <- mat
@@ -283,8 +271,7 @@ onefacaov_fac2 <- function(root_norm,
                 col <- matrix("black", nrow = 1, ncol = nr_fac1)
                 col[lower.tri(col, diag = TRUE)] <- "white"
                 # filename
-                pdf(file = paste(file_base, "_", fac2[tp], ".pdf", sep = ""),
-                    width = 6, height = 2.5)
+                pdf(file = paste(file_base, "_", fac2[tp], ".pdf", sep = ""))
                 image(t(mat), col = c("red", "white"), breaks = c(0, 0.05, 1),
                       axes = FALSE)
                 title(main = paste(fac2[con_position], 'vs.', fac2[tp]))
@@ -297,6 +284,11 @@ onefacaov_fac2 <- function(root_norm,
                                      digits = 2, nsmall = 3,
                                      scientific = TRUE)[1:nr_fac1 ^ 2],
                      cex = p_value_size)
+
+                if (summary_plots) {
+                    plot(aov_all)
+                }
+
                 dev.off()
             }
         }
@@ -353,11 +345,6 @@ twofacaov <- function(root_norm,
     # model that compares all vs all
     aov_all_vs_all <- aov(LengthMM ~ Factor1 * Factor2, data = root_norm)
 
-    # summary plots
-    if(summary_plots){
-        plot(aov_all_vs_all)
-    }
-
     # tukey post hoc test
     tuk <- as.data.frame(TukeyHSD(aov_all_vs_all,
                                   ordered = FALSE)$`Factor1:Factor2`)
@@ -406,6 +393,12 @@ twofacaov <- function(root_norm,
                                       digits = 2, nsmall = 3,
                                       scientific = TRUE)[1:nr_labs ^ 2],
              col = as.vector(col), cex = p_value_size)
+
+        # summary plots
+        if(summary_plots){
+            plot(aov_all_vs_all)
+        }
+
         dev.off()
     }
     return(mat)
