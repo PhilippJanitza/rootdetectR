@@ -259,16 +259,6 @@ plot_abs <- function(root_norm,
 
 
 
-
-
-
-
-
-
-
-
-
-
 #' @title Plotting Relative Data Of Normalized Rootdetection Data Set
 #' @description Relative data is plotted as boxplot or box-jitter-plot combination. If Significances should be illustrated multiple plots are generated. Each Factor2 control Factor2 treatment combination will produce a plot.
 #' @param root_norm data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values
