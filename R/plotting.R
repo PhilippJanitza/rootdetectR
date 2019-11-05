@@ -61,7 +61,27 @@ plot_hist <- function(root_norm, draw_out = F,
 
     if (draw_out == T) {
         pdf(file)
-        gridExtra::marrangeGrob(grobs = plot_list, nrow = 4, ncol = 3, layout_matrix = matrix(1:12, ncol = 3, nrow =4, byrow = T))
+
+        fp <- length(plot_list) %/% 12
+        x <- 1
+        if(fp > 0){
+            for(i in 1:fp){
+
+
+                gridExtra::grid.arrange(grobs = plot_list[x:(x + 11)], ncol = 3, nrow = 4)
+                x <- x + 12
+
+            }
+        }
+
+        lp <- length(plot_list) %% 12
+        if(lp >= 1){
+
+            gridExtra::grid.arrange(grobs = plot_list[x:(x + (lp - 1))], ncol = 3, nrow = 4)
+
+        }
+
+
         dev.off()
     }
     return(plot_list)
