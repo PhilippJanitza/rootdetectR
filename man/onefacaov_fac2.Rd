@@ -6,7 +6,7 @@
 \usage{
 onefacaov_fac2(root_norm, col_grouping1 = "Factor1",
   col_grouping2 = "Factor2", col_value = "LengthMM", control = "20",
-  summary_plots = F, draw_out = F, file_base = "1fac_ANOVA_factor2",
+  draw_out = F, file_base = "1fac_ANOVA_factor2",
   axis_label_size = 0.7, p_value_size = 0.8)
 }
 \arguments{
@@ -19,8 +19,6 @@ onefacaov_fac2(root_norm, col_grouping1 = "Factor1",
 \item{col_value}{string; name of the column containing values (dependent variable) (LengthMM)}
 
 \item{control}{string; name of the grouping variable 2 (Factor2) control condition}
-
-\item{summary_plots}{logical; If TRUE summary (plot(aov)) will be plotted}
 
 \item{draw_out}{logical; If TRUE a matrix containing p-values is plotted in a pdf file}
 

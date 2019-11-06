@@ -212,6 +212,7 @@ ow_anova_factor1
 ```
 <br>
 The `file_base` argument is necessary if `draw_out = T`. It is used to get the path and the base for the file name (e.g. /your/path/filebasename). Two *.pdf files were produced in this example case as we have two Factor2 levels. The functions adds the level of grouping variable 2 (Factor2) automatically to the file names. In this example case the file names will be 1fac_ANOVA_factor1_20.pdf and 1fac_ANOVA_factor1_28.pdf.
+
 ```r
 # draw_out = T produces a list of matrices containing p-values from Tukey post-hoc test 
 # in addition pdf files with basename 1fac_ANOVA_factor1 are produced in your working dir
@@ -264,7 +265,6 @@ ow_anova_factor2 <- onefacaov_fac2(root_norm, control = '20', draw_out = T,
 
 It is possible to use the function with non Rootdetection data sets by adjusting some arguments of the functions. The Arguments `col_grouping1` and `col_grouping2` can be used to set the column names of two grouping variables and `col_value` to set the column name of dependent variable.
 
-In addition it is possible to add ANOVA summary plots to the generated pdf files by setting `summary_plots = TRUE`.
 
 
 ## Two-Way ANOVA

@@ -205,7 +205,6 @@ onefacaov_fac1 <- function(root_norm,
 #' @param col_grouping2 string; name of the column that should be used as grouping variable 2 (Factor2)
 #' @param col_value  string; name of the column containing values (dependent variable) (LengthMM)
 #' @param control string; name of the grouping variable 2 (Factor2) control condition
-#' @param summary_plots logical; If TRUE summary (plot(aov)) will be plotted
 #' @param draw_out logical; If TRUE a matrix containing p-values is plotted in a pdf file
 #' @param file_base string; file base name of the pdf output (is needed if draw_out = TRUE)
 #' @param axis_label_size numeric; font size of axis labels in pdf file (if draw_out = TRUE)
@@ -224,7 +223,6 @@ onefacaov_fac2 <- function(root_norm,
                            col_grouping1 = 'Factor1', col_grouping2 = 'Factor2',
                            col_value = 'LengthMM',
                            control = '20',
-                           summary_plots = F,
                            draw_out = F,
                            file_base = "1fac_ANOVA_factor2",
                            axis_label_size = 0.7,
@@ -265,32 +263,26 @@ onefacaov_fac2 <- function(root_norm,
             # add mat to list with name
             name <- fac2[tp]
             matl[[name]] <- mat
-
-            if (draw_out) {
-                # Visualize the p-values
-                col <- matrix("black", nrow = 1, ncol = nr_fac1)
-                col[lower.tri(col, diag = TRUE)] <- "white"
-                # filename
-                pdf(file = paste(file_base, "_", fac2[tp], ".pdf", sep = ""))
-                image(t(mat), col = c("red", "white"), breaks = c(0, 0.05, 1),
-                      axes = FALSE)
-                title(main = paste(fac2[con_position], 'vs.', fac2[tp]))
-                s <- seq(from = 0, to = 1, length = nr_fac1)
-                axis(1, at = s, labels = fac1, las = 2, cex.axis = axis_label_size)
-                axis(2, at = s[1], labels = "pval", las = 2, cex.axis = axis_label_size)
-                abline(v = c(s - (s[2] - s[1]) / 2, s[nr_fac1] +
-                                 (s[2] - s[1]) / 2), col = "grey")
-                text(s, s[1], format(as.vector(mat),
-                                     digits = 2, nsmall = 3,
-                                     scientific = TRUE)[1:nr_fac1 ^ 2],
-                     cex = p_value_size)
-
-                if (summary_plots) {
-                    plot(aov_all)
-                }
-
-                dev.off()
-            }
+        }
+        if (draw_out) {
+            # Visualize the p-values
+            col <- matrix("black", nrow = 1, ncol = nr_fac1)
+            col[lower.tri(col, diag = TRUE)] <- "white"
+            # filename
+            pdf(file = paste(file_base, "_", fac2[tp], ".pdf", sep = ""))
+            image(t(mat), col = c("red", "white"), breaks = c(0, 0.05, 1),
+                  axes = FALSE)
+            title(main = paste(fac2[con_position], 'vs.', fac2[tp]))
+            s <- seq(from = 0, to = 1, length = nr_fac1)
+            axis(1, at = s, labels = fac1, las = 2, cex.axis = axis_label_size)
+            axis(2, at = s[1], labels = "pval", las = 2, cex.axis = axis_label_size)
+            abline(v = c(s - (s[2] - s[1]) / 2, s[nr_fac1] +
+                             (s[2] - s[1]) / 2), col = "grey")
+            text(s, s[1], format(as.vector(mat),
+                                 digits = 2, nsmall = 3,
+                                 scientific = TRUE)[1:nr_fac1 ^ 2],
+                 cex = p_value_size)
+            dev.off()
         }
     }
     return(matl)
