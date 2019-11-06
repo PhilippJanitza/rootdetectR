@@ -271,7 +271,7 @@ onefacaov_fac2 <- function(root_norm,
             col <- matrix("black", nrow = 1, ncol = nr_fac1)
             col[lower.tri(col, diag = TRUE)] <- "white"
             # filename
-            pdf(file = paste(file_base, "_", fac2[tp], ".pdf", sep = ""))
+            pdf(file = paste(file_base, "_", fac2[tp], ".pdf", sep = ""), width=6, height=2.5)
             image(t(mat), col = c("red", "white"), breaks = c(0, 0.05, 1),
                   axes = FALSE)
             title(main = paste(fac2[con_position], 'vs.', fac2[tp]))
