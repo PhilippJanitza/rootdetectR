@@ -34,6 +34,7 @@ list; data.frames containing p-values for one-way ANOVA and Tukey post-hoc over 
 \description{
 The function performs a one-way ANOVA and Tukey post-hoc test over grouping variable 2 (Factor2).
 The function takes each control + treatment combination of grouping variable 2 and perfoms a one-way ANOVA iterating over grouping Variable 1 (Factor1).
+The p-values are adjusted using Benjamini-Hochberg correction.
 }
 \examples{
 # get data.frame containg p-values for one-way ANOVA and Tukey post-hoc over grouping variable 2 (Factor2)

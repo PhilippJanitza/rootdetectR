@@ -200,6 +200,7 @@ onefacaov_fac1 <- function(root_norm,
 #' @title One-way ANOVA Over Grouping Variable 2 Treatments
 #' @description The function performs a one-way ANOVA and Tukey post-hoc test over grouping variable 2 (Factor2).
 #' The function takes each control + treatment combination of grouping variable 2 and perfoms a one-way ANOVA iterating over grouping Variable 1 (Factor1).
+#' The p-values are adjusted using Benjamini-Hochberg correction.
 #' @param root_norm data.frame; normalized Rootdetection data set
 #' @param col_grouping1 string; name of the column that should be used as grouping variable 1 (Factor1)
 #' @param col_grouping2 string; name of the column that should be used as grouping variable 2 (Factor2)
@@ -260,10 +261,11 @@ onefacaov_fac2 <- function(root_norm,
             aov_all <- aov(lm_all)
             mat[1, i] <- anova(aov_all)[1, 5]
 
-            # add mat to list with name
-            name <- fac2[tp]
-            matl[[name]] <- mat
         }
+
+        # adjust pval
+        mat[1,] <- multtest::mt.rawp2adjp(mat[1,], proc = "BH")$adjp[,2]
+
         if (draw_out) {
             # Visualize the p-values
             col <- matrix("black", nrow = 1, ncol = nr_fac1)
@@ -284,6 +286,10 @@ onefacaov_fac2 <- function(root_norm,
                  cex = p_value_size)
             dev.off()
         }
+
+        # add mat to list with name
+        name <- fac2[tp]
+        matl[[name]] <- mat
     }
     return(matl)
 }
