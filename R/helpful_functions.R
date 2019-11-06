@@ -248,3 +248,31 @@ sort_label <- function(root_norm, label_delim = ';', col_label = 'Label', contro
 
 
 }
+
+
+
+#' @title Detach All Elements
+#' @description This function will detach all elements except th base R packages:
+#' .GlobalEnv', 'package:stats', 'package:graphics', 'package:grDevices', 'package:utils',
+#' 'package:datasets', 'package:methods', 'Autoloads', 'package:base', 'tools:rstudio'
+#' _Caution: This function will also detach rootdetectR_deta
+#' @examples
+#' detach_all()
+#' @export
+detach_all <- function(){
+
+
+  # create vector with base packages
+  base_pkg <- c('.GlobalEnv', 'package:stats', 'package:graphics', 'package:grDevices', 'package:utils', 'package:datasets', 'package:methods', 'Autoloads', 'package:base', 'tools:rstudio')
+
+  # which are not in base packages
+  att_pkg <- search()[which(!search() %in% base_pkg)]
+
+  # remove all that are not in base list
+  for(e in att_pkg){
+
+    detach(name = e, character.only = T)
+
+  }
+
+}
