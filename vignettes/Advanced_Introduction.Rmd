@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Detailed (Advanced) manual for `rootdetectR 0.9.1`
+Detailed (Advanced) manual for `rootdetectR 0.9.2`
 
 
 # Table of Contents
