@@ -24,7 +24,7 @@ data.frame; with sorted col_label
 \description{
 The function will sort the grouping variable (Label) according to Controls for plotting.
 By defining control_fac1 and control_fac2 you can set the corresponding grouping variable (label) to the first place in order.
-Caution: The column that should be ordered must be organized as a factor.
+_Caution: The column that should be ordered must be organized as a factor._
 }
 \examples{
 # obtain normalized Rootdetection data.frame

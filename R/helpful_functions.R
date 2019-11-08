@@ -195,7 +195,7 @@ get_sig_letters <- function(tukmatrix){
 #' @title Sort Grouping Variable Of Normalized Rootdetection Data Set
 #' @description The function will sort the grouping variable (Label) according to Controls for plotting.
 #' By defining control_fac1 and control_fac2 you can set the corresponding grouping variable (label) to the first place in order.
-#' Caution: The column that should be ordered must be organized as a factor.
+#' _Caution: The column that should be ordered must be organized as a factor._
 #' @param root_norm data.frame; normalized Rootdetection data set
 #' @param label_delim character; defines how Factor1 and Factor2 are separated in Label
 #' @param col_label string; name of the column carring the grouping variable (Label)
@@ -255,15 +255,25 @@ sort_label <- function(root_norm, label_delim = ';', col_label = 'Label', contro
 #' @description This function will detach all elements except th base R packages:
 #' .GlobalEnv', 'package:stats', 'package:graphics', 'package:grDevices', 'package:utils',
 #' 'package:datasets', 'package:methods', 'Autoloads', 'package:base', 'tools:rstudio'
-#' _Caution: This function will also detach rootdetectR_deta
+#' _Caution: This function will also detach rootdetectR_
+#' @param except vector; elements that should be excluded from detaching
 #' @examples
+#' # detach all elements in search()
 #' detach_all()
+#'
+#' # detach all element except rootdetectR
+#' detach_all(except = 'rootdetectR')
+#'
 #' @export
-detach_all <- function(){
+detach_all <- function(except){
 
 
   # create vector with base packages
   base_pkg <- c('.GlobalEnv', 'package:stats', 'package:graphics', 'package:grDevices', 'package:utils', 'package:datasets', 'package:methods', 'Autoloads', 'package:base', 'tools:rstudio')
+
+  if(!missing(except)){
+    base_pkg <- c(base_pkg, except)
+  }
 
   # which are not in base packages
   att_pkg <- search()[which(!search() %in% base_pkg)]
@@ -275,4 +285,47 @@ detach_all <- function(){
 
   }
 
+}
+
+
+
+#' @title Change Names of Elements In Specific Column
+#' @description The function will rename elements in a specific column by vectors "old_name" and "new_name".
+#' Simply give the function a vector with old names that should be renamed by a vector with new names.
+#' _Be carefull that elements in new_name have the rigth position_ (e.g. the second element in "old_name" will be replaced by the second element in "new_name").
+#' @param df data.frame; input data.frame
+#' @param colname character; name of the column storing the elements to be renamed
+#' @param old_name vector; elements that should be renamed in column specified by 'colname'
+#' @param new_name vector; new names of the elements specified by "old_name"
+#' @return data.frame; with renamed elements in "colname"
+#' @examples
+#' rename_element(root_output, colname = 'Label', oldname = c('Col_0;28', 'Col_0;20'), new_name = c('Col0_28', 'Col0_20'))
+#' @export
+rename_element <- function(df, colname, old_name, new_name){
+
+  # check if colname is factor -> transform to character
+  if(is.factor(df[,colname])){
+    df[,colname] <- as.character(df[,colname])
+  }
+
+  # check if all old_names matches
+  if(all(old_name %in% df[,colname])){
+    # check if old_name and new_name have same length
+    if(length(old_name) == length(new_name)){
+
+      for(i in 1:length(old_name)){
+
+        df[,colname][df[,colname] == old_name[i]] <- new_name[i]
+
+      }
+
+      df[,colname] <- as.factor(df[,colname])
+      return(df)
+
+    } else {
+      stop('"old_name" must have the same length as "new_name"')
+    }
+  } else {
+    stop(c('element/s ', paste(noquote(old_name[which(!old_name %in% df[,colname])]),collapse=','), ' do not exist in ', colname))
+  }
 }

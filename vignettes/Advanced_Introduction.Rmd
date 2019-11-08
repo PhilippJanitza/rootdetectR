@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Detailed (Advanced) manual for `rootdetectR 0.9.2`
+Detailed (Advanced) manual for `rootdetectR 0.9.3`
 
 
 # Table of Contents
@@ -540,7 +540,7 @@ rm_outlier(x, fill_na = T)
 <br>
 If you want to remove outliers from a complete Normalized Rootdetection Output you can use the function `rm_outlier_df` to delete all outliers from the data set.
 ```{r}
-# you can use the rm_outlier_df function to delete all outliers from Normalized Rootdetection Output
+# use rm_outlier_df function to delete all outliers from Normalized Rootdetection Output
 head(rm_outlier_df(root_norm))
 
 # you can convert the outlier to NA values to illustrate the positions in your data set
@@ -623,7 +623,8 @@ root_norm20$Factor2 <- NULL
 # use onefacaov_fac1 to conduct an one-way ANOVA of this dataset
 # define grouping and dependend variables
 # be sure to set grouping_var2 = NULL if you have only one grouping variable
-onefacaov_fac1(root_norm20, col_grouping1 = 'Factor1', col_grouping2 = NULL, col_value = 'LengthMM')
+onefacaov_fac1(root_norm20, col_grouping1 = 'Factor1', 
+               col_grouping2 = NULL, col_value = 'LengthMM')
 ```
 
 
@@ -666,7 +667,8 @@ root_norm <- norm_10mm_standard(root_output)
 levels(root_norm$Label)
 
 # change order by sorting function
-root_norm <- sort_label(root_norm, label_delim = ';', control_fac1 = 'yucOx', control_fac2 = '28')
+root_norm <- sort_label(root_norm, label_delim = ';', 
+                        control_fac1 = 'yucOx', control_fac2 = '28')
 
 # check sorting again
 levels(root_norm$Label)
@@ -680,7 +682,9 @@ root_norm <- norm_10mm_standard(root_output)
 levels(root_norm$Label)
 
 # change order by vector
-sorting_vector <- c("weitar1_1;20", "weitar1_1;28", "Col_0;20", "Col_0;28", "tir1_1afb2_3;20", "tir1_1afb2_3;28", "yucOx;20", "yucOx;28")
+sorting_vector <- c("weitar1_1;20", "weitar1_1;28", "Col_0;20", 
+                    "Col_0;28", "tir1_1afb2_3;20", "tir1_1afb2_3;28", 
+                    "yucOx;20", "yucOx;28")
 
 root_norm$Label <- factor(root_norm$Label,levels = sorting_vector)
 
@@ -688,6 +692,39 @@ root_norm$Label <- factor(root_norm$Label,levels = sorting_vector)
 levels(root_norm$Label)
 ```
 
+
+## Renaming labels
+
+Sometimes there are wrong labels (e.g. containing hyphens) in data sets or labels that should be renamed. Therefore `rootdetectR` has a function to simplify the renaming of e.g. labels. The function `rename_element` will take a data.frame, a column name and vectors of old and new names as input and rename the elements in the specified column of the given data.frame. Therfore the elements of the vector `old_name` need to match elements already present in the specified column of the data.frame. Then those elements will be replaced by the elements in the vector `new_name`. Therefore the vectors `old_name` and `new_name` need to have the same length and the position of the elements must match (e.g. the second element of `old_name` will be replaced by the second element of `new_name`). To show the functionality of the fuction the following example will rename the labels 'Col_0;20' and 'Col_0;28' to 'Col0;20' and 'Col0;28'
+
+```{r}
+# show all labels
+levels(root_output$Label)
+# rename some of them
+new_labels <- rename_element(root_output, colname = 'Label', 
+                             old_name = c('Col_0;20','Col_0;28'), 
+                             new_name = c('Col0;20','Col0;28'))
+# show levels of new data.frame
+levels(new_labels$Label)
+```
+
+
+## detach all elements
+
+When starting a script you often want to remove everything from your R enviroment. By using `rm(list = ls())` you can clear your Global Enviroment and all assigned variables will be deleted. But this will not detach packages or data sets from the `search()`. To detach everything except the basic R packages you can use the function `detach_all` from `rootdetectR`. It is also possible to except packages or dataset from the detachment.
+
+```{r}
+# show the attached items 
+search()
+# use detach_all
+detach_all()
+# show search() again
+search()
+# you can also exclude elements from detachment
+library(rootdetectR)
+detach_all(except = 'package:rootdetectR')
+search()
+```
 
 # Future Features
 
