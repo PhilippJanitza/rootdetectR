@@ -220,7 +220,7 @@ sort_label <- function(root_norm, label_delim = ';', col_label = 'Label', contro
   root_norm$Label <- as.factor(root_norm$Label)
 
   # get control positions
-  con_fac1_position <- grep(control_fac1, levels(root_norm$Label))
+  con_fac1_position <- grep(paste(control_fac1, label_delim, sep = ''), levels(root_norm$Label))
   # get all other positions and put controls in first place
   sort_fac1 <- c(levels(root_norm$Label)[con_fac1_position], levels(root_norm$Label)[-con_fac1_position])
 
@@ -231,7 +231,7 @@ sort_label <- function(root_norm, label_delim = ';', col_label = 'Label', contro
 
   for (i in fac1) {
 
-    temp <- sort_fac1[grep(i, sort_fac1)]
+    temp <- sort_fac1[grep(paste(i, label_delim, sep = ''), sort_fac1)]
     con_fac2_position <- grep(control_fac2, unique(sub(paste(".*", label_delim, sep = ''), '', temp)))
     sort_fac2 <- c(temp[con_fac2_position], temp[-con_fac2_position])
     sorted_fac1_fac2 <- c(sorted_fac1_fac2, sort_fac2)
