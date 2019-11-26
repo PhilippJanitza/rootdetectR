@@ -31,6 +31,6 @@ plot_hist, plot_abs, plot_rel
 
 \section{helpful Functions}{
 
-se, rm_outlier, subset_fac2, tukey_to_matrix, get_sig_letters, sort_label, extract_colors, show_colors
+se, rm_outlier, subset_fac2, tukey_to_matrix, get_sig_letters, sort_label, extract_colors, show_colors, detach_all, rename_element
 }
 
