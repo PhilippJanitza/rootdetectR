@@ -277,7 +277,7 @@ inspect_root_norm <- function(root_norm, plot = TRUE, output = TRUE ){
     stop('Input does not fit the criteria - check your input with is_root_norm() function!')
   }
 
-  rs_sum <- summary_stat(root_norm)
+  rs_sum <- rootdetectR::summary_stat(root_norm)
 
   rs_sum$quality[rs_sum$n < 5] <- 'bad'
   rs_sum$quality[rs_sum$n >= 5 & rs_sum$n < 10] <- 'fair'
@@ -310,13 +310,13 @@ inspect_root_norm <- function(root_norm, plot = TRUE, output = TRUE ){
 
   if(plot == T){
 
-    p <- ggplot(rs_sum, aes(y = Factor1, x = Factor2)) +
-      geom_tile(aes(fill=quality), colour = 'black') +
-      geom_text(aes(label = n)) +
-      theme_bw() +
-      theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank()) +
-      scale_fill_manual(values = c('bad' = 'red','fair' = 'yellow','good' = 'green'))
+    p <- ggplot2::ggplot(rs_sum, ggplot2::aes(y = Factor1, x = Factor2)) +
+      ggplot2::geom_tile(ggplot2::aes(fill=quality), colour = 'black') +
+      ggplot2::geom_text(aes(label = n)) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(panel.border = ggplot2::element_blank(), panel.grid.major = ggplot2::element_blank(),
+            panel.grid.minor = ggplot2::element_blank()) +
+      ggplot2::scale_fill_manual(values = c('bad' = 'red','fair' = 'yellow','good' = 'green'))
 
     return(p)
 
