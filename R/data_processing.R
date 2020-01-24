@@ -79,7 +79,7 @@ is_root_output <- function(root_output, length_standard = '10mm') {
 #' - No length standard must be present
 #'
 #' - hyphens (-) in Labels are not allowed
-#' @param root_output data.frame; output *.csv (list) from Rootdetection
+#' @param root_output data.frame; normalized Rootdetection data set
 #' @return logical; TRUE or FALSE
 #' @examples
 #' # normalize root_output
@@ -252,6 +252,75 @@ norm_cust_standard <- function(root_output,
   # return data.frame
   return(root_output)
 
+}
+
+
+
+#' @title Visualize and Inspect Rootdetection Data
+#' @importFrom magrittr "%>%"
+#' @description The function produces a summary of all lines and conditions of a normalized rootdetection dataset.
+#' It visualizes a summary in a matrix styled plot and gives a description of data in the R console.
+#' @param root_norm data.frame;  normalized Rootdetection data set
+#' @param plot logical; if TRUE summary plot is produced
+#' @param output logical; if TRUE summary is printed in R console
+#' @return plot and/or console output
+#' @examples
+#' # normalize root_output
+#' root_norm <- norm_10mm_standard(root_output)
+#'
+#' # data summary
+#' inspect_root_norm(root_norm)
+#' @export
+inspect_root_norm <- function(root_norm, plot = TRUE, output = TRUE ){
+
+  if(is_root_norm(root_norm) == F){
+    stop('Input does not fit the criteria - check your input with is_root_norm() function!')
+  }
+
+  rs_sum <- summary_stat(root_norm)
+
+  rs_sum$quality[rs_sum$n < 5] <- 'bad'
+  rs_sum$quality[rs_sum$n >= 5 & rs_sum$n < 10] <- 'fair'
+  rs_sum$quality[rs_sum$n >= 10] <- 'good'
+
+  if(output == T){
+
+    cat(paste('Factor1 levels present:', paste(as.character(unique(rs_sum$Factor1)), collapse = ', '), '\n'))
+    cat(paste('Factor2 levels present:', paste(as.character(unique(rs_sum$Factor2)),collapse = ', '), '\n\n'))
+
+    fair <- rs_sum[which(rs_sum$n < 10 & rs_sum$n >= 5),]
+    if(nrow(fair) != 0){
+      cat('Lines with n 5-10: ')
+      cat(paste(as.character(fair$Factor1), ';', as.character(fair$Factor2), '\n', sep = ''))
+    }
+
+    bad <- rs_sum[which(rs_sum$n < 5 & rs_sum$n >= 1),]
+    if(nrow(bad) != 0){
+      cat('Lines with n 1-5: ')
+      cat(paste(as.character(bad$Factor1), ';', as.character(bad$Factor2), '\n', sep = ''))
+    }
+
+
+    missing <- rs_sum[which(rs_sum$n == 0),]
+    if(nrow(missing) != 0){
+      cat('Missing Lines (n =0): ')
+      cat(paste(as.character(missing$Factor1), ';', as.character(missing$Factor2), sep = ''))
+    }
+  }
+
+  if(plot == T){
+
+    p <- ggplot(rs_sum, aes(y = Factor1, x = Factor2)) +
+      geom_tile(aes(fill=quality), colour = 'black') +
+      geom_text(aes(label = n)) +
+      theme_bw() +
+      theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank()) +
+      scale_fill_manual(values = c('bad' = 'red','fair' = 'yellow','good' = 'green'))
+
+    return(p)
+
+  }
 }
 
 
