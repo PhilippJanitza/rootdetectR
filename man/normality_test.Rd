@@ -4,8 +4,7 @@
 \alias{normality_test}
 \title{Normality Test For Normalized Rootdetection Data Set}
 \usage{
-normality_test(root_norm, col_grouping = "Label",
-  col_value = "LengthMM")
+normality_test(root_norm, col_grouping = "Label", col_value = "LengthMM")
 }
 \arguments{
 \item{root_norm}{data.frame; normalized Rootdetection data set}

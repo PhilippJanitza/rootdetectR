@@ -4,14 +4,30 @@
 \alias{plot_abs}
 \title{Plotting Absolute Data Of Normalized Rootdetection Data Set}
 \usage{
-plot_abs(root_norm, label_delim = ";", type = "jitter",
-  size_jitter_dot = 2, plot_n = T, plot_colours, plot_title,
-  size_plot_title = 14, y_label = "hypocotyl length [mm]",
-  x_label = "", legend_label = "condition", size_legend_title = 12,
-  size_legend_text = 10, width_lines = 0.5, width_axis = 0.5,
-  size_x_axes = 9, size_y_axes = 9, size_n = 3,
-  plot_significance = F, height_letter = 2, size_letter = 5,
-  angle_letter = 0)
+plot_abs(
+  root_norm,
+  label_delim = ";",
+  type = "jitter",
+  size_jitter_dot = 2,
+  plot_n = T,
+  plot_colours,
+  plot_title,
+  size_plot_title = 14,
+  y_label = "hypocotyl length [mm]",
+  x_label = "",
+  legend_label = "condition",
+  size_legend_title = 12,
+  size_legend_text = 10,
+  width_lines = 0.5,
+  width_axis = 0.5,
+  size_x_axes = 9,
+  size_y_axes = 9,
+  size_n = 3,
+  plot_significance = F,
+  height_letter = 2,
+  size_letter = 5,
+  angle_letter = 0
+)
 }
 \arguments{
 \item{root_norm}{data.frame; normalized Rootdetection data set}

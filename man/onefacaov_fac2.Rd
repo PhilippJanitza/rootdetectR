@@ -4,10 +4,17 @@
 \alias{onefacaov_fac2}
 \title{One-way ANOVA Over Grouping Variable 2 Treatments}
 \usage{
-onefacaov_fac2(root_norm, col_grouping1 = "Factor1",
-  col_grouping2 = "Factor2", col_value = "LengthMM", control = "20",
-  draw_out = F, file_base = "1fac_ANOVA_factor2",
-  axis_label_size = 0.7, p_value_size = 0.8)
+onefacaov_fac2(
+  root_norm,
+  col_grouping1 = "Factor1",
+  col_grouping2 = "Factor2",
+  col_value = "LengthMM",
+  control = "20",
+  draw_out = F,
+  file_base = "1fac_ANOVA_factor2",
+  axis_label_size = 0.7,
+  p_value_size = 0.8
+)
 }
 \arguments{
 \item{root_norm}{data.frame; normalized Rootdetection data set}

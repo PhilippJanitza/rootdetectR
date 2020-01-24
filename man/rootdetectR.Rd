@@ -3,7 +3,6 @@
 \docType{package}
 \name{rootdetectR}
 \alias{rootdetectR}
-\alias{rootdetectR-package}
 \title{rootdetectR: Statistical analysis of rootdetection output with R}
 \description{
 rootdectR can be used to analyse the output from rootdetection software. This package contains functions to visualize and statistically test data coming from rootdetection
