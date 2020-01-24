@@ -4,11 +4,19 @@
 \alias{twofacaov}
 \title{Two-Way ANOVA Over Grouping Variable 1 And 2}
 \usage{
-twofacaov(root_norm, col_grouping1 = "Factor1",
-  col_grouping2 = "Factor2", col_value = "LengthMM",
-  col_label = "Label", label_delim = ";", summary_plots = F,
-  draw_out = F, file = "2fac_ANOVA_all_vs_all.pdf",
-  axis_label_size = 0.7, p_value_size = 0.8)
+twofacaov(
+  root_norm,
+  col_grouping1 = "Factor1",
+  col_grouping2 = "Factor2",
+  col_value = "LengthMM",
+  col_label = "Label",
+  label_delim = ";",
+  summary_plots = F,
+  draw_out = F,
+  file = "2fac_ANOVA_all_vs_all.pdf",
+  axis_label_size = 0.7,
+  p_value_size = 0.8
+)
 }
 \arguments{
 \item{root_norm}{data.frame; normalized Rootdetection data set}

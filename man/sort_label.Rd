@@ -4,8 +4,13 @@
 \alias{sort_label}
 \title{Sort Grouping Variable Of Normalized Rootdetection Data Set}
 \usage{
-sort_label(root_norm, label_delim = ";", col_label = "Label",
-  control_fac1, control_fac2)
+sort_label(
+  root_norm,
+  label_delim = ";",
+  col_label = "Label",
+  control_fac1,
+  control_fac2
+)
 }
 \arguments{
 \item{root_norm}{data.frame; normalized Rootdetection data set}

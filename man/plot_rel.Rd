@@ -4,13 +4,29 @@
 \alias{plot_rel}
 \title{Plotting Relative Data Of Normalized Rootdetection Data Set}
 \usage{
-plot_rel(root_norm, label_delim = ";", control = 20, type = "jitter",
-  size_jitter_dot = 2, plot_colours, plot_title, size_plot_title = 14,
-  y_label = "hypocotyl growth [\%]", x_label = "",
-  legend_label = "Label", size_legend_title = 12,
-  size_legend_text = 10, width_lines = 0.5, width_axis = 0.5,
-  size_x_axes = 9, size_y_axes = 9, plot_significance = F,
-  height_letter = 10, size_letter = 5, angle_letter = 0)
+plot_rel(
+  root_norm,
+  label_delim = ";",
+  control = 20,
+  type = "jitter",
+  size_jitter_dot = 2,
+  plot_colours,
+  plot_title,
+  size_plot_title = 14,
+  y_label = "hypocotyl growth [\%]",
+  x_label = "",
+  legend_label = "Label",
+  size_legend_title = 12,
+  size_legend_text = 10,
+  width_lines = 0.5,
+  width_axis = 0.5,
+  size_x_axes = 9,
+  size_y_axes = 9,
+  plot_significance = F,
+  height_letter = 10,
+  size_letter = 5,
+  angle_letter = 0
+)
 }
 \arguments{
 \item{root_norm}{data.frame; LengthMM normalized output from Rootdetection containing NO 10mm values}

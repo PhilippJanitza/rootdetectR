@@ -4,8 +4,11 @@
 \alias{summary_stat}
 \title{Calculate Summary Statistics for Normalized Rootdetection Data Set}
 \usage{
-summary_stat(root_norm, col_grouping = c("Factor1", "Factor2"),
-  col_value = "LengthMM")
+summary_stat(
+  root_norm,
+  col_grouping = c("Factor1", "Factor2"),
+  col_value = "LengthMM"
+)
 }
 \arguments{
 \item{root_norm}{data.frame; normalized Rootdetection data set}

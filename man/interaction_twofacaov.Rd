@@ -4,11 +4,18 @@
 \alias{interaction_twofacaov}
 \title{Pairwise Two-Way ANOVA Of Interaction (Treatment) Effects}
 \usage{
-interaction_twofacaov(root_norm, col_grouping1 = "Factor1",
-  col_grouping2 = "Factor2", col_value = "LengthMM", control = "20",
-  label_delim = ";", draw_out = F,
-  file_base = "2fac_ANOVA_BH_corrected", axis_label_size = 0.7,
-  p_value_size = 0.8)
+interaction_twofacaov(
+  root_norm,
+  col_grouping1 = "Factor1",
+  col_grouping2 = "Factor2",
+  col_value = "LengthMM",
+  control = "20",
+  label_delim = ";",
+  draw_out = F,
+  file_base = "2fac_ANOVA_BH_corrected",
+  axis_label_size = 0.7,
+  p_value_size = 0.8
+)
 }
 \arguments{
 \item{root_norm}{data.frame; normalized Rootdetection data set}
@@ -32,8 +39,6 @@ interaction_twofacaov(root_norm, col_grouping1 = "Factor1",
 \item{p_value_size}{numeric; font size of the p-values printed in pdf file}
 
 \item{col_label}{string; column name of label (combining grouping variable 1 and 2 separated by delimiter)}
-
-\item{label_delim}{character; defines how Factor1 and Factor2 are separated in Label}
 }
 \value{
 list; matrices containg p-values for pairwise two way ANOVA for each Factor1 per Factor2 control treatment effect

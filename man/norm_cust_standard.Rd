@@ -4,9 +4,15 @@
 \alias{norm_cust_standard}
 \title{Normalize Rootdetection Output According To Customized Standard}
 \usage{
-norm_cust_standard(root_output, split = TRUE, label_delim = ";",
-  col_label = "Label", col_value = "LengthPx",
-  label_standard = "10mm", standard_length_mm = "10")
+norm_cust_standard(
+  root_output,
+  split = TRUE,
+  label_delim = ";",
+  col_label = "Label",
+  col_value = "LengthPx",
+  label_standard = "10mm",
+  standard_length_mm = "10"
+)
 }
 \arguments{
 \item{root_output}{data.frame; *.csv output from Rootdetection containing length standard values}

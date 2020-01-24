@@ -4,8 +4,12 @@
 \alias{rm_outlier_df}
 \title{Remove Outlier from Normalized Rootdetection Data Set}
 \usage{
-rm_outlier_df(root_norm, col_grouping = "Label",
-  col_value = "LengthMM", fill_na = F)
+rm_outlier_df(
+  root_norm,
+  col_grouping = "Label",
+  col_value = "LengthMM",
+  fill_na = F
+)
 }
 \arguments{
 \item{root_norm}{data.frame; normalized Rootdetection data set}
