@@ -312,11 +312,7 @@ inspect_root_norm <- function(root_norm, plot = TRUE, output = TRUE ){
 
     p <- ggplot2::ggplot(rs_sum, ggplot2::aes(y = Factor1, x = Factor2)) +
       ggplot2::geom_tile(ggplot2::aes(fill=quality), colour = 'black') +
-<<<<<<< HEAD
       ggplot2::geom_text(ggplot2::aes(label = n)) +
-=======
-      ggplot2::geom_text(aes(label = n)) +
->>>>>>> c7a75c08b4b03ae03011e2c3d4866157587ff35e
       ggplot2::theme_bw() +
       ggplot2::theme(panel.border = ggplot2::element_blank(), panel.grid.major = ggplot2::element_blank(),
             panel.grid.minor = ggplot2::element_blank()) +
