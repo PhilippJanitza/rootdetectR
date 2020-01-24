@@ -16,8 +16,9 @@ Imports:
     ggplot2 (>= 3.2.1),
     multcompView (>= 0.1-7),
     tidyr (>= 0.8.3.9000),
-    gridExtra (>= 2.3)
-RoxygenNote: 6.1.1
+    gridExtra (>= 2.3),
+    magrittr (>= 1.5)
+RoxygenNote: 7.0.2
 Suggests: 
     knitr,
     rmarkdown,
