@@ -114,6 +114,9 @@ plot_hist <- function(root_norm, draw_out = F,
 #' @param height_letter numeric; defines the position of the significance letters
 #' @param size_letter numeric; defines size of the significance letters
 #' @param angle_letter numeric, defines angle of significance letters
+#' @param plot_response logical; if TRUE response will be represented by a line between boxes
+#' @param width_response numeric; defines width of response lines
+#' @param alpha_response numeric; defines alpha level (visibility) of response lines
 #' @return plot; box, box jitter or violin plot of the absolute data
 #' @examples
 #' # plot without significance letters
@@ -145,7 +148,8 @@ plot_hist <- function(root_norm, draw_out = F,
 #'                 width_lines = 0.5, width_axis = 0.5,
 #'                 size_x_axes = 9, size_y_axes = 9,
 #'                 size_n = 3,
-#'                 plot_significance = T, height_letter = 5, size_letter = 5, angle_letter = 0)
+#'                 plot_significance = T, height_letter = 5, size_letter = 5, angle_letter = 0,
+#'                 plot_response = T, width_response = 0.4, alpha_response = 0.6)
 #' @export
 plot_abs <- function(root_norm,
                      label_delim = ";",
@@ -168,7 +172,10 @@ plot_abs <- function(root_norm,
                      plot_significance = F,
                      height_letter = 2,
                      size_letter = 5,
-                     angle_letter = 0) {
+                     angle_letter = 0,
+                     plot_response = F,
+                     width_response = 0.4,
+                     alpha_response = 0.6) {
 
     ############## first chunk creating letters from statistics
 
@@ -207,6 +214,35 @@ plot_abs <- function(root_norm,
         plot_letters <- merge(letters, y_coord, by = "Label")
     }
 
+    if (plot_response) {
+
+        # set counter i to zero
+        i <- 0
+        # create empty vectors
+        ymin_line <- NULL
+        ymax_line <- NULL
+
+
+
+        # while loop creating y elements ymin and ymax
+        while(i < length(levels(root_norm$Label))){
+
+            i <- i+1
+            j <- i+1
+
+            sub <- levels(root_norm$Label)[i:j]
+
+            one <- median((root_norm[root_norm$Label == sub[1],]$LengthMM))
+            two <- median((root_norm[root_norm$Label == sub[2],]$LengthMM))
+
+            ymin_line <- c(ymin_line, one)
+            ymax_line <- c(ymax_line, two)
+
+            i <- j
+        }
+        # create x element
+        x_line <- seq(1.5, length(unique(root_norm$Label)), by=2)
+    }
 
     abs_plot <- ggplot2::ggplot() +
         {if(type == 'jitter')ggplot2::geom_boxplot(data = root_norm,
@@ -234,6 +270,10 @@ plot_abs <- function(root_norm,
                                                               label = plot_letters$Letters,
                                                               angle = angle_letter),
                                                  size = size_letter)} +
+        {if(plot_response)ggplot2::geom_linerange(ggplot2::aes(x = x_line,
+                                                                ymax = ymax_line,
+                                                                ymin = ymin_line),
+                                                   alpha = alpha_response, size = width_response)} +
         ggplot2::theme_classic() +
         ggplot2::scale_y_continuous(name = y_label) +
         ggplot2::scale_x_discrete(name = x_label) +

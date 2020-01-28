@@ -26,7 +26,10 @@ plot_abs(
   plot_significance = F,
   height_letter = 2,
   size_letter = 5,
-  angle_letter = 0
+  angle_letter = 0,
+  plot_response = F,
+  width_response = 0.4,
+  alpha_response = 0.6
 )
 }
 \arguments{
@@ -73,6 +76,12 @@ plot_abs(
 \item{size_letter}{numeric; defines size of the significance letters}
 
 \item{angle_letter}{numeric, defines angle of significance letters}
+
+\item{plot_response}{logical; if TRUE response will be represented by a line between boxes}
+
+\item{width_response}{numeric; defines width of response lines}
+
+\item{alpha_response}{numeric; defines alpha level (visibility) of response lines}
 }
 \value{
 plot; box, box jitter or violin plot of the absolute data
@@ -111,5 +120,6 @@ plot_abs(root_norm, plot_significance = T)
                 width_lines = 0.5, width_axis = 0.5,
                 size_x_axes = 9, size_y_axes = 9,
                 size_n = 3,
-                plot_significance = T, height_letter = 5, size_letter = 5, angle_letter = 0)
+                plot_significance = T, height_letter = 5, size_letter = 5, angle_letter = 0,
+                plot_response = T, width_response = 0.4, alpha_response = 0.6)
 }
