@@ -434,14 +434,14 @@ twofacaov <- function(root_norm,
 #' # function creates a pdf file 2fac_ANOVA_BH_corrected_28.pdf
 #' @export
 interaction_twofacaov <- function(root_norm,
-                             col_grouping1 = 'Factor1', col_grouping2 = 'Factor2',
-                             col_value = 'LengthMM',
-                             control = "20",
-                             label_delim = ";",
-                             draw_out = F,
-                             file_base = "2fac_ANOVA_BH_corrected",
-                             axis_label_size = 0.7,
-                             p_value_size = 0.8) {
+                                  col_grouping1 = 'Factor1', col_grouping2 = 'Factor2',
+                                  col_value = 'LengthMM',
+                                  control = "20C",
+                                  label_delim = ";",
+                                  draw_out = F,
+                                  file_base = "2fac_ANOVA_BH_corrected",
+                                  axis_label_size = 0.7,
+                                  p_value_size = 0.8) {
 
 
     colnames(root_norm)[colnames(root_norm)==col_grouping1] <- 'Factor1'
@@ -452,6 +452,12 @@ interaction_twofacaov <- function(root_norm,
     root_norm$Factor1 <- as.factor(root_norm$Factor1)
     root_norm$Factor2 <- as.factor(root_norm$Factor2)
 
+    # test if values with zero are present
+    if(nrow(root_norm[root_norm$LengthMM == 0,]) >= 1){
+
+        stop('There are measurements with LengthMM = 0 present')
+
+    }
 
     # get all levels of factor2
     fac2 <- levels(as.factor(root_norm$Factor2))
@@ -492,14 +498,19 @@ interaction_twofacaov <- function(root_norm,
         }
 
         # adjust p-values
-        pvals <- mat[upper.tri(mat)]
-        mat_adj <- matrix(NA, nrow = nr_fac1, ncol = nr_fac1)
-        rownames(mat_adj) <- fac1
-        colnames(mat_adj) <- fac1
-        adjp <- multtest::mt.rawp2adjp(pvals, proc = "BH")
-        idx <- order(adjp$index)
-        mat_adj[upper.tri(mat_adj)] <- adjp$adjp[idx, "BH"]
-        mat <- mat_adj
+        if(length(mat[upper.tri(mat)] > 1)){
+
+            pvals <- mat[upper.tri(mat)]
+            mat_adj <- matrix(NA, nrow = nr_fac1, ncol = nr_fac1)
+            rownames(mat_adj) <- fac1
+            colnames(mat_adj) <- fac1
+            adjp <- multtest::mt.rawp2adjp(pvals, proc = "BH")
+            idx <- order(adjp$index)
+            mat_adj[upper.tri(mat_adj)] <- adjp$adjp[idx, "BH"]
+            mat <- mat_adj
+
+        }
+
         if (draw_out) {
             # Visualisiation of P-Value-Matrix font color
             col <- matrix("black", nrow = nr_fac1, ncol = nr_fac1)
