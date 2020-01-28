@@ -216,6 +216,11 @@ plot_abs <- function(root_norm,
 
     if (plot_response) {
 
+        # throw error if moore than two Factor2 are present
+        if (length(levels(as.factor(root_norm$Factor2))) > 2){
+            stop('With the current rootdetectR Version it is only possible to use this feature with two Factor2 levels')
+
+        }
         # set counter i to zero
         i <- 0
         # create empty vectors
