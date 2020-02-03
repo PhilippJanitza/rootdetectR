@@ -498,7 +498,7 @@ interaction_twofacaov <- function(root_norm,
         }
 
         # adjust p-values
-        if(length(mat[upper.tri(mat)] > 1)){
+        if(nr_fac1 > 2){
 
             pvals <- mat[upper.tri(mat)]
             mat_adj <- matrix(NA, nrow = nr_fac1, ncol = nr_fac1)
