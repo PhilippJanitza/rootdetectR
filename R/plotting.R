@@ -228,7 +228,6 @@ plot_abs <- function(root_norm,
         ymax_line <- NULL
 
 
-
         # while loop creating y elements ymin and ymax
         while(i < length(levels(root_norm$Label))){
 
@@ -251,34 +250,34 @@ plot_abs <- function(root_norm,
 
     abs_plot <- ggplot2::ggplot() +
         {if(type == 'jitter')ggplot2::geom_boxplot(data = root_norm,
-                                                   ggplot2::aes(x = root_norm$Label,
-                                                                y = root_norm$LengthMM),
+                                                   ggplot2::aes(x = Label,
+                                                                y = LengthMM),
                                                    outlier.shape = NA, lwd = width_lines)} +
         {if(type == 'jitter')ggplot2::geom_jitter(data = root_norm,
-                                                  ggplot2::aes(x = root_norm$Label,
-                                                               y = root_norm$LengthMM,
-                                                               colour = as.factor(root_norm$Factor2)),
+                                                  ggplot2::aes(x = Label,
+                                                               y = LengthMM,
+                                                               colour = as.factor(Factor2)),
                                                   position = ggplot2::position_jitter(0.2,
                                                                                       seed = 1), size = size_jitter_dot)} +
         {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
         {if(type == 'box')ggplot2::geom_boxplot(data = root_norm,
-                                                ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM,
-                                                             fill = as.factor(root_norm$Factor2)), lwd = width_lines)} +
+                                                ggplot2::aes(x = Label, y = LengthMM,
+                                                             fill = as.factor(Factor2)), lwd = width_lines)} +
         {if(type == 'box')ggplot2::labs(fill = legend_label)} +
         {if(type == 'violin')ggplot2::geom_violin(data = root_norm,
-                                                   ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM,
-                                                                fill = as.factor(root_norm$Factor2)), lwd = width_lines)} +
+                                                  ggplot2::aes(x = Label, y = LengthMM,
+                                                               fill = as.factor(Factor2)), lwd = width_lines)} +
         {if(type == 'violin')ggplot2::labs(fill = legend_label)} +
         {if(plot_significance)ggplot2::geom_text(data = plot_letters,
-                                                 ggplot2::aes(x = plot_letters$Label,
-                                                              y = plot_letters$y,
-                                                              label = plot_letters$Letters,
+                                                 ggplot2::aes(x = Label,
+                                                              y = y,
+                                                              label = Letters,
                                                               angle = angle_letter),
                                                  size = size_letter)} +
         {if(plot_response)ggplot2::geom_linerange(ggplot2::aes(x = x_line,
-                                                                ymax = ymax_line,
-                                                                ymin = ymin_line),
-                                                   alpha = alpha_response, size = width_response)} +
+                                                               ymax = ymax_line,
+                                                               ymin = ymin_line),
+                                                  alpha = alpha_response, size = width_response)} +
         ggplot2::theme_classic() +
         ggplot2::scale_y_continuous(name = y_label) +
         ggplot2::scale_x_discrete(name = x_label) +
@@ -294,7 +293,7 @@ plot_abs <- function(root_norm,
                        legend.text = ggplot2::element_text(size = size_legend_text),
                        plot.title = ggplot2::element_text(hjust = 0.5, size = size_plot_title)) +
         {if(plot_n)EnvStats::stat_n_text(data = root_norm,
-                                         ggplot2::aes(x = root_norm$Label, y = root_norm$LengthMM),
+                                         ggplot2::aes(x = Label, y = LengthMM),
                                          angle = 90, size = size_n)} +
         {if(!missing(plot_colours))ggplot2::scale_fill_manual(values = plot_colours)} +
         {if(!missing(plot_colours))ggplot2::scale_colour_manual(values = plot_colours)}
@@ -452,14 +451,12 @@ plot_rel <- function(root_norm,
                                                                                   rel_sub$relative_value, colour = as.factor(rel_sub$Label)),
                                                           position = ggplot2::position_jitter(0.2, seed = 1), size = size_jitter_dot)} +
                 {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
-                {if(type == 'box')ggplot2::geom_boxplot(data = rel_sub, ggplot2::aes_string(x =
-                                                                                                rel_sub$Label, y = rel_sub$relative_value, fill =
-                                                                                                rel_sub$Label),
-                                                        lwd = width_lines)} +
+                {if(type == 'box')ggplot2::geom_boxplot(data = rel_sub, ggplot2::aes_string(x = rel_sub$Label, y = rel_sub$relative_value, fill =
+                                                                                                rel_sub$Label), lwd = width_lines)} +
                 {if(type == 'box')ggplot2::labs(fill = legend_label)} +
                 {if(type == 'violin')ggplot2::geom_violin(data = rel_sub,
-                                                           ggplot2::aes_string(x = rel_sub$Label, y = rel_sub$relative_value,
-                                                                               fill = as.factor(rel_sub$Label)), lwd = width_lines)} +
+                                                          ggplot2::aes_string(x = rel_sub$Label, y = rel_sub$relative_value,
+                                                                              fill = as.factor(rel_sub$Label)), lwd = width_lines)} +
                 {if(type == 'violin')ggplot2::labs(fill = legend_label)} +
                 ggplot2::theme_classic() +
                 ggplot2::scale_y_continuous(name = y_label) +
@@ -484,23 +481,22 @@ plot_rel <- function(root_norm,
 
         relative_plot <- ggplot2::ggplot() +
             {if(type == 'jitter')ggplot2::geom_boxplot(data = rel_root_norm,
-                                                       ggplot2::aes(x = rel_root_norm$Label, y =
-                                                                        rel_root_norm$relative_value), outlier.shape = NA,
+                                                       ggplot2::aes(x = Label, y =
+                                                                        relative_value), outlier.shape = NA,
                                                        lwd = width_lines)} +
             {if(type == 'jitter')ggplot2::geom_jitter(data = rel_root_norm,
-                                                      ggplot2::aes(x = rel_root_norm$Label, y =
-                                                                       rel_root_norm$relative_value, colour =
-                                                                       as.factor(rel_root_norm$Label)), position =
+                                                      ggplot2::aes(x = Label, y =
+                                                                       relative_value, colour =
+                                                                       as.factor(Label)), position =
                                                           ggplot2::position_jitter(0.2, seed = 1), size = size_jitter_dot)} +
             {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
-            {if(type == 'box')ggplot2::geom_boxplot(data = rel_root_norm, ggplot2::aes(x =
-                                                                                           rel_root_norm$Label, y = rel_root_norm$relative_value,
-                                                                                       fill = as.factor(rel_root_norm$Label)),
+            {if(type == 'box')ggplot2::geom_boxplot(data = rel_root_norm, ggplot2::aes(x = Label, y = relative_value,
+                                                                                       fill = as.factor(Label)),
                                                     lwd = width_lines)} +
             {if(type == 'box')ggplot2::labs(fill = legend_label)} +
             {if(type == 'violin')ggplot2::geom_violin(data = rel_root_norm,
-                                                       ggplot2::aes(x = rel_root_norm$Label, y = rel_root_norm$relative_value,
-                                                                    fill = as.factor(rel_root_norm$Label)), lwd = width_lines)} +
+                                                      ggplot2::aes(x = Label, y = relative_value,
+                                                                   fill = as.factor(Label)), lwd = width_lines)} +
             {if(type == 'violin')ggplot2::labs(fill = legend_label)} +
             ggplot2::theme_classic() +
             ggplot2::scale_y_continuous(name = y_label) +
