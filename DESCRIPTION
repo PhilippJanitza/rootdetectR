@@ -1,27 +1,32 @@
-Package: rootdetectR
 Type: Package
+Package: rootdetectR
 Title: Statistical analysis of rootdetection output with R
 Version: 0.9.4.2
-Authors@R: person("Philipp", "Janitza", email = "philipp.janitza@landw.uni-halle.de",
-                  role = c("aut", "cre"))
-Description: rootdectR can be used to analyse the output from rootdetection software. This package contains functions to visualize and statistically test data coming from rootdetection 			software. It can be used to produce pretty boxplots including statistics from ANOVA analysis.
+Authors@R: 
+    person("Philipp", "Janitza", , "philipp.janitza@landw.uni-halle.de", role = c("aut", "cre"))
+Description: rootdectR can be used to analyse the output from
+    rootdetection software. This package contains functions to visualize
+    and statistically test data coming from rootdetection software. It can
+    be used to produce pretty boxplots including statistics from ANOVA
+    analysis.
 License: GPL-2
-Encoding: UTF-8
-LazyData: true
-biocViews:
 Imports: 
-    plyr (>= 1.8.4),
-    multtest (>= 2.40.0),
     EnvStats (>= 2.3.1),
     ggplot2 (>= 3.2.1),
-    multcompView (>= 0.1-7),
-    tidyr (>= 0.8.3.9000),
     gridExtra (>= 2.3),
-    magrittr (>= 1.5)
-RoxygenNote: 7.0.2
+    magrittr (>= 1.5),
+    multcompView (>= 0.1-7),
+    multtest (>= 2.40.0),
+    plyr (>= 1.8.4),
+    tidyr (>= 0.8.3.9000)
 Suggests: 
+    jpeg,
     knitr,
-    rmarkdown,
     png,
-    jpeg
-VignetteBuilder: knitr
+    rmarkdown
+VignetteBuilder: 
+    knitr
+biocViews:
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.0.2
