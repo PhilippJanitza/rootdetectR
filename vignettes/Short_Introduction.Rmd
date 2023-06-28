@@ -17,12 +17,13 @@ knitr::opts_chunk$set(
   fig.width=4, 
   fig.height=4
 )
+devtools::load_all(".")
 ```
 
 
 # Installation
 
-Make sure you have the latest version of R and R Studio.
+Make sure you have the latest version of R and R Studio installed.
 
 First you need to install some perquisites:
 
@@ -30,7 +31,7 @@ First you need to install some perquisites:
 install.packages(c('knitr', 'rmarkdown', 'jpeg', 'png', 'devtools'))
 ```
 
-After installing all prerequisites you can install `rootdetectR` from github.
+After installing all prerequisites you can install `rootdetectR` from github using the devtools package.
 
 ```r
 library(devtools)
@@ -40,23 +41,24 @@ install_github("PhilippJanitza/rootdetectR", build_vignettes = TRUE)
 
 After the installation the package can be loaded within R.
 
-```{r setup}
+```r
 library(rootdetectR)
 ```
 
 # Introduction
 
-This tutorial is showing how `rootdetectR` can be used to conduct a standard analysis of a Rootdetection output. To be able to run the following script the data set should fulfill following specifications:
+This vignette describes how `rootdetectR` can be used to conduct analysis of physiological root or hypocotyl elongation assays. It was designed to work in companion with Rootdetection, an automated tool for evaluating photographs of plant roots. 
+To be able to run this script the input data must fulfill some criteria (check the example data included in this script):
 
-- The delimiter of labels should be ';'
-- the data set should contain a length standard called '10mm' (measuring of 1 cm)
-- hyphens (-) in labels are not allowed
-- if performing TIHE TIRE Assay and grouping variable 2 is '20' and '28' they don't need to be provided to functions
+- The structure of the input table must be in long format and use standard column names 
+- The delimiter within labels should be ';' - necessary if the analysis uses two factors e.g. genotype and treatment
+- the data set must contain a length standard called '10mm' (multiple measuring of 1 cm)
+- hyphens (-) in labels are not allowed!!
 
 
 # Simple Data Analysis
 
-First you will need to set the working directory and read in your Rootdetection table.
+First you will need to set the working directory and read in the data table (e.g. output from Rootdetection).
 
 ```r
 # set your working directory and read in your data
@@ -65,10 +67,12 @@ setwd('/paht/to/your/workingdir')
 # read in your rootdetection output table
 my_dataset <- read.csv(file = '/path/to/rootdetection/output.csv')
 ```
-Then we will check the input data and calculate normalized LengthMM, relative data and summary statistics.
+First you can run the function `is_root_output()` to check if your dataset fulfills the minimum criteria to run all subsequent functions of `rootdetectR`. As measurings with Rootdetection
+
+To start the analysis we need to normalize the dataset to a length standard.
 
 ```{r}
-# In this example we will use a data set included in the package
+# In this example we will use an example data set included in rootdetectR
 my_dataset <- root_output
 
 # check input data
