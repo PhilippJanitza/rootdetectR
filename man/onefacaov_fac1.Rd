@@ -51,19 +51,19 @@ onefacaov_fac1(root_norm, draw_out = F)
 # plot p-value matrix as pdf output
 
 root_test_norm <- norm_10mm_standard(root_output)
-onefacaov_fac1(root_test_norm, draw_out = T, file_base = '1fac_ANOVA_factor1')
+onefacaov_fac1(root_test_norm, draw_out = T, file_base = "1fac_ANOVA_factor1")
 # function creates two pdf files: 1fac_ANOVA_factor1_20.pdf and 1fac_ANOVA_factor1_28.pdf
 
 
 ### Usage for table containing only a single grouping variable ###
 
 # produce example data set containing only a single grouping variable
-root_single_var <- root_test_norm[root_test_norm$Factor2 == '20',]
+root_single_var <- root_test_norm[root_test_norm$Factor2 == "20", ]
 root_single_var$Factor2 <- NULL
 # rename some columns
-colnames(root_single_var)[colnames(root_single_var)=='LengthMM'] <- 'length'
-colnames(root_single_var)[colnames(root_single_var)=='Factor1'] <- 'lines'
+colnames(root_single_var)[colnames(root_single_var) == "LengthMM"] <- "length"
+colnames(root_single_var)[colnames(root_single_var) == "Factor1"] <- "lines"
 
 # use onefacaov_fac1 to conduct one-way ANOVA
-onefacaov_fac1(root_single_var, col_grouping1 = 'lines', col_grouping2 = NULL, col_value = 'length')
+onefacaov_fac1(root_single_var, col_grouping1 = "lines", col_grouping2 = NULL, col_value = "length")
 }

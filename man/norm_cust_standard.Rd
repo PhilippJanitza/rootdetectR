@@ -39,7 +39,9 @@ Therefore label_standard must match the label of your length standard measuremen
 }
 \examples{
 # use data_set with standard called '20mm' and 20 mm measured
-norm_cust_standard(root_output_multfac2, label_delim = ';',
-                   col_label = 'Label', col_value = 'LengthPx',
-                   label_standard = '20mm', standard_length_mm = '20')
+norm_cust_standard(root_output_multfac2,
+  label_delim = ";",
+  col_label = "Label", col_value = "LengthPx",
+  label_standard = "20mm", standard_length_mm = "20"
+)
 }

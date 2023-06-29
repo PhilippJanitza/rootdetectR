@@ -20,6 +20,6 @@ _Caution: This function will also detach rootdetectR_
 detach_all()
 
 # detach all element except rootdetectR
-detach_all(except = 'rootdetectR')
+detach_all(except = "rootdetectR")
 
 }

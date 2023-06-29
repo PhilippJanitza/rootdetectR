@@ -24,5 +24,5 @@ Simply give the function a vector with old names that should be renamed by a vec
 _Be carefull that elements in new_name have the rigth position_ (e.g. the second element in "old_name" will be replaced by the second element in "new_name").
 }
 \examples{
-rename_element(root_output, colname = 'Label', oldname = c('Col_0;28', 'Col_0;20'), new_name = c('Col0_28', 'Col0_20'))
+rename_element(root_output, colname = "Label", oldname = c("Col_0;28", "Col_0;20"), new_name = c("Col0_28", "Col0_20"))
 }

@@ -95,13 +95,13 @@ Signifcances can be illustrated by letter encoding. There are a lot of possibili
 
 root_norm <- norm_10mm_standard(root_output)
 # box plot
-plot_abs(root_norm, type = 'box')
+plot_abs(root_norm, type = "box")
 # box and jitter plot
-plot_abs(root_norm, type = 'jitter')
+plot_abs(root_norm, type = "jitter")
 # violin plot
-plot_abs(root_norm, type = 'violin')
+plot_abs(root_norm, type = "violin")
 # provide own colours (standard r colours or hex-code) - must have the same length than grouping variable 2 level(root_test_norm$Factor2)
-plot_abs(root_norm, plot_colours = c('dodgerblue3', 'firebrick2'))
+plot_abs(root_norm, plot_colours = c("dodgerblue3", "firebrick2"))
 
 # plot with significance letters
 
@@ -109,17 +109,18 @@ root_norm <- norm_10mm_standard(root_output)
 plot_abs(root_norm, plot_significance = T)
 
 # all customizable plotting parameters have a default value
- plot_abs_short(root_test_norm,
-                label_delim = ';',
-                type = 'jitter', size_jitter_dot = 2,
-                plot_n = T,
-                plot_colours = c('cornflowerblue', 'coral2'),
-                plot_title = 'My Plot', size_plot_title = 14,
-                y_label = 'length mm', x_label = '',
-                legend_label = 'condition', size_legend_title = 12, size_legend_text = 10,
-                width_lines = 0.5, width_axis = 0.5,
-                size_x_axes = 9, size_y_axes = 9,
-                size_n = 3,
-                plot_significance = T, height_letter = 5, size_letter = 5, angle_letter = 0,
-                plot_response = T, width_response = 0.4, alpha_response = 0.6)
+plot_abs_short(root_test_norm,
+  label_delim = ";",
+  type = "jitter", size_jitter_dot = 2,
+  plot_n = T,
+  plot_colours = c("cornflowerblue", "coral2"),
+  plot_title = "My Plot", size_plot_title = 14,
+  y_label = "length mm", x_label = "",
+  legend_label = "condition", size_legend_title = 12, size_legend_text = 10,
+  width_lines = 0.5, width_axis = 0.5,
+  size_x_axes = 9, size_y_axes = 9,
+  size_n = 3,
+  plot_significance = T, height_letter = 5, size_letter = 5, angle_letter = 0,
+  plot_response = T, width_response = 0.4, alpha_response = 0.6
+)
 }

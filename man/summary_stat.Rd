@@ -32,5 +32,5 @@ root_norm <- norm_10mm_standard(root_output)
 summary_stat(root_norm)
 
 # calculate summary statistic grouped by Factor 1 only
-summary_stat(root_norm, col_grouping = 'Factor1', col_value = 'LengthMM')
+summary_stat(root_norm, col_grouping = "Factor1", col_value = "LengthMM")
 }

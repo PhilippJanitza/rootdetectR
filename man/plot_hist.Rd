@@ -31,7 +31,7 @@ plot_hist[[1]]
 
 # produce list of plots and print as pdf
 root_norm <- norm_10mm_standard(root_output)
-plot_hist(root_norm, draw_out = T, file = 'test_plot_histograms.pdf')
+plot_hist(root_norm, draw_out = T, file = "test_plot_histograms.pdf")
 # view the first plot in R:
 plot_hist[[1]]
 }

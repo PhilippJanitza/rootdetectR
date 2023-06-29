@@ -20,8 +20,8 @@ This function creates subsets for each grouping variable 2 (Factor2) control and
 }
 \examples{
 # create normalized data.set with multiple Factor2
-root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_standard = '20mm', standard_length_mm = '20')
+root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_standard = "20mm", standard_length_mm = "20")
 
 # create subsets for each control_treatment pair
-subset_fac2(root_norm_multfac2, control = '20')
+subset_fac2(root_norm_multfac2, control = "20")
 }

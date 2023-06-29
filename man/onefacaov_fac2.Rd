@@ -46,9 +46,9 @@ The p-values are adjusted using Benjamini-Hochberg correction.
 \examples{
 # get data.frame containg p-values for one-way ANOVA and Tukey post-hoc over grouping variable 2 (Factor2)
 root_norm <- norm_10mm_standard(root_output)
-onefacaov_fac2(root_norm, control = '20', draw_out = F)
+onefacaov_fac2(root_norm, control = "20", draw_out = F)
 
 # plot p-value matrix as pdf output
-onefacaov_fac2(root_test_norm, control = '20', draw_out = T, file_base = '1fac_ANOVA_factor2')
+onefacaov_fac2(root_test_norm, control = "20", draw_out = T, file_base = "1fac_ANOVA_factor2")
 # function creates a pdf file 1fac_ANOVA_factor2_28.pdf
 }

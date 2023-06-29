@@ -52,11 +52,11 @@ Caution: In the actual version it is necessary to provide a Label column (groupi
 # get data.frame containing p-values for two-way ANOVA and Tukey post-hoc over grouping variable 1 and 2 (Factor1 and Factor2)
 
 root_norm <- norm_10mm_standard(root_output)
-twofacaov(root_norm, label_delim = ';', draw_out = F)
+twofacaov(root_norm, label_delim = ";", draw_out = F)
 
 # get data.frame and plot as pdf output
 
 root_norm <- norm_10mm_standard(root_output)
-twofacaov(root_norm, label_delim = ';', draw_out = T, file = '2fac_ANOVA_all_vs_all.pdf')
+twofacaov(root_norm, label_delim = ";", draw_out = T, file = "2fac_ANOVA_all_vs_all.pdf")
 #' # function creates a pdf file 2fac_ANOVA_all_vs_all.pdf
 }

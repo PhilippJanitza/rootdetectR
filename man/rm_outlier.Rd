@@ -21,7 +21,7 @@ According to box plots the function defines outliers as 1.5 x IQR. Caution: NAs 
 \examples{
 # get some example vector
 root_norm <- norm_10mm_standard(root_output)
-x <- root_norm[root_norm$Label == 'weitar1_1;28',]
+x <- root_norm[root_norm$Label == "weitar1_1;28", ]
 
 # delete outliers
 rm_outlier(x, fill_na = F)

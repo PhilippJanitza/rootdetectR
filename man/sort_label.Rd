@@ -40,5 +40,5 @@ root_norm <- norm_10mm_standard(root_output)
 levels(root_norm$Label)
 
 # change order of levels by setting yucOx and 28 as controls
-sort_label(root_norm, control_fac1 = 'yucOx', control_fac2 = '28')
+sort_label(root_norm, control_fac1 = "yucOx", control_fac2 = "28")
 }
