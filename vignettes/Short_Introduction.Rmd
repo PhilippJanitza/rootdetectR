@@ -58,7 +58,7 @@ To be able to run this script the input data must fulfill some criteria (also ch
 
 # Simple Data Analysis
 
-First you will need to set the working directory and read in the data table (e.g. output from Rootdetection).
+First we need to set the working directory and read in the data table (e.g. output from Rootdetection).
 
 ```r
 # set your working directory and read in your data
@@ -67,10 +67,12 @@ setwd('/paht/to/your/workingdir')
 # read in your rootdetection output table
 my_dataset <- read.csv(file = '/path/to/rootdetection/output.csv')
 ```
-First you need to check if the data meet the criteria of a standard Rootdetection Output. The function `is_root_output()` helps to check the structure of the input data set.
-Then you need to clean your data and transform the measured pixels to millimeter as unit. Therefore length standard measurements are used. In this example we measured one centimeter of an ruler with the same camera (zoom) settings as used for the rest of the plant pictures.
+First we need to check if the data meets the criteria of Rootdetection standard Output. The function `is_root_output()` helps to check the structure of the input data set.
+Then we need to clean your data and transform the measured pixels to millimeter as unit. Therefore length standard measurements are used. In this example we measured one centimeter of an ruler with the same camera (zoom) settings as used for the rest of the plant pictures.
 
-In the next step we can calculate relative data, which is described as the different between the treatments. 
+In the next step we can calculate relative data, which are the length values of grouping variable 2 (Factor2) treatments relative to the median of grouping variable 2 (Factor2) control.
+
+
 ```{r}
 # In this example we will use an example data set included in rootdetectR
 my_dataset <- root_output
@@ -81,6 +83,7 @@ is_root_output(my_dataset)
 # remove measurements with length 0
 my_dataset <- my_dataset[!my_dataset$LengthPx == 0,]
 # calculate LengthMM by length standard 10mm
+# break up the label in 2 factors according to the delimiter (";")
 my_dataset <- norm_10mm_standard(my_dataset)
 # calculate relative data
 my_dataset_rel <- rel_data(my_dataset, control = '20')
@@ -99,10 +102,10 @@ write.csv(my_dataset_rel, file = 'relative_data.csv')
 write.csv(s_stat, file = 'summary_statistics.csv')
 ```
 
-Then we can check the data distribution and test for normality and save the output to a pdf file. (You can change the name by setting file = yourfilename.pdf as an argument to the function)
- 
+After normalizing and cleaning the data we can check the distribution and test for normality. 
+Green histogram plots indicate a normal distribution tested by Shapiro-Wilk-test (p > 0.05).
 ```r
-plot_hist(my_dataset, draw_out = T)
+plot_hist(my_dataset, draw_out = F)
 ```
 
 <br>
@@ -112,7 +115,7 @@ plot_hist(my_dataset, draw_out = T)
 <p style="font-size:12px;">histograms.pdf</p>
 </center>
 
-`rootdetectR` can perform several ANOVA + Tukey post-hoc analysis and print the p-values as matrix plots in pdf files. You can change the name of output pdfs by setting the arguments file or file_base.
+`rootdetectR` can perform several ANOVA + Tukey post-hoc analysis and print the p-values as matrix plots in pdf files.
 
 ```r
 # One-way Anova over Factor1
