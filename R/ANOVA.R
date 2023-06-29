@@ -15,12 +15,12 @@
 #'
 #' # get data.frame containg p-values from one-way ANOVA and Tukey post-hoc test over grouping variable 1
 #' root_norm <- norm_10mm_standard(root_output)
-#' onefacaov_fac1(root_norm, draw_out = F)
+#' onefacaov_fac1(root_norm, draw_out = FALSE)
 #'
 #' # plot p-value matrix as pdf output
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
-#' onefacaov_fac1(root_test_norm, draw_out = T, file_base = "1fac_ANOVA_factor1")
+#' onefacaov_fac1(root_test_norm, draw_out = TRUE, file_base = "1fac_ANOVA_factor1")
 #' # function creates two pdf files: 1fac_ANOVA_factor1_20.pdf and 1fac_ANOVA_factor1_28.pdf
 #'
 #'
@@ -225,10 +225,10 @@ onefacaov_fac1 <- function(root_norm,
 #' @examples
 #' # get data.frame containg p-values for one-way ANOVA and Tukey post-hoc over grouping variable 2 (Factor2)
 #' root_norm <- norm_10mm_standard(root_output)
-#' onefacaov_fac2(root_norm, control = "20", draw_out = F)
+#' onefacaov_fac2(root_norm, control = "20", draw_out = FALSE)
 #'
 #' # plot p-value matrix as pdf output
-#' onefacaov_fac2(root_test_norm, control = "20", draw_out = T, file_base = "1fac_ANOVA_factor2")
+#' onefacaov_fac2(root_test_norm, control = "20", draw_out = TRUE, file_base = "1fac_ANOVA_factor2")
 #' # function creates a pdf file 1fac_ANOVA_factor2_28.pdf
 #' @export
 onefacaov_fac2 <- function(root_norm,
@@ -327,12 +327,12 @@ onefacaov_fac2 <- function(root_norm,
 #' # get data.frame containing p-values for two-way ANOVA and Tukey post-hoc over grouping variable 1 and 2 (Factor1 and Factor2)
 #'
 #' root_norm <- norm_10mm_standard(root_output)
-#' twofacaov(root_norm, label_delim = ";", draw_out = F)
+#' twofacaov(root_norm, label_delim = ";", draw_out = FALSE)
 #'
 #' # get data.frame and plot as pdf output
 #'
 #' root_norm <- norm_10mm_standard(root_output)
-#' twofacaov(root_norm, label_delim = ";", draw_out = T, file = "2fac_ANOVA_all_vs_all.pdf")
+#' twofacaov(root_norm, label_delim = ";", draw_out = TRUE, file = "2fac_ANOVA_all_vs_all.pdf")
 #' #' # function creates a pdf file 2fac_ANOVA_all_vs_all.pdf
 #' @export
 twofacaov <- function(root_norm,
@@ -446,12 +446,12 @@ twofacaov <- function(root_norm,
 #' # get data.frame containing p-values for pairwise two-way ANOVA of interaction effects
 #'
 #' root_norm <- norm_10mm_standard(root_output)
-#' interaction_twofacaov(root_norm, control = "20", label_delim = ";", draw_out = F)
+#' interaction_twofacaov(root_norm, control = "20", label_delim = ";", draw_out = FALSE)
 #'
 #' # get data.frame and plot as pdf output
 #'
 #' root_norm <- norm_10mm_standard(root_output)
-#' interaction_twofacaov(root_norm, control = "20", label_delim = ";", draw_out = T, file_base = "2fac_ANOVA_BH_corrected")
+#' interaction_twofacaov(root_norm, control = "20", label_delim = ";", draw_out = TRUE, file_base = "2fac_ANOVA_BH_corrected")
 #' # function creates a pdf file 2fac_ANOVA_BH_corrected_28.pdf
 #' @export
 interaction_twofacaov <- function(root_norm,

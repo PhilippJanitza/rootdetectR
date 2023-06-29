@@ -46,12 +46,12 @@ The function performs a one-way ANOVA and Tukey post-hoc test over grouping vari
 
 # get data.frame containg p-values from one-way ANOVA and Tukey post-hoc test over grouping variable 1
 root_norm <- norm_10mm_standard(root_output)
-onefacaov_fac1(root_norm, draw_out = F)
+onefacaov_fac1(root_norm, draw_out = FALSE)
 
 # plot p-value matrix as pdf output
 
 root_test_norm <- norm_10mm_standard(root_output)
-onefacaov_fac1(root_test_norm, draw_out = T, file_base = "1fac_ANOVA_factor1")
+onefacaov_fac1(root_test_norm, draw_out = TRUE, file_base = "1fac_ANOVA_factor1")
 # function creates two pdf files: 1fac_ANOVA_factor1_20.pdf and 1fac_ANOVA_factor1_28.pdf
 
 

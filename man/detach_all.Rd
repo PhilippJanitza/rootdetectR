@@ -15,3 +15,6 @@ This function will detach all elements except th base R packages:
 'package:datasets', 'package:methods', 'Autoloads', 'package:base', 'tools:rstudio'
 _Caution: This function will also detach rootdetectR_
 }
+\examples{
+# detach_all()
+}

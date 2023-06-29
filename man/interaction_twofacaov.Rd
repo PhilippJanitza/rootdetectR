@@ -52,11 +52,11 @@ The p-values are adjusted using Benjamini-Hochberg correction procedure.
 # get data.frame containing p-values for pairwise two-way ANOVA of interaction effects
 
 root_norm <- norm_10mm_standard(root_output)
-interaction_twofacaov(root_norm, control = "20", label_delim = ";", draw_out = F)
+interaction_twofacaov(root_norm, control = "20", label_delim = ";", draw_out = FALSE)
 
 # get data.frame and plot as pdf output
 
 root_norm <- norm_10mm_standard(root_output)
-interaction_twofacaov(root_norm, control = "20", label_delim = ";", draw_out = T, file_base = "2fac_ANOVA_BH_corrected")
+interaction_twofacaov(root_norm, control = "20", label_delim = ";", draw_out = TRUE, file_base = "2fac_ANOVA_BH_corrected")
 # function creates a pdf file 2fac_ANOVA_BH_corrected_28.pdf
 }
