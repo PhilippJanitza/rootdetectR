@@ -18,7 +18,7 @@ Imports:
     tidyr (>= 0.8.3.9000),
     gridExtra (>= 2.3),
     magrittr (>= 1.5)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.2.3
 Suggests: 
     knitr,
     rmarkdown,

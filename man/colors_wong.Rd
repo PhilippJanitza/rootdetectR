@@ -4,7 +4,9 @@
 \name{colors_wong}
 \alias{colors_wong}
 \title{Color Palette For Colorblind Individuals.}
-\format{A vector containing hex-codes for 7 colors}
+\format{
+A vector containing hex-codes for 7 colors
+}
 \usage{
 colors_wong
 }

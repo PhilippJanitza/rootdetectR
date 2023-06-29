@@ -4,7 +4,9 @@
 \name{primroses}
 \alias{primroses}
 \title{Picture Of Colorful Primroses}
-\format{A matrix containing color information for each pixel.}
+\format{
+A matrix containing color information for each pixel.
+}
 \usage{
 primroses
 }

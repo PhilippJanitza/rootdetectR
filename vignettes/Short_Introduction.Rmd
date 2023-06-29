@@ -48,7 +48,7 @@ library(rootdetectR)
 # Introduction
 
 This vignette describes how `rootdetectR` can be used to conduct analysis of physiological root or hypocotyl elongation assays. It was designed to work in companion with Rootdetection, an automated tool for evaluating photographs of plant roots. 
-To be able to run this script the input data must fulfill some criteria (check the example data included in this script):
+To be able to run this script the input data must fulfill some criteria (also check the example data included in this script):
 
 - The structure of the input table must be in long format and use standard column names 
 - The delimiter within labels should be ';' - necessary if the analysis uses two factors e.g. genotype and treatment
@@ -67,10 +67,10 @@ setwd('/paht/to/your/workingdir')
 # read in your rootdetection output table
 my_dataset <- read.csv(file = '/path/to/rootdetection/output.csv')
 ```
-First you can run the function `is_root_output()` to check if your dataset fulfills the minimum criteria to run all subsequent functions of `rootdetectR`. As measurings with Rootdetection
+First you need to check if the data meet the criteria of a standard Rootdetection Output. The function `is_root_output()` helps to check the structure of the input data set.
+Then you need to clean your data and transform the measured pixels to millimeter as unit. Therefore length standard measurements are used. In this example we measured one centimeter of an ruler with the same camera (zoom) settings as used for the rest of the plant pictures.
 
-To start the analysis we need to normalize the dataset to a length standard.
-
+In the next step we can calculate relative data, which is described as the different between the treatments. 
 ```{r}
 # In this example we will use an example data set included in rootdetectR
 my_dataset <- root_output
@@ -85,7 +85,7 @@ my_dataset <- norm_10mm_standard(my_dataset)
 # calculate relative data
 my_dataset_rel <- rel_data(my_dataset, control = '20')
 # calculate summary satistics
-s_stat <-summary_stat(my_dataset)
+s_stat <- summary_stat(my_dataset)
 # show summary statistics
 s_stat
 ```
