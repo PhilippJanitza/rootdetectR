@@ -10,6 +10,8 @@ Description: rootdectR can be used to analyse the output from
     be used to produce pretty boxplots including statistics from ANOVA
     analysis.
 License: MIT + file LICENSE
+Depends:
+    R (>= 2.10)
 Imports: 
     EnvStats (>= 2.3.1),
     ggplot2 (>= 3.2.1),
@@ -18,8 +20,7 @@ Imports:
     multcompView (>= 0.1-7),
     multtest (>= 2.40.0),
     plyr (>= 1.8.4),
-    tidyr (>= 0.8.3.9000),
-    magrittr (>= 1.5)
+    tidyr (>= 0.8.3.9000)
 RoxygenNote: 7.2.3
 Suggests: 
     jpeg,

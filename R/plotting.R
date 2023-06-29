@@ -10,15 +10,15 @@
 #' # produce list of plots:
 #'
 #' root_norm <- norm_10mm_standard(root_output)
-#' plot_hist(root_norm, draw_out = F)
+#' histograms <- plot_hist(root_norm, draw_out = FALSE)
 #' # view the first plot in R:
-#' plot_hist[[1]]
+#' histograms[[1]]
 #'
 #' # produce list of plots and print as pdf
 #' root_norm <- norm_10mm_standard(root_output)
-#' plot_hist(root_norm, draw_out = T, file = "test_plot_histograms.pdf")
+#' histograms <- plot_hist(root_norm, draw_out = TRUE, file = "test_plot_histograms.pdf")
 #' # view the first plot in R:
-#' plot_hist[[1]]
+#' histograms[[1]]
 #' @export
 plot_hist <- function(root_norm, draw_out = F,
                       file = "data_distribution.pdf") {
@@ -149,13 +149,13 @@ plot_hist <- function(root_norm, draw_out = F,
 #' # plot with significance letters
 #'
 #' root_norm <- norm_10mm_standard(root_output)
-#' plot_abs(root_norm, plot_significance = T)
+#' plot_abs(root_norm, plot_significance = TRUE)
 #'
 #' # all customizable plotting parameters have a default value
-#' plot_abs_short(root_test_norm,
+#' plot_abs(root_norm,
 #'   label_delim = ";",
 #'   type = "jitter", size_jitter_dot = 2,
-#'   plot_n = T,
+#'   plot_n = TRUE,
 #'   plot_colours = c("cornflowerblue", "coral2"),
 #'   plot_title = "My Plot", size_plot_title = 14,
 #'   y_label = "length mm", x_label = "",
@@ -163,8 +163,8 @@ plot_hist <- function(root_norm, draw_out = F,
 #'   width_lines = 0.5, width_axis = 0.5,
 #'   size_x_axes = 9, size_y_axes = 9,
 #'   size_n = 3,
-#'   plot_significance = T, height_letter = 5, size_letter = 5, angle_letter = 0,
-#'   plot_response = T, width_response = 0.4, alpha_response = 0.6
+#'   plot_significance = TRUE, height_letter = 5, size_letter = 5, angle_letter = 0,
+#'   plot_response = TRUE, width_response = 0.4, alpha_response = 0.6
 #' )
 #' @export
 plot_abs <- function(root_norm,
@@ -419,16 +419,16 @@ plot_abs <- function(root_norm,
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
 #' # boxplot
-#' plot_rel(root_test_norm, plot_significance = F, control = "20", type = "box")
+#' plot_rel(root_test_norm, plot_significance = FALSE, control = "20", type = "box")
 #' # jitterplot
-#' plot_rel(root_test_norm, plot_significance = F, control = "20", type = "jitter")
+#' plot_rel(root_test_norm, plot_significance = FALSE, control = "20", type = "jitter")
 #'
 #' # Plot with siginficance letters
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
-#' root_stat <- interaction_twofacaov(root_test_norm, draw_out = F, label_delim = ";")
+#' root_stat <- interaction_twofacaov(root_test_norm, draw_out = FALSE, label_delim = ";")
 #' # boxplot with statistics
-#' plot_rel(root_test_norm, plot_significance = T, interaction_twofacaov_output = root_stat, control = "20", type = "box")
+#' plot_rel(root_test_norm, plot_significance = TRUE, control = "20", type = "box")
 #'
 #' # all customizable plotting parameters have a default value
 #' plot_rel(root_test_norm,
@@ -443,8 +443,7 @@ plot_abs <- function(root_norm,
 #'   size_legend_text = 10,
 #'   size_x_axes = 9,
 #'   size_y_axes = 9,
-#'   plot_significance = T,
-#'   interaction_twofacaov_output = root_stat,
+#'   plot_significance = TRUE,
 #'   height_letter = 10,
 #'   size_letter = 5,
 #'   angle_letter = 0

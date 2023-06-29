@@ -32,7 +32,7 @@ According to outlier definition in box plots the function defines outliers as 1.
 root_norm <- norm_10mm_standard(root_output)
 
 # transform outliers to NA
-rm_outlier_df(root_norm, fill_na = T)
+rm_outlier_df(root_norm, fill_na = TRUE)
 # remove outliers
-rm_outlier_df(root_norm, fill_na = F)
+rm_outlier_df(root_norm, fill_na = FALSE)
 }

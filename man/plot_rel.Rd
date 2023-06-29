@@ -82,16 +82,16 @@ Relative data is plotted as boxplot or box-jitter-plot combination. If Significa
 
 root_test_norm <- norm_10mm_standard(root_output)
 # boxplot
-plot_rel(root_test_norm, plot_significance = F, control = "20", type = "box")
+plot_rel(root_test_norm, plot_significance = FALSE, control = "20", type = "box")
 # jitterplot
-plot_rel(root_test_norm, plot_significance = F, control = "20", type = "jitter")
+plot_rel(root_test_norm, plot_significance = FALSE, control = "20", type = "jitter")
 
 # Plot with siginficance letters
 
 root_test_norm <- norm_10mm_standard(root_output)
-root_stat <- interaction_twofacaov(root_test_norm, draw_out = F, label_delim = ";")
+root_stat <- interaction_twofacaov(root_test_norm, draw_out = FALSE, label_delim = ";")
 # boxplot with statistics
-plot_rel(root_test_norm, plot_significance = T, interaction_twofacaov_output = root_stat, control = "20", type = "box")
+plot_rel(root_test_norm, plot_significance = TRUE, control = "20", type = "box")
 
 # all customizable plotting parameters have a default value
 plot_rel(root_test_norm,
@@ -106,8 +106,7 @@ plot_rel(root_test_norm,
   size_legend_text = 10,
   size_x_axes = 9,
   size_y_axes = 9,
-  plot_significance = T,
-  interaction_twofacaov_output = root_stat,
+  plot_significance = TRUE,
   height_letter = 10,
   size_letter = 5,
   angle_letter = 0

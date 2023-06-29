@@ -49,6 +49,6 @@ root_norm <- norm_10mm_standard(root_output)
 onefacaov_fac2(root_norm, control = "20", draw_out = FALSE)
 
 # plot p-value matrix as pdf output
-onefacaov_fac2(root_test_norm, control = "20", draw_out = TRUE, file_base = "1fac_ANOVA_factor2")
+onefacaov_fac2(root_norm, control = "20", draw_out = TRUE, file_base = "1fac_ANOVA_factor2")
 # function creates a pdf file 1fac_ANOVA_factor2_28.pdf
 }

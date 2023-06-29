@@ -25,7 +25,7 @@ extract_colors <- function(image, n = 6, plot_out = F) {
 
   # compute the k-means clustering
   set.seed(42)
-  K <- kmeans(df, n)
+  K <- stats::kmeans(df, n)
   df$label <- K$cluster
 
   # get the "center" coloring of K-means clustering
@@ -35,7 +35,7 @@ extract_colors <- function(image, n = 6, plot_out = F) {
     G = K$centers[, "green"],
     B = K$centers[, "blue"]
   )
-  colors$rgb <- rgb(colors$R, colors$G, colors$B)
+  colors$rgb <- grDevices::rgb(colors$R, colors$G, colors$B)
 
   if (plot_out == T) {
     # merge color codes on to df

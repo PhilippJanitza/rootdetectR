@@ -14,18 +14,18 @@ se <- function(x) sd(x, na.rm = T) / sqrt(length(na.omit(x)))
 #' @description This function removes outlier from a vector or replaced outliers by NA.
 #' According to box plots the function defines outliers as 1.5 x IQR. Caution: NAs already present in the input vector will be removed first.
 #' @param x numeric vector
-#' @param fill.na logical; If TRUE all outliers present in x will be replaced by NA. If FALSE all outliers will be deleted.
+#' @param fill_na logical; If TRUE all outliers present in x will be replaced by NA. If FALSE all outliers will be deleted.
 #' @return numeric vector; without outliers or outliers replaced by NA
 #' @examples
 #' # get some example vector
 #' root_norm <- norm_10mm_standard(root_output)
-#' x <- root_norm[root_norm$Label == "weitar1_1;28", ]
+#' x <- root_norm[root_norm$Label == "weitar1_1;28", ]$LengthMM
 #'
 #' # delete outliers
-#' rm_outlier(x, fill_na = F)
+#' rm_outlier(x, fill_na = FALSE)
 #'
 #' # replace outliers with NA
-#' rm_outlier(x, fill_na = T)
+#' rm_outlier(x, fill_na = TRUE)
 #' @export
 rm_outlier <- function(x, fill_na = F) {
   low_border <- quantile(x, 0.25, na.rm = T) - (IQR(x, na.rm = T) * 1.5)
@@ -271,7 +271,7 @@ detach_all <- function(except) {
 #' @param new_name vector; new names of the elements specified by "old_name"
 #' @return data.frame; with renamed elements in "colname"
 #' @examples
-#' rename_element(root_output, colname = "Label", oldname = c("Col_0;28", "Col_0;20"), new_name = c("Col0_28", "Col0_20"))
+#' rename_element(root_output, colname = "Label", old_name = c("Col_0;28", "Col_0;20"), new_name = c("Col0_28", "Col0_20"))
 #' @export
 rename_element <- function(df, colname, old_name, new_name) {
   # check if colname is factor -> transform to character

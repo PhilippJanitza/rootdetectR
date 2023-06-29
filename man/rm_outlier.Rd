@@ -9,7 +9,7 @@ rm_outlier(x, fill_na = F)
 \arguments{
 \item{x}{numeric vector}
 
-\item{fill.na}{logical; If TRUE all outliers present in x will be replaced by NA. If FALSE all outliers will be deleted.}
+\item{fill_na}{logical; If TRUE all outliers present in x will be replaced by NA. If FALSE all outliers will be deleted.}
 }
 \value{
 numeric vector; without outliers or outliers replaced by NA
@@ -21,11 +21,11 @@ According to box plots the function defines outliers as 1.5 x IQR. Caution: NAs 
 \examples{
 # get some example vector
 root_norm <- norm_10mm_standard(root_output)
-x <- root_norm[root_norm$Label == "weitar1_1;28", ]
+x <- root_norm[root_norm$Label == "weitar1_1;28", ]$LengthMM
 
 # delete outliers
-rm_outlier(x, fill_na = F)
+rm_outlier(x, fill_na = FALSE)
 
 # replace outliers with NA
-rm_outlier(x, fill_na = T)
+rm_outlier(x, fill_na = TRUE)
 }

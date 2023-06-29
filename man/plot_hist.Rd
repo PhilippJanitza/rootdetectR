@@ -25,13 +25,13 @@ Also there is colour coding - green = normaly distributed according to Shapiro-W
 # produce list of plots:
 
 root_norm <- norm_10mm_standard(root_output)
-plot_hist(root_norm, draw_out = F)
+histograms <- plot_hist(root_norm, draw_out = FALSE)
 # view the first plot in R:
-plot_hist[[1]]
+histograms[[1]]
 
 # produce list of plots and print as pdf
 root_norm <- norm_10mm_standard(root_output)
-plot_hist(root_norm, draw_out = T, file = "test_plot_histograms.pdf")
+histograms <- plot_hist(root_norm, draw_out = TRUE, file = "test_plot_histograms.pdf")
 # view the first plot in R:
-plot_hist[[1]]
+histograms[[1]]
 }

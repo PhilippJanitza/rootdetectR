@@ -44,7 +44,7 @@
 #' @format A matrix containing color information for each pixel.
 #' @examples
 #' # show picture in R using grid package
-#' grid.raster(primroses)
+#' grid::grid.raster(primroses)
 "primroses"
 
 

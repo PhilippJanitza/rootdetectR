@@ -308,9 +308,9 @@ inspect_root_norm <- function(root_norm, plot = TRUE, output = TRUE) {
   }
 
   if (plot == T) {
-    p <- ggplot2::ggplot(rs_sum, ggplot2::aes(y = Factor1, x = Factor2)) +
-      ggplot2::geom_tile(ggplot2::aes(fill = quality), colour = "black") +
-      ggplot2::geom_text(ggplot2::aes(label = n)) +
+    p <- ggplot2::ggplot(rs_sum, ggplot2::aes_string(y = "Factor1", x = "Factor2")) +
+      ggplot2::geom_tile(ggplot2::aes_string(fill = "quality"), colour = "black") +
+      ggplot2::geom_text(ggplot2::aes_string(label = "n")) +
       ggplot2::theme_bw() +
       ggplot2::theme(
         panel.border = ggplot2::element_blank(), panel.grid.major = ggplot2::element_blank(),
@@ -444,9 +444,9 @@ rel_data <- function(root_norm, control = "20") {
 #' root_norm <- norm_10mm_standard(root_output)
 #'
 #' # transform outliers to NA
-#' rm_outlier_df(root_norm, fill_na = T)
+#' rm_outlier_df(root_norm, fill_na = TRUE)
 #' # remove outliers
-#' rm_outlier_df(root_norm, fill_na = F)
+#' rm_outlier_df(root_norm, fill_na = FALSE)
 #' @export
 rm_outlier_df <- function(root_norm, col_grouping = "Label", col_value = "LengthMM", fill_na = F) {
   colnames(root_norm)[colnames(root_norm) == col_grouping] <- "Label"
