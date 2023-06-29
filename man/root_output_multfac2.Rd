@@ -4,7 +4,8 @@
 \name{root_output_multfac2}
 \alias{root_output_multfac2}
 \title{Rootdetection Output Of An Example Study With Multiple Grouping Variable 2 Levels}
-\format{A data frame with 213 rows of  6 variables:
+\format{
+A data frame with 213 rows of  6 variables:
 \describe{
   \item{Nr}{Number given by Rootdetection}
   \item{Filename}{Filename of the photo}
@@ -12,7 +13,8 @@
   \item{Label}{Label describing the line}
   \item{LengthPx}{Length of measured root or Hypocotyl in Pixel}
   \item{LengthMM}{Length of measured root or Hypocotyl in mm}
-}}
+}
+}
 \usage{
 root_output_multfac2
 }
