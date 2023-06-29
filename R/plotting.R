@@ -16,75 +16,90 @@
 #'
 #' # produce list of plots and print as pdf
 #' root_norm <- norm_10mm_standard(root_output)
-#' plot_hist(root_norm, draw_out = T, file = 'test_plot_histograms.pdf')
+#' plot_hist(root_norm, draw_out = T, file = "test_plot_histograms.pdf")
 #' # view the first plot in R:
 #' plot_hist[[1]]
 #' @export
 plot_hist <- function(root_norm, draw_out = F,
                       file = "data_distribution.pdf") {
-    # other tests than shapiro-wilk
-    plot_list <- list()
+  # other tests than shapiro-wilk
+  plot_list <- list()
 
-    # make sure Factor1 and Factor 2 are factors
-    root_norm$Factor1 <- as.factor(root_norm$Factor1)
-    root_norm$Factor2 <- as.factor(root_norm$Factor2)
+  # make sure Factor1 and Factor 2 are factors
+  root_norm$Factor1 <- as.factor(root_norm$Factor1)
+  root_norm$Factor2 <- as.factor(root_norm$Factor2)
 
-    for (lev in 1:length(levels(root_norm$Label))) {
+  for (lev in 1:length(levels(root_norm$Label))) {
+    # create subset contain only the data for one label
+    hist_sub <- subset(root_norm, Label == levels(root_norm$Label)[lev])
+    hist_sub$Factor1 <- droplevels(hist_sub$Factor1)
 
-        # create subset contain only the data for one label
-        hist_sub <- subset(root_norm, Label == levels(root_norm$Label)[lev])
-        hist_sub$Factor1 <- droplevels(hist_sub$Factor1)
+    # calculate Shapiro-Wilk
+    shap <- shapiro.test(hist_sub$LengthMM)
 
-        #calculate Shapiro-Wilk
-        shap <- shapiro.test(hist_sub$LengthMM)
+    # calculate breaks
+    brx <- pretty(range(hist_sub$LengthMM),
+      n = nclass.Sturges(hist_sub$LengthMM), min.n = 1
+    )
 
-        #calculate breaks
-        brx <- pretty(range(hist_sub$LengthMM),
-                      n = nclass.Sturges(hist_sub$LengthMM), min.n = 1)
+    p <- ggplot2::ggplot(hist_sub, ggplot2::aes_string(
+      x =
+        hist_sub$LengthMM
+    )) +
+      {
+        if (shap$p.value >= 0.05) {
+          ggplot2::geom_histogram(
+            color = "black", fill = "green",
+            breaks = brx
+          )
+        }
+      } +
+      {
+        if (shap$p.value < 0.05) {
+          ggplot2::geom_histogram(
+            color = "black", fill = "red",
+            breaks = brx
+          )
+        }
+      } +
+      ggplot2::theme_classic() +
+      ggplot2::theme(
+        plot.title = ggplot2::element_text(hjust = 0.5, size = 11),
+        plot.subtitle = ggplot2::element_text(hjust = 0.5, size = 8)
+      ) +
+      ggplot2::scale_x_continuous("LengthMM") +
+      ggplot2::ggtitle(
+        label = paste(
+          unique(hist_sub$Factor1),
+          unique(hist_sub$Factor2, sep = " ")
+        ),
+        subtitle = paste("p.val =", round(shap$p.value, digits = 4))
+      )
 
-        p <- ggplot2::ggplot(hist_sub, ggplot2::aes_string(x =
-                                                               hist_sub$LengthMM)) +
-            {if(shap$p.value >= 0.05)ggplot2::geom_histogram(color = "black", fill = "green",
-                                                             breaks = brx)} +
-            {if(shap$p.value < 0.05)ggplot2::geom_histogram(color = "black", fill = "red",
-                                                            breaks = brx)} +
-            ggplot2::theme_classic() +
-            ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, size = 11),
-                           plot.subtitle =  ggplot2::element_text(hjust = 0.5, size = 8)) +
-            ggplot2::scale_x_continuous("LengthMM") +
-            ggplot2::ggtitle(label = paste(unique(hist_sub$Factor1),
-                                           unique(hist_sub$Factor2, sep = " ")),
-                             subtitle =  paste('p.val =', round(shap$p.value, digits = 4)))
+    plot_list[[lev]] <- p
+  }
 
-        plot_list[[lev]] <- p
+  if (draw_out == T) {
+    pdf(file)
+
+    fp <- length(plot_list) %/% 12
+    x <- 1
+    if (fp > 0) {
+      for (i in 1:fp) {
+        gridExtra::grid.arrange(grobs = plot_list[x:(x + 11)], ncol = 3, nrow = 4)
+        x <- x + 12
+      }
     }
 
-    if (draw_out == T) {
-        pdf(file)
-
-        fp <- length(plot_list) %/% 12
-        x <- 1
-        if(fp > 0){
-            for(i in 1:fp){
-
-
-                gridExtra::grid.arrange(grobs = plot_list[x:(x + 11)], ncol = 3, nrow = 4)
-                x <- x + 12
-
-            }
-        }
-
-        lp <- length(plot_list) %% 12
-        if(lp >= 1){
-
-            gridExtra::grid.arrange(grobs = plot_list[x:(x + (lp - 1))], ncol = 3, nrow = 4)
-
-        }
-
-
-        dev.off()
+    lp <- length(plot_list) %% 12
+    if (lp >= 1) {
+      gridExtra::grid.arrange(grobs = plot_list[x:(x + (lp - 1))], ncol = 3, nrow = 4)
     }
-    return(plot_list)
+
+
+    dev.off()
+  }
+  return(plot_list)
 }
 
 
@@ -123,13 +138,13 @@ plot_hist <- function(root_norm, draw_out = F,
 #'
 #' root_norm <- norm_10mm_standard(root_output)
 #' # box plot
-#' plot_abs(root_norm, type = 'box')
+#' plot_abs(root_norm, type = "box")
 #' # box and jitter plot
-#' plot_abs(root_norm, type = 'jitter')
+#' plot_abs(root_norm, type = "jitter")
 #' # violin plot
-#' plot_abs(root_norm, type = 'violin')
+#' plot_abs(root_norm, type = "violin")
 #' # provide own colours (standard r colours or hex-code) - must have the same length than grouping variable 2 level(root_test_norm$Factor2)
-#' plot_abs(root_norm, plot_colours = c('dodgerblue3', 'firebrick2'))
+#' plot_abs(root_norm, plot_colours = c("dodgerblue3", "firebrick2"))
 #'
 #' # plot with significance letters
 #'
@@ -137,19 +152,20 @@ plot_hist <- function(root_norm, draw_out = F,
 #' plot_abs(root_norm, plot_significance = T)
 #'
 #' # all customizable plotting parameters have a default value
-#'  plot_abs_short(root_test_norm,
-#'                 label_delim = ';',
-#'                 type = 'jitter', size_jitter_dot = 2,
-#'                 plot_n = T,
-#'                 plot_colours = c('cornflowerblue', 'coral2'),
-#'                 plot_title = 'My Plot', size_plot_title = 14,
-#'                 y_label = 'length mm', x_label = '',
-#'                 legend_label = 'condition', size_legend_title = 12, size_legend_text = 10,
-#'                 width_lines = 0.5, width_axis = 0.5,
-#'                 size_x_axes = 9, size_y_axes = 9,
-#'                 size_n = 3,
-#'                 plot_significance = T, height_letter = 5, size_letter = 5, angle_letter = 0,
-#'                 plot_response = T, width_response = 0.4, alpha_response = 0.6)
+#' plot_abs_short(root_test_norm,
+#'   label_delim = ";",
+#'   type = "jitter", size_jitter_dot = 2,
+#'   plot_n = T,
+#'   plot_colours = c("cornflowerblue", "coral2"),
+#'   plot_title = "My Plot", size_plot_title = 14,
+#'   y_label = "length mm", x_label = "",
+#'   legend_label = "condition", size_legend_title = 12, size_legend_text = 10,
+#'   width_lines = 0.5, width_axis = 0.5,
+#'   size_x_axes = 9, size_y_axes = 9,
+#'   size_n = 3,
+#'   plot_significance = T, height_letter = 5, size_letter = 5, angle_letter = 0,
+#'   plot_response = T, width_response = 0.4, alpha_response = 0.6
+#' )
 #' @export
 plot_abs <- function(root_norm,
                      label_delim = ";",
@@ -159,9 +175,9 @@ plot_abs <- function(root_norm,
                      plot_colours,
                      plot_title,
                      size_plot_title = 14,
-                     y_label = 'hypocotyl length [mm]',
-                     x_label = '',
-                     legend_label = 'condition',
+                     y_label = "hypocotyl length [mm]",
+                     x_label = "",
+                     legend_label = "condition",
                      size_legend_title = 12,
                      size_legend_text = 10,
                      width_lines = 0.5,
@@ -176,129 +192,200 @@ plot_abs <- function(root_norm,
                      plot_response = F,
                      width_response = 0.4,
                      alpha_response = 0.6) {
+  ############## first chunk creating letters from statistics
 
-    ############## first chunk creating letters from statistics
+  # create table with letters only if plot_significance = T
+  if (plot_significance) {
+    # conduct ANOVA
+    twofacov_output <- rootdetectR::twofacaov(root_norm, label_delim = label_delim)
 
-    # create table with letters only if plot_significance = T
-    if (plot_significance) {
-
-        # conduct ANOVA
-        twofacov_output <- rootdetectR::twofacaov(root_norm, label_delim = label_delim)
-
-        # get Letters for twofacaov output
-        mat_names <- character()
-        mat_values <- numeric()
-        # loop over matrix and get names + values
-        for (j in 1:(length(row.names(twofacov_output)) - 1)) {
-            for (k in (j + 1):length(colnames(twofacov_output))) {
-                v <- twofacov_output[j, k]
-                t <- paste(row.names(twofacov_output)[j],
-                           colnames(twofacov_output)[k], sep = "-")
-                mat_names <- c(mat_names, t)
-                mat_values <- c(mat_values, v)
-            }
-        }
-
-        # combine names + values
-        names(mat_values) <- mat_names
-        # get df with letters and replace : with label delim!!
-        letters <-
-            data.frame(multcompView::multcompLetters(mat_values)["Letters"])
-        letters$Label <- gsub(":", label_delim, rownames(letters))
-
-
-        # letter 1/5 of highest value
-        y_coord <- plyr::ddply(root_norm, plyr::.(Label), plyr::summarize,
-                               y = fivenum(LengthMM)[5])
-        y_coord$y <- y_coord$y + height_letter
-        plot_letters <- merge(letters, y_coord, by = "Label")
+    # get Letters for twofacaov output
+    mat_names <- character()
+    mat_values <- numeric()
+    # loop over matrix and get names + values
+    for (j in 1:(length(row.names(twofacov_output)) - 1)) {
+      for (k in (j + 1):length(colnames(twofacov_output))) {
+        v <- twofacov_output[j, k]
+        t <- paste(row.names(twofacov_output)[j],
+          colnames(twofacov_output)[k],
+          sep = "-"
+        )
+        mat_names <- c(mat_names, t)
+        mat_values <- c(mat_values, v)
+      }
     }
 
-    if (plot_response) {
-
-        # throw error if moore than two Factor2 are present
-        if (length(levels(as.factor(root_norm$Factor2))) > 2){
-            stop('With the current rootdetectR Version it is only possible to use this feature with two Factor2 levels')
-
-        }
-        # set counter i to zero
-        i <- 0
-        # create empty vectors
-        ymin_line <- NULL
-        ymax_line <- NULL
+    # combine names + values
+    names(mat_values) <- mat_names
+    # get df with letters and replace : with label delim!!
+    letters <-
+      data.frame(multcompView::multcompLetters(mat_values)["Letters"])
+    letters$Label <- gsub(":", label_delim, rownames(letters))
 
 
-        # while loop creating y elements ymin and ymax
-        while(i < length(levels(root_norm$Label))){
+    # letter 1/5 of highest value
+    y_coord <- plyr::ddply(root_norm, plyr::.(Label), plyr::summarize,
+      y = fivenum(LengthMM)[5]
+    )
+    y_coord$y <- y_coord$y + height_letter
+    plot_letters <- merge(letters, y_coord, by = "Label")
+  }
 
-            i <- i+1
-            j <- i+1
+  if (plot_response) {
+    # throw error if moore than two Factor2 are present
+    if (length(levels(as.factor(root_norm$Factor2))) > 2) {
+      stop("With the current rootdetectR Version it is only possible to use this feature with two Factor2 levels")
+    }
+    # set counter i to zero
+    i <- 0
+    # create empty vectors
+    ymin_line <- NULL
+    ymax_line <- NULL
 
-            sub <- levels(root_norm$Label)[i:j]
 
-            one <- median((root_norm[root_norm$Label == sub[1],]$LengthMM))
-            two <- median((root_norm[root_norm$Label == sub[2],]$LengthMM))
+    # while loop creating y elements ymin and ymax
+    while (i < length(levels(root_norm$Label))) {
+      i <- i + 1
+      j <- i + 1
 
-            ymin_line <- c(ymin_line, one)
-            ymax_line <- c(ymax_line, two)
+      sub <- levels(root_norm$Label)[i:j]
 
-            i <- j
-        }
-        # create x element
-        x_line <- seq(1.5, length(unique(root_norm$Label)), by=2)
+      one <- median((root_norm[root_norm$Label == sub[1], ]$LengthMM))
+      two <- median((root_norm[root_norm$Label == sub[2], ]$LengthMM))
+
+      ymin_line <- c(ymin_line, one)
+      ymax_line <- c(ymax_line, two)
+
+      i <- j
+    }
+    # create x element
+    x_line <- seq(1.5, length(unique(root_norm$Label)), by = 2)
+  }
+
+  abs_plot <- ggplot2::ggplot() +
+    {
+      if (type == "jitter") {
+        ggplot2::geom_boxplot(
+          data = root_norm,
+          ggplot2::aes(
+            x = Label,
+            y = LengthMM
+          ),
+          outlier.shape = NA, lwd = width_lines
+        )
+      }
+    } +
+    {
+      if (type == "jitter") {
+        ggplot2::geom_jitter(
+          data = root_norm,
+          ggplot2::aes(
+            x = Label,
+            y = LengthMM,
+            colour = as.factor(Factor2)
+          ),
+          position = ggplot2::position_jitter(0.2,
+            seed = 1
+          ), size = size_jitter_dot
+        )
+      }
+    } +
+    {
+      if (type == "jitter") ggplot2::labs(colour = legend_label)
+    } +
+    {
+      if (type == "box") {
+        ggplot2::geom_boxplot(
+          data = root_norm,
+          ggplot2::aes(
+            x = Label, y = LengthMM,
+            fill = as.factor(Factor2)
+          ), lwd = width_lines
+        )
+      }
+    } +
+    {
+      if (type == "box") ggplot2::labs(fill = legend_label)
+    } +
+    {
+      if (type == "violin") {
+        ggplot2::geom_violin(
+          data = root_norm,
+          ggplot2::aes(
+            x = Label, y = LengthMM,
+            fill = as.factor(Factor2)
+          ), lwd = width_lines
+        )
+      }
+    } +
+    {
+      if (type == "violin") ggplot2::labs(fill = legend_label)
+    } +
+    {
+      if (plot_significance) {
+        ggplot2::geom_text(
+          data = plot_letters,
+          ggplot2::aes(
+            x = Label,
+            y = y,
+            label = Letters,
+            angle = angle_letter
+          ),
+          size = size_letter
+        )
+      }
+    } +
+    {
+      if (plot_response) {
+        ggplot2::geom_linerange(
+          ggplot2::aes(
+            x = x_line,
+            ymax = ymax_line,
+            ymin = ymin_line
+          ),
+          alpha = alpha_response, size = width_response
+        )
+      }
+    } +
+    ggplot2::theme_classic() +
+    ggplot2::scale_y_continuous(name = y_label) +
+    ggplot2::scale_x_discrete(name = x_label) +
+    {
+      if (!missing(plot_title)) ggplot2::ggtitle(label = plot_title)
+    } +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(
+        angle = 45,
+        hjust = 1, vjust = 1,
+        colour = "black",
+        size = size_x_axes
+      ),
+      axis.text.y = ggplot2::element_text(
+        colour = "black",
+        size = size_y_axes
+      ),
+      axis.line = ggplot2::element_line(size = width_axis),
+      legend.title = ggplot2::element_text(size = size_legend_title),
+      legend.text = ggplot2::element_text(size = size_legend_text),
+      plot.title = ggplot2::element_text(hjust = 0.5, size = size_plot_title)
+    ) +
+    {
+      if (plot_n) {
+        EnvStats::stat_n_text(
+          data = root_norm,
+          ggplot2::aes(x = Label, y = LengthMM),
+          angle = 90, size = size_n
+        )
+      }
+    } +
+    {
+      if (!missing(plot_colours)) ggplot2::scale_fill_manual(values = plot_colours)
+    } +
+    {
+      if (!missing(plot_colours)) ggplot2::scale_colour_manual(values = plot_colours)
     }
 
-    abs_plot <- ggplot2::ggplot() +
-        {if(type == 'jitter')ggplot2::geom_boxplot(data = root_norm,
-                                                   ggplot2::aes(x = Label,
-                                                                y = LengthMM),
-                                                   outlier.shape = NA, lwd = width_lines)} +
-        {if(type == 'jitter')ggplot2::geom_jitter(data = root_norm,
-                                                  ggplot2::aes(x = Label,
-                                                               y = LengthMM,
-                                                               colour = as.factor(Factor2)),
-                                                  position = ggplot2::position_jitter(0.2,
-                                                                                      seed = 1), size = size_jitter_dot)} +
-        {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
-        {if(type == 'box')ggplot2::geom_boxplot(data = root_norm,
-                                                ggplot2::aes(x = Label, y = LengthMM,
-                                                             fill = as.factor(Factor2)), lwd = width_lines)} +
-        {if(type == 'box')ggplot2::labs(fill = legend_label)} +
-        {if(type == 'violin')ggplot2::geom_violin(data = root_norm,
-                                                  ggplot2::aes(x = Label, y = LengthMM,
-                                                               fill = as.factor(Factor2)), lwd = width_lines)} +
-        {if(type == 'violin')ggplot2::labs(fill = legend_label)} +
-        {if(plot_significance)ggplot2::geom_text(data = plot_letters,
-                                                 ggplot2::aes(x = Label,
-                                                              y = y,
-                                                              label = Letters,
-                                                              angle = angle_letter),
-                                                 size = size_letter)} +
-        {if(plot_response)ggplot2::geom_linerange(ggplot2::aes(x = x_line,
-                                                               ymax = ymax_line,
-                                                               ymin = ymin_line),
-                                                  alpha = alpha_response, size = width_response)} +
-        ggplot2::theme_classic() +
-        ggplot2::scale_y_continuous(name = y_label) +
-        ggplot2::scale_x_discrete(name = x_label) +
-        {if(!missing(plot_title))ggplot2::ggtitle(label = plot_title)} +
-        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
-                                                           hjust = 1, vjust = 1,
-                                                           colour = 'black',
-                                                           size = size_x_axes),
-                       axis.text.y = ggplot2::element_text(colour = 'black',
-                                                           size= size_y_axes),
-                       axis.line = ggplot2::element_line(size = width_axis),
-                       legend.title = ggplot2::element_text(size = size_legend_title),
-                       legend.text = ggplot2::element_text(size = size_legend_text),
-                       plot.title = ggplot2::element_text(hjust = 0.5, size = size_plot_title)) +
-        {if(plot_n)EnvStats::stat_n_text(data = root_norm,
-                                         ggplot2::aes(x = Label, y = LengthMM),
-                                         angle = 90, size = size_n)} +
-        {if(!missing(plot_colours))ggplot2::scale_fill_manual(values = plot_colours)} +
-        {if(!missing(plot_colours))ggplot2::scale_colour_manual(values = plot_colours)}
-
-    return(abs_plot)
+  return(abs_plot)
 }
 
 
@@ -332,48 +419,49 @@ plot_abs <- function(root_norm,
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
 #' # boxplot
-#' plot_rel(root_test_norm, plot_significance = F, control = '20', type = 'box')
+#' plot_rel(root_test_norm, plot_significance = F, control = "20", type = "box")
 #' # jitterplot
-#' plot_rel(root_test_norm, plot_significance = F, control = '20', type = 'jitter')
+#' plot_rel(root_test_norm, plot_significance = F, control = "20", type = "jitter")
 #'
 #' # Plot with siginficance letters
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
-#' root_stat <- interaction_twofacaov(root_test_norm, draw_out = F, label_delim = ';')
+#' root_stat <- interaction_twofacaov(root_test_norm, draw_out = F, label_delim = ";")
 #' # boxplot with statistics
-#' plot_rel(root_test_norm, plot_significance = T, interaction_twofacaov_output = root_stat, control = '20', type = 'box')
+#' plot_rel(root_test_norm, plot_significance = T, interaction_twofacaov_output = root_stat, control = "20", type = "box")
 #'
 #' # all customizable plotting parameters have a default value
 #' plot_rel(root_test_norm,
-#'          label_delim = ';',
-#'          control = 20,
-#'          type = "jitter",
-#'          plot_colours = c('blue', 'red', 'orange', 'green'),
-#'          y_label = '% growth',
-#'          x_label = '',
-#'          legend_label = 'Label',
-#'          size_legend_title = 12,
-#'          size_legend_text = 10,
-#'          size_x_axes = 9,
-#'          size_y_axes = 9,
-#'          plot_significance = T,
-#'          interaction_twofacaov_output = root_stat,
-#'          height_letter = 10,
-#'          size_letter = 5,
-#'          angle_letter = 0)
+#'   label_delim = ";",
+#'   control = 20,
+#'   type = "jitter",
+#'   plot_colours = c("blue", "red", "orange", "green"),
+#'   y_label = "% growth",
+#'   x_label = "",
+#'   legend_label = "Label",
+#'   size_legend_title = 12,
+#'   size_legend_text = 10,
+#'   size_x_axes = 9,
+#'   size_y_axes = 9,
+#'   plot_significance = T,
+#'   interaction_twofacaov_output = root_stat,
+#'   height_letter = 10,
+#'   size_letter = 5,
+#'   angle_letter = 0
+#' )
 #'
 #' @export
 plot_rel <- function(root_norm,
-                     label_delim = ';',
+                     label_delim = ";",
                      control = 20,
                      type = "jitter",
                      size_jitter_dot = 2,
                      plot_colours,
                      plot_title,
                      size_plot_title = 14,
-                     y_label = 'hypocotyl growth [%]',
-                     x_label = '',
-                     legend_label = 'Label',
+                     y_label = "hypocotyl growth [%]",
+                     x_label = "",
+                     legend_label = "Label",
                      size_legend_title = 12,
                      size_legend_text = 10,
                      width_lines = 0.5,
@@ -384,135 +472,231 @@ plot_rel <- function(root_norm,
                      height_letter = 10,
                      size_letter = 5,
                      angle_letter = 0) {
+  rel_root_norm <- rootdetectR::rel_data(root_norm, control = control)
 
-    rel_root_norm <- rootdetectR::rel_data(root_norm, control = control)
+  if (plot_significance == T) {
+    # conduct ANOVA
+    interaction_twofacaov_output <- rootdetectR::interaction_twofacaov(root_norm,
+      control = control,
+      label_delim = label_delim
+    )
 
-    if (plot_significance == T) {
+    relative_plot <- list()
 
-        # conduct ANOVA
-        interaction_twofacaov_output <- rootdetectR::interaction_twofacaov(root_norm,
-                                                                           control = control,
-                                                                           label_delim = label_delim)
-
-        relative_plot <- list()
-
-        for (i in 1:length(interaction_twofacaov_output)) {
-
-            # create rel subsets
-            rel_sub <- subset(rel_root_norm,
-                              Factor2 == names(interaction_twofacaov_output)[i])
-            rel_sub$Factor2 <- as.factor(rel_sub$Factor2)
-            rel_sub$Factor2 <- droplevels(rel_sub$Factor2)
-
-
-
-            # create subset of ANOVA matrices
-            sub_aov <- interaction_twofacaov_output[[i]]
-
-            # get Letters from ANOVA subset
-            mat_names <- character()
-            mat_values <- numeric()
-            # loop over matrix and get names + values
-            for (j in 1:(length(row.names(sub_aov)) - 1)) {
-                for (k in (j + 1):length(colnames(sub_aov))) {
-                    v <- sub_aov[j, k]
-                    t <- paste(row.names(sub_aov)[j],
-                               colnames(sub_aov)[k], sep = "-")
-                    mat_names <- c(mat_names, t)
-                    mat_values <- c(mat_values, v)
-                }
-            }
-
-            # combine names + values
-            names(mat_values) <- mat_names
-            # get df with letters and replace : with label delim!!
-            letters <-
-                data.frame(multcompView::multcompLetters(mat_values)["Letters"])
-            letters$Label <- paste(rownames(letters), names(interaction_twofacaov_output)[i], sep = label_delim)
-
-
-            # letter 1/5 of highest value
-            y_coord <- plyr::ddply(rel_sub, plyr::.(Label), plyr::summarize,
-                                   y = fivenum(relative_value)[5])
-            y_coord$y <- y_coord$y + height_letter
-            plot_letters <- merge(letters, y_coord, by = "Label")
+    for (i in 1:length(interaction_twofacaov_output)) {
+      # create rel subsets
+      rel_sub <- subset(
+        rel_root_norm,
+        Factor2 == names(interaction_twofacaov_output)[i]
+      )
+      rel_sub$Factor2 <- as.factor(rel_sub$Factor2)
+      rel_sub$Factor2 <- droplevels(rel_sub$Factor2)
 
 
 
+      # create subset of ANOVA matrices
+      sub_aov <- interaction_twofacaov_output[[i]]
 
-            # use annotate instead of geom_text() to use within a loop
-            relative_plot_temp <- ggplot2::ggplot() +
-                {if(type == 'jitter')ggplot2::geom_boxplot(data = rel_sub,
-                                                           ggplot2::aes_string(x = rel_sub$Label, y =
-                                                                                   rel_sub$relative_value), outlier.shape = NA,
-                                                           lwd = width_lines)} +
-                {if(type == 'jitter')ggplot2::geom_jitter(data = rel_sub,
-                                                          ggplot2::aes_string(x = rel_sub$Label, y =
-                                                                                  rel_sub$relative_value, colour = as.factor(rel_sub$Label)),
-                                                          position = ggplot2::position_jitter(0.2, seed = 1), size = size_jitter_dot)} +
-                {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
-                {if(type == 'box')ggplot2::geom_boxplot(data = rel_sub, ggplot2::aes_string(x = rel_sub$Label, y = rel_sub$relative_value, fill =
-                                                                                                rel_sub$Label), lwd = width_lines)} +
-                {if(type == 'box')ggplot2::labs(fill = legend_label)} +
-                {if(type == 'violin')ggplot2::geom_violin(data = rel_sub,
-                                                          ggplot2::aes_string(x = rel_sub$Label, y = rel_sub$relative_value,
-                                                                              fill = as.factor(rel_sub$Label)), lwd = width_lines)} +
-                {if(type == 'violin')ggplot2::labs(fill = legend_label)} +
-                ggplot2::theme_classic() +
-                ggplot2::scale_y_continuous(name = y_label) +
-                ggplot2::scale_x_discrete(name = x_label) +
-                {if(!missing(plot_title))ggplot2::ggtitle(label = plot_title)} +
-                ggplot2::theme(axis.text.x = ggplot2::element_text(angle =
-                                                                       45, hjust = 1, vjust = 1, colour = 'black', size = size_x_axes),
-                               axis.text.y = ggplot2::element_text(colour = 'black', size = size_y_axes),
-                               axis.line = ggplot2::element_line(size = width_axis),
-                               legend.title = ggplot2::element_text(size = size_legend_title),
-                               legend.text = ggplot2::element_text(size = size_legend_text),
-                               plot.title = ggplot2::element_text(hjust = 0.5, size = size_plot_title)) +
-                ggplot2::annotate("text", x = plot_letters$Label,
-                                  y = plot_letters$y, label = plot_letters$Letters, size = size_letter,
-                                  angle = angle_letter) +
-                {if(!missing(plot_colours))ggplot2::scale_fill_manual(values = plot_colours)} +
-                {if(!missing(plot_colours))ggplot2::scale_colour_manual(values = plot_colours)}
-
-            relative_plot[[i]] <- relative_plot_temp
+      # get Letters from ANOVA subset
+      mat_names <- character()
+      mat_values <- numeric()
+      # loop over matrix and get names + values
+      for (j in 1:(length(row.names(sub_aov)) - 1)) {
+        for (k in (j + 1):length(colnames(sub_aov))) {
+          v <- sub_aov[j, k]
+          t <- paste(row.names(sub_aov)[j],
+            colnames(sub_aov)[k],
+            sep = "-"
+          )
+          mat_names <- c(mat_names, t)
+          mat_values <- c(mat_values, v)
         }
-    } else if(plot_significance == F) {
+      }
 
-        relative_plot <- ggplot2::ggplot() +
-            {if(type == 'jitter')ggplot2::geom_boxplot(data = rel_root_norm,
-                                                       ggplot2::aes(x = Label, y =
-                                                                        relative_value), outlier.shape = NA,
-                                                       lwd = width_lines)} +
-            {if(type == 'jitter')ggplot2::geom_jitter(data = rel_root_norm,
-                                                      ggplot2::aes(x = Label, y =
-                                                                       relative_value, colour =
-                                                                       as.factor(Label)), position =
-                                                          ggplot2::position_jitter(0.2, seed = 1), size = size_jitter_dot)} +
-            {if(type == 'jitter')ggplot2::labs(colour = legend_label)} +
-            {if(type == 'box')ggplot2::geom_boxplot(data = rel_root_norm, ggplot2::aes(x = Label, y = relative_value,
-                                                                                       fill = as.factor(Label)),
-                                                    lwd = width_lines)} +
-            {if(type == 'box')ggplot2::labs(fill = legend_label)} +
-            {if(type == 'violin')ggplot2::geom_violin(data = rel_root_norm,
-                                                      ggplot2::aes(x = Label, y = relative_value,
-                                                                   fill = as.factor(Label)), lwd = width_lines)} +
-            {if(type == 'violin')ggplot2::labs(fill = legend_label)} +
-            ggplot2::theme_classic() +
-            ggplot2::scale_y_continuous(name = y_label) +
-            ggplot2::scale_x_discrete(name = x_label) +
-            {if(!missing(plot_title))ggplot2::ggtitle(label = plot_title)} +
-            ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
-                                                               hjust = 1, vjust = 1, colour = 'black', size = size_x_axes),
-                           axis.text.y = ggplot2::element_text(colour = 'black', size = size_y_axes),
-                           axis.line = ggplot2::element_line(size = width_axis),
-                           legend.title = ggplot2::element_text(size = size_legend_title),
-                           legend.text =  ggplot2::element_text(size = size_legend_text),
-                           plot.title = ggplot2::element_text(hjust = 0.5, size = size_plot_title)) +
-            {if(!missing(plot_colours))ggplot2::scale_fill_manual(values = plot_colours)} +
-            {if(!missing(plot_colours))ggplot2::scale_colour_manual(values = plot_colours)}
+      # combine names + values
+      names(mat_values) <- mat_names
+      # get df with letters and replace : with label delim!!
+      letters <-
+        data.frame(multcompView::multcompLetters(mat_values)["Letters"])
+      letters$Label <- paste(rownames(letters), names(interaction_twofacaov_output)[i], sep = label_delim)
 
 
+      # letter 1/5 of highest value
+      y_coord <- plyr::ddply(rel_sub, plyr::.(Label), plyr::summarize,
+        y = fivenum(relative_value)[5]
+      )
+      y_coord$y <- y_coord$y + height_letter
+      plot_letters <- merge(letters, y_coord, by = "Label")
+
+
+
+
+      # use annotate instead of geom_text() to use within a loop
+      relative_plot_temp <- ggplot2::ggplot() +
+        {
+          if (type == "jitter") {
+            ggplot2::geom_boxplot(
+              data = rel_sub,
+              ggplot2::aes_string(
+                x = rel_sub$Label, y =
+                  rel_sub$relative_value
+              ), outlier.shape = NA,
+              lwd = width_lines
+            )
+          }
+        } +
+        {
+          if (type == "jitter") {
+            ggplot2::geom_jitter(
+              data = rel_sub,
+              ggplot2::aes_string(
+                x = rel_sub$Label, y =
+                  rel_sub$relative_value, colour = as.factor(rel_sub$Label)
+              ),
+              position = ggplot2::position_jitter(0.2, seed = 1), size = size_jitter_dot
+            )
+          }
+        } +
+        {
+          if (type == "jitter") ggplot2::labs(colour = legend_label)
+        } +
+        {
+          if (type == "box") {
+            ggplot2::geom_boxplot(data = rel_sub, ggplot2::aes_string(
+              x = rel_sub$Label, y = rel_sub$relative_value, fill =
+                rel_sub$Label
+            ), lwd = width_lines)
+          }
+        } +
+        {
+          if (type == "box") ggplot2::labs(fill = legend_label)
+        } +
+        {
+          if (type == "violin") {
+            ggplot2::geom_violin(
+              data = rel_sub,
+              ggplot2::aes_string(
+                x = rel_sub$Label, y = rel_sub$relative_value,
+                fill = as.factor(rel_sub$Label)
+              ), lwd = width_lines
+            )
+          }
+        } +
+        {
+          if (type == "violin") ggplot2::labs(fill = legend_label)
+        } +
+        ggplot2::theme_classic() +
+        ggplot2::scale_y_continuous(name = y_label) +
+        ggplot2::scale_x_discrete(name = x_label) +
+        {
+          if (!missing(plot_title)) ggplot2::ggtitle(label = plot_title)
+        } +
+        ggplot2::theme(
+          axis.text.x = ggplot2::element_text(
+            angle =
+              45, hjust = 1, vjust = 1, colour = "black", size = size_x_axes
+          ),
+          axis.text.y = ggplot2::element_text(colour = "black", size = size_y_axes),
+          axis.line = ggplot2::element_line(size = width_axis),
+          legend.title = ggplot2::element_text(size = size_legend_title),
+          legend.text = ggplot2::element_text(size = size_legend_text),
+          plot.title = ggplot2::element_text(hjust = 0.5, size = size_plot_title)
+        ) +
+        ggplot2::annotate("text",
+          x = plot_letters$Label,
+          y = plot_letters$y, label = plot_letters$Letters, size = size_letter,
+          angle = angle_letter
+        ) +
+        {
+          if (!missing(plot_colours)) ggplot2::scale_fill_manual(values = plot_colours)
+        } +
+        {
+          if (!missing(plot_colours)) ggplot2::scale_colour_manual(values = plot_colours)
+        }
+
+      relative_plot[[i]] <- relative_plot_temp
     }
-    return(relative_plot)
+  } else if (plot_significance == F) {
+    relative_plot <- ggplot2::ggplot() +
+      {
+        if (type == "jitter") {
+          ggplot2::geom_boxplot(
+            data = rel_root_norm,
+            ggplot2::aes(
+              x = Label, y =
+                relative_value
+            ), outlier.shape = NA,
+            lwd = width_lines
+          )
+        }
+      } +
+      {
+        if (type == "jitter") {
+          ggplot2::geom_jitter(
+            data = rel_root_norm,
+            ggplot2::aes(
+              x = Label, y =
+                relative_value, colour =
+                as.factor(Label)
+            ), position =
+              ggplot2::position_jitter(0.2, seed = 1), size = size_jitter_dot
+          )
+        }
+      } +
+      {
+        if (type == "jitter") ggplot2::labs(colour = legend_label)
+      } +
+      {
+        if (type == "box") {
+          ggplot2::geom_boxplot(
+            data = rel_root_norm, ggplot2::aes(
+              x = Label, y = relative_value,
+              fill = as.factor(Label)
+            ),
+            lwd = width_lines
+          )
+        }
+      } +
+      {
+        if (type == "box") ggplot2::labs(fill = legend_label)
+      } +
+      {
+        if (type == "violin") {
+          ggplot2::geom_violin(
+            data = rel_root_norm,
+            ggplot2::aes(
+              x = Label, y = relative_value,
+              fill = as.factor(Label)
+            ), lwd = width_lines
+          )
+        }
+      } +
+      {
+        if (type == "violin") ggplot2::labs(fill = legend_label)
+      } +
+      ggplot2::theme_classic() +
+      ggplot2::scale_y_continuous(name = y_label) +
+      ggplot2::scale_x_discrete(name = x_label) +
+      {
+        if (!missing(plot_title)) ggplot2::ggtitle(label = plot_title)
+      } +
+      ggplot2::theme(
+        axis.text.x = ggplot2::element_text(
+          angle = 45,
+          hjust = 1, vjust = 1, colour = "black", size = size_x_axes
+        ),
+        axis.text.y = ggplot2::element_text(colour = "black", size = size_y_axes),
+        axis.line = ggplot2::element_line(size = width_axis),
+        legend.title = ggplot2::element_text(size = size_legend_title),
+        legend.text = ggplot2::element_text(size = size_legend_text),
+        plot.title = ggplot2::element_text(hjust = 0.5, size = size_plot_title)
+      ) +
+      {
+        if (!missing(plot_colours)) ggplot2::scale_fill_manual(values = plot_colours)
+      } +
+      {
+        if (!missing(plot_colours)) ggplot2::scale_colour_manual(values = plot_colours)
+      }
+  }
+  return(relative_plot)
 }

@@ -14,8 +14,8 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width=4, 
-  fig.height=4
+  fig.width = 4,
+  fig.height = 4
 )
 devtools::load_all(".")
 ```
@@ -81,12 +81,12 @@ my_dataset <- root_output
 is_root_output(my_dataset)
 
 # remove measurements with length 0
-my_dataset <- my_dataset[!my_dataset$LengthPx == 0,]
+my_dataset <- my_dataset[!my_dataset$LengthPx == 0, ]
 # calculate LengthMM by length standard 10mm
 # break up the label in 2 factors according to the delimiter (";")
 my_dataset <- norm_10mm_standard(my_dataset)
 # calculate relative data
-my_dataset_rel <- rel_data(my_dataset, control = '20')
+my_dataset_rel <- rel_data(my_dataset, control = "20")
 # calculate summary satistics
 s_stat <- summary_stat(my_dataset)
 # show summary statistics
@@ -177,8 +177,10 @@ At least we will produce plots of absolute and relative data. Here only the stan
 
 ```{r}
 # plot absolute data as jitter plot
-absolute_plot <- plot_abs(my_dataset, plot_significance = T, label_delim = ';', 
-                          height_letter = 5, plot_colours = c('cornflowerblue', 'indianred'))
+absolute_plot <- plot_abs(my_dataset,
+  plot_significance = T, label_delim = ";",
+  height_letter = 5, plot_colours = c("cornflowerblue", "indianred")
+)
 absolute_plot
 ```
 ```r
@@ -190,8 +192,10 @@ dev.off()
 
 ```{r}
 # plot relative data as jitter plot
-relative_plot <- plot_rel(my_dataset, plot_significance = T, 
-                          control = '20', size_jitter_dot = 3)
+relative_plot <- plot_rel(my_dataset,
+  plot_significance = T,
+  control = "20", size_jitter_dot = 3
+)
 relative_plot
 ```
 ```r

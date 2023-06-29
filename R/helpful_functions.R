@@ -19,7 +19,7 @@ se <- function(x) sd(x, na.rm = T) / sqrt(length(na.omit(x)))
 #' @examples
 #' # get some example vector
 #' root_norm <- norm_10mm_standard(root_output)
-#' x <- root_norm[root_norm$Label == 'weitar1_1;28',]
+#' x <- root_norm[root_norm$Label == "weitar1_1;28", ]
 #'
 #' # delete outliers
 #' rm_outlier(x, fill_na = F)
@@ -28,19 +28,15 @@ se <- function(x) sd(x, na.rm = T) / sqrt(length(na.omit(x)))
 #' rm_outlier(x, fill_na = T)
 #' @export
 rm_outlier <- function(x, fill_na = F) {
-
   low_border <- quantile(x, 0.25, na.rm = T) - (IQR(x, na.rm = T) * 1.5)
   high_border <- quantile(x, 0.75, na.rm = T) + (IQR(x, na.rm = T) * 1.5)
 
-  if(fill_na){
-
+  if (fill_na) {
     # outliers will be changed to NA
     x[which(x < low_border | x > high_border)] <- NA
-
   } else {
     # outliers will be just deleted
     x <- x[which(x > low_border & x < high_border)]
-
   }
   return(x)
 }
@@ -55,24 +51,21 @@ rm_outlier <- function(x, fill_na = F) {
 #' @return list of data.frames; each subset will be in an separated data.frame stored in a list
 #' @examples
 #' # create normalized data.set with multiple Factor2
-#' root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_standard = '20mm', standard_length_mm = '20')
+#' root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_standard = "20mm", standard_length_mm = "20")
 #'
 #' # create subsets for each control_treatment pair
-#' subset_fac2(root_norm_multfac2, control = '20')
+#' subset_fac2(root_norm_multfac2, control = "20")
 #' @export
-subset_fac2 <- function(root_norm, control = '20'){
-
+subset_fac2 <- function(root_norm, control = "20") {
   root_norm$Factor2 <- as.factor(root_norm$Factor2)
 
-  if(length(levels(root_norm$Factor2)) <= 2){
+  if (length(levels(root_norm$Factor2)) <= 2) {
+    warning("There are only 2 levels of Factor2 - no subsetting by Factor2 possible!")
 
-    warning('There are only 2 levels of Factor2 - no subsetting by Factor2 possible!')
-
-    #else create subtables
+    # else create subtables
   } else {
-
     # variable containing only Factor2 control
-    root_norm_control <- root_norm[root_norm$Factor2 == control,]
+    root_norm_control <- root_norm[root_norm$Factor2 == control, ]
 
     # create empty list to put subsets in
     dfl <- list()
@@ -80,16 +73,14 @@ subset_fac2 <- function(root_norm, control = '20'){
 
     # loop over all levels in Factor2 that are not control
     for (i in levels(root_norm$Factor2)[levels(root_norm$Factor2) != control]) {
-
       # get subset for each i
-      sub <- root_norm[root_norm$Factor2 == i,]
-      #bind root_norm_control with sub_temp
+      sub <- root_norm[root_norm$Factor2 == i, ]
+      # bind root_norm_control with sub_temp
       sub_control <- rbind(sub, root_norm_control)
 
       # paste in list and name
-      name <- paste(unique(root_norm_control$Factor2), '_and_', i, sep = '')
+      name <- paste(unique(root_norm_control$Factor2), "_and_", i, sep = "")
       dfl[[name]] <- sub_control
-
     }
   }
   return(dfl)
@@ -112,16 +103,13 @@ subset_fac2 <- function(root_norm, control = '20'){
 #' tukey_to_matrix(tuk)
 #' @export
 tukey_to_matrix <- function(tukeyHSD_output) {
-
-  if(!is.data.frame(tukeyHSD_output)){
-
+  if (!is.data.frame(tukeyHSD_output)) {
     tukeyHSD_output <- as.data.frame(tukeyHSD_output)
-
   }
 
   temp <- data.frame(name = rownames(tukeyHSD_output), p.val = tukeyHSD_output$`p adj`)
 
-  temp_new <- tidyr::separate(temp, 'name', into = c('V1', 'V2'), sep = '-')
+  temp_new <- tidyr::separate(temp, "name", into = c("V1", "V2"), sep = "-")
   labs <- sort(unique(c(temp_new$V1, temp_new$V2)))
   nr_labs <- length(labs)
   # create empty matrix
@@ -132,11 +120,10 @@ tukey_to_matrix <- function(tukeyHSD_output) {
 
   for (j in 1:(nr_labs - 1)) {
     for (k in (j + 1):nr_labs) {
-
       # get p-values and put them into the matrix
-      idx <- which(paste(labs[j], '-', labs[k], sep = '') == temp$name)
+      idx <- which(paste(labs[j], "-", labs[k], sep = "") == temp$name)
       if (length(idx) == 0) {
-        idx <- which(paste(labs[k], '-', labs[j], sep = '') == temp$name)
+        idx <- which(paste(labs[k], "-", labs[j], sep = "") == temp$name)
       }
       if (length(idx) != 0) {
         mat[j, k] <- temp[idx, 2]
@@ -164,8 +151,7 @@ tukey_to_matrix <- function(tukeyHSD_output) {
 #' # obtain significance_letters
 #' get_sig_letters(tuk_mat)
 #' @export
-get_sig_letters <- function(tukmatrix){
-
+get_sig_letters <- function(tukmatrix) {
   # get Letters for twofacaov output
   mat_names <- character()
   mat_values <- numeric()
@@ -174,7 +160,9 @@ get_sig_letters <- function(tukmatrix){
     for (k in (j + 1):length(colnames(tukmatrix))) {
       v <- tukmatrix[j, k]
       t <- paste(row.names(tukmatrix)[j],
-                 colnames(tukmatrix)[k], sep = "-")
+        colnames(tukmatrix)[k],
+        sep = "-"
+      )
       mat_names <- c(mat_names, t)
       mat_values <- c(mat_values, v)
     }
@@ -187,7 +175,6 @@ get_sig_letters <- function(tukmatrix){
     data.frame(multcompView::multcompLetters(mat_values)["Letters"])
 
   return(letters)
-
 }
 
 
@@ -211,42 +198,37 @@ get_sig_letters <- function(tukmatrix){
 #' levels(root_norm$Label)
 #'
 #' # change order of levels by setting yucOx and 28 as controls
-#' sort_label(root_norm, control_fac1 = 'yucOx', control_fac2 = '28')
+#' sort_label(root_norm, control_fac1 = "yucOx", control_fac2 = "28")
 #' @export
-sort_label <- function(root_norm, label_delim = ';', col_label = 'Label', control_fac1, control_fac2){
-
-
-  colnames(root_norm)[colnames(root_norm) == col_label] <- 'Label'
+sort_label <- function(root_norm, label_delim = ";", col_label = "Label", control_fac1, control_fac2) {
+  colnames(root_norm)[colnames(root_norm) == col_label] <- "Label"
   root_norm$Label <- as.factor(root_norm$Label)
 
   # get control positions
-  con_fac1_position <- grep(paste(control_fac1, label_delim, sep = ''), levels(root_norm$Label))
+  con_fac1_position <- grep(paste(control_fac1, label_delim, sep = ""), levels(root_norm$Label))
   # get all other positions and put controls in first place
   sort_fac1 <- c(levels(root_norm$Label)[con_fac1_position], levels(root_norm$Label)[-con_fac1_position])
 
-  fac1 <- unique(sub(paste(label_delim, ".*", sep = ''), '', sort_fac1))
-  fac2 <- unique(sub(paste(".*", label_delim, sep = ''), '', sort_fac1))
+  fac1 <- unique(sub(paste(label_delim, ".*", sep = ""), "", sort_fac1))
+  fac2 <- unique(sub(paste(".*", label_delim, sep = ""), "", sort_fac1))
 
   sorted_fac1_fac2 <- character(0)
 
   for (i in fac1) {
-
-    temp <- sort_fac1[grep(paste(i, label_delim, sep = ''), sort_fac1)]
-    con_fac2_position <- grep(control_fac2, unique(sub(paste(".*", label_delim, sep = ''), '', temp)))
+    temp <- sort_fac1[grep(paste(i, label_delim, sep = ""), sort_fac1)]
+    con_fac2_position <- grep(control_fac2, unique(sub(paste(".*", label_delim, sep = ""), "", temp)))
     sort_fac2 <- c(temp[con_fac2_position], temp[-con_fac2_position])
     sorted_fac1_fac2 <- c(sorted_fac1_fac2, sort_fac2)
   }
 
 
-  root_norm$Label <- factor(root_norm$Label,levels = sorted_fac1_fac2)
+  root_norm$Label <- factor(root_norm$Label, levels = sorted_fac1_fac2)
 
   root_norm$Label <- as.factor(root_norm$Label)
-  colnames(root_norm)[colnames(root_norm) == 'Label'] <- col_label
+  colnames(root_norm)[colnames(root_norm) == "Label"] <- col_label
 
 
   return(root_norm)
-
-
 }
 
 
@@ -262,16 +244,14 @@ sort_label <- function(root_norm, label_delim = ';', col_label = 'Label', contro
 #' detach_all()
 #'
 #' # detach all element except rootdetectR
-#' detach_all(except = 'rootdetectR')
+#' detach_all(except = "rootdetectR")
 #'
 #' @export
-detach_all <- function(except){
-
-
+detach_all <- function(except) {
   # create vector with base packages
-  base_pkg <- c('.GlobalEnv', 'package:stats', 'package:graphics', 'package:grDevices', 'package:utils', 'package:datasets', 'package:methods', 'Autoloads', 'package:base', 'tools:rstudio')
+  base_pkg <- c(".GlobalEnv", "package:stats", "package:graphics", "package:grDevices", "package:utils", "package:datasets", "package:methods", "Autoloads", "package:base", "tools:rstudio")
 
-  if(!missing(except)){
+  if (!missing(except)) {
     base_pkg <- c(base_pkg, except)
   }
 
@@ -279,12 +259,9 @@ detach_all <- function(except){
   att_pkg <- search()[which(!search() %in% base_pkg)]
 
   # remove all that are not in base list
-  for(e in att_pkg){
-
+  for (e in att_pkg) {
     detach(name = e, character.only = T)
-
   }
-
 }
 
 
@@ -299,33 +276,28 @@ detach_all <- function(except){
 #' @param new_name vector; new names of the elements specified by "old_name"
 #' @return data.frame; with renamed elements in "colname"
 #' @examples
-#' rename_element(root_output, colname = 'Label', oldname = c('Col_0;28', 'Col_0;20'), new_name = c('Col0_28', 'Col0_20'))
+#' rename_element(root_output, colname = "Label", oldname = c("Col_0;28", "Col_0;20"), new_name = c("Col0_28", "Col0_20"))
 #' @export
-rename_element <- function(df, colname, old_name, new_name){
-
+rename_element <- function(df, colname, old_name, new_name) {
   # check if colname is factor -> transform to character
-  if(is.factor(df[,colname])){
-    df[,colname] <- as.character(df[,colname])
+  if (is.factor(df[, colname])) {
+    df[, colname] <- as.character(df[, colname])
   }
 
   # check if all old_names matches
-  if(all(old_name %in% df[,colname])){
+  if (all(old_name %in% df[, colname])) {
     # check if old_name and new_name have same length
-    if(length(old_name) == length(new_name)){
-
-      for(i in 1:length(old_name)){
-
-        df[,colname][df[,colname] == old_name[i]] <- new_name[i]
-
+    if (length(old_name) == length(new_name)) {
+      for (i in 1:length(old_name)) {
+        df[, colname][df[, colname] == old_name[i]] <- new_name[i]
       }
 
-      df[,colname] <- as.factor(df[,colname])
+      df[, colname] <- as.factor(df[, colname])
       return(df)
-
     } else {
       stop('"old_name" must have the same length as "new_name"')
     }
   } else {
-    stop(c('element/s ', paste(noquote(old_name[which(!old_name %in% df[,colname])]),collapse=','), ' do not exist in ', colname))
+    stop(c("element/s ", paste(noquote(old_name[which(!old_name %in% df[, colname])]), collapse = ","), " do not exist in ", colname))
   }
 }

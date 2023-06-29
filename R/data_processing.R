@@ -16,38 +16,37 @@
 #' @examples
 #' is_root_output(root_output)
 #' @export
-is_root_output <- function(root_output, length_standard = '10mm') {
-
+is_root_output <- function(root_output, length_standard = "10mm") {
   # get name of the input variable
   object_name <- deparse(substitute(root_output))
 
   # check if input is a data.frame
   dataframe_bool <- is.data.frame(root_output)
   if (!dataframe_bool) {
-    stop(paste(object_name, ' is not a data.frame', sep = ''), call. = FALSE)
+    stop(paste(object_name, " is not a data.frame", sep = ""), call. = FALSE)
   }
 
   # check if column Label is present
-  col_Label <- 'Label' %in% colnames(root_output)
+  col_Label <- "Label" %in% colnames(root_output)
   if (!col_Label) {
-    stop(paste(object_name, ' is missing the column Label', sep = ''), call. = FALSE)
+    stop(paste(object_name, " is missing the column Label", sep = ""), call. = FALSE)
   }
   # check if column LengthPx is present
-  col_LPx <- 'LengthPx' %in% colnames(root_output)
+  col_LPx <- "LengthPx" %in% colnames(root_output)
   if (!col_LPx) {
-    stop(paste(object_name, ' is missing the column LengthPx', sep = ''), call. = FALSE)
+    stop(paste(object_name, " is missing the column LengthPx", sep = ""), call. = FALSE)
   }
 
   # check if LengthPx is numeric
   pxnum <- is.numeric(root_output$LengthPx)
   if (!pxnum) {
-    stop('The column LenghtPx needs to store numeric values!', call. = FALSE)
+    stop("The column LenghtPx needs to store numeric values!", call. = FALSE)
   }
 
   # check if length standard is present
   std <- length_standard %in% root_output$Label
   if (!std) {
-    stop(paste('Length standard', length_standard, 'is missing! Is the dataset already normalized or do you use a customized lenght standard?'))
+    stop(paste("Length standard", length_standard, "is missing! Is the dataset already normalized or do you use a customized lenght standard?"))
   }
 
   # check if Labels contain hyphens
@@ -60,8 +59,8 @@ is_root_output <- function(root_output, length_standard = '10mm') {
   if (all(c(dataframe_bool, col_Label, col_LPx, pxnum, std)) && !all(c(hyph))) {
     return(TRUE)
   } else {
-    stop('The present input object does not fulfill the
-             RootdetectionOutput standard.', call. = FALSE)
+    stop("The present input object does not fulfill the
+             RootdetectionOutput standard.", call. = FALSE)
   }
 }
 
@@ -89,52 +88,51 @@ is_root_output <- function(root_output, length_standard = '10mm') {
 #' is_root_norm(root_norm)
 #' @export
 is_root_norm <- function(root_norm) {
-
   # get name of the input variable
   object_name <- deparse(substitute(root_norm))
 
   # check if input is a data.frame
   dataframe_bool <- is.data.frame(root_norm)
   if (!dataframe_bool) {
-    stop(paste(object_name, ' is not a data.frame', sep = ''), call. = FALSE)
+    stop(paste(object_name, " is not a data.frame", sep = ""), call. = FALSE)
   }
 
   # check if column Label is present
-  col_Label <- 'Label' %in% colnames(root_norm)
+  col_Label <- "Label" %in% colnames(root_norm)
   if (!col_Label) {
-    stop(paste(object_name, ' is missing the column Label', sep = ''), call. = FALSE)
+    stop(paste(object_name, " is missing the column Label", sep = ""), call. = FALSE)
   }
   # check if column LengthMM is present
-  col_LMM <- 'LengthMM' %in% colnames(root_norm)
+  col_LMM <- "LengthMM" %in% colnames(root_norm)
   if (!col_LMM) {
-    stop(paste(object_name, ' is missing the column LengthMM', sep = ''), call. = FALSE)
+    stop(paste(object_name, " is missing the column LengthMM", sep = ""), call. = FALSE)
   }
   # check if column LengthPx is present
-  col_LPx <- 'LengthPx' %in% colnames(root_norm)
+  col_LPx <- "LengthPx" %in% colnames(root_norm)
   if (!col_LPx) {
-    stop(paste(object_name, ' is missing the column LengthPx', sep = ''), call. = FALSE)
+    stop(paste(object_name, " is missing the column LengthPx", sep = ""), call. = FALSE)
   }
   # check if column Factor1 is present
-  col_LPx <- 'Factor1' %in% colnames(root_norm)
+  col_LPx <- "Factor1" %in% colnames(root_norm)
   if (!col_LPx) {
-    stop(paste(object_name, ' is missing the column Factor1', sep = ''), call. = FALSE)
+    stop(paste(object_name, " is missing the column Factor1", sep = ""), call. = FALSE)
   }
   # check if column Factor2 is present
-  col_LPx <- 'Factor2' %in% colnames(root_norm)
+  col_LPx <- "Factor2" %in% colnames(root_norm)
   if (!col_LPx) {
-    stop(paste(object_name, ' is missing the column Factor2', sep = ''), call. = FALSE)
+    stop(paste(object_name, " is missing the column Factor2", sep = ""), call. = FALSE)
   }
 
   # check if LengthPx is numeric
   mmnum <- is.numeric(root_norm$LengthMM)
   if (!mmnum) {
-    stop('The column LenghtPx needs to store numeric values!', call. = FALSE)
+    stop("The column LenghtPx needs to store numeric values!", call. = FALSE)
   }
 
   # check if length standard is present
-  std <- '10mm' %in% root_norm$Label
+  std <- "10mm" %in% root_norm$Label
   if (std) {
-    stop(paste('Length standard 10mm is still present! Use norm_10mm_standard to normalize your dataset?'))
+    stop(paste("Length standard 10mm is still present! Use norm_10mm_standard to normalize your dataset?"))
   }
 
   # check if Labels contain hyphens
@@ -147,8 +145,8 @@ is_root_norm <- function(root_norm) {
   if (all(c(dataframe_bool, col_Label, col_LMM, col_LPx, mmnum)) && !all(c(hyph, std))) {
     return(TRUE)
   } else {
-    stop('The present input object does not fulfill the
-             RootdetectionOutput standard.', call. = FALSE)
+    stop("The present input object does not fulfill the
+             RootdetectionOutput standard.", call. = FALSE)
   }
 }
 
@@ -167,34 +165,35 @@ is_root_norm <- function(root_norm) {
 #' norm_10mm_standard(root_output, split = FALSE)
 #' @export
 norm_10mm_standard <- function(root_output, split = TRUE, label_delim = ";") {
+  # transform Label to factor
+  root_output$Label <- as.factor(root_output$Label)
 
-    # transform Label to factor
-    root_output$Label <- as.factor(root_output$Label)
+  # features --> change name of 10mm to something else choose length that
+  # should be used as normalisation (other than 10mm)
+  # calc 10mm
+  standard_mm <- subset(root_output, Label == "10mm")
+  standard_mm_mean <- mean(standard_mm$LengthPx)
+  root_output$LengthMM <- root_output$LengthPx / (standard_mm_mean / 10)
+  # delete 10mm
+  root_output <- subset(root_output, Label != "10mm")
+  root_output$Label <- droplevels(root_output$Label)
 
-    # features --> change name of 10mm to something else choose length that
-    # should be used as normalisation (other than 10mm)
-    # calc 10mm
-    standard_mm <- subset(root_output, Label == "10mm")
-    standard_mm_mean <- mean(standard_mm$LengthPx)
-    root_output$LengthMM <- root_output$LengthPx / (standard_mm_mean / 10)
-    # delete 10mm
-    root_output <- subset(root_output, Label != "10mm")
-    root_output$Label <- droplevels(root_output$Label)
+  # if split is TRUE order the columns and devide labels according to
+  if (split == TRUE) {
+    root_output <- tidyr::separate(
+      data = root_output, col = Label,
+      into = c("Factor1", "Factor2"),
+      sep = label_delim, remove = F
+    )
+    root_output <- root_output[, c(
+      "Nr", "Filename", "RootNr", "Label",
+      "Factor1", "Factor2", "LengthPx",
+      "LengthMM"
+    )]
+  }
 
-    # if split is TRUE order the columns and devide labels according to
-    if (split == TRUE) {
-        root_output <- tidyr::separate(data = root_output, col = Label,
-                                into = c("Factor1", "Factor2"),
-                                sep = label_delim, remove = F)
-        root_output <- root_output[, c("Nr", "Filename", "RootNr", "Label",
-                                       "Factor1", "Factor2", "LengthPx",
-                                       "LengthMM")]
-
-    }
-
-    # return data.frame
-    return(root_output)
-
+  # return data.frame
+  return(root_output)
 }
 
 
@@ -213,21 +212,21 @@ norm_10mm_standard <- function(root_output, split = TRUE, label_delim = ";") {
 #' @return data.frame; Rootdetection data set, containing normalized length values
 #' @examples
 #' # use data_set with standard called '20mm' and 20 mm measured
-#' norm_cust_standard(root_output_multfac2, label_delim = ';',
-#'                    col_label = 'Label', col_value = 'LengthPx',
-#'                    label_standard = '20mm', standard_length_mm = '20')
+#' norm_cust_standard(root_output_multfac2,
+#'   label_delim = ";",
+#'   col_label = "Label", col_value = "LengthPx",
+#'   label_standard = "20mm", standard_length_mm = "20"
+#' )
 #' @export
 norm_cust_standard <- function(root_output,
                                split = TRUE,
-                               label_delim = ';',
-                               col_label = 'Label',
-                               col_value = 'LengthPx',
-                               label_standard = '10mm',
-                               standard_length_mm = '10') {
-
-
-  colnames(root_output)[colnames(root_output) == col_label] <- 'Label'
-  colnames(root_output)[colnames(root_output) == col_value] <- 'LengthPx'
+                               label_delim = ";",
+                               col_label = "Label",
+                               col_value = "LengthPx",
+                               label_standard = "10mm",
+                               standard_length_mm = "10") {
+  colnames(root_output)[colnames(root_output) == col_label] <- "Label"
+  colnames(root_output)[colnames(root_output) == col_value] <- "LengthPx"
   root_output$Label <- as.factor(root_output$Label)
 
   # calc 10mm
@@ -240,18 +239,20 @@ norm_cust_standard <- function(root_output,
 
   # if split is TRUE order the columns and devide labels according to
   if (split == TRUE) {
-    root_output <- tidyr::separate(data = root_output, col = Label,
-                                   into = c("Factor1", "Factor2"),
-                                   sep = label_delim, remove = F)
-    root_output <- root_output[, c("Nr", "Filename", "RootNr", "Label",
-                                   "Factor1", "Factor2", "LengthPx",
-                                   "LengthMM")]
-
+    root_output <- tidyr::separate(
+      data = root_output, col = Label,
+      into = c("Factor1", "Factor2"),
+      sep = label_delim, remove = F
+    )
+    root_output <- root_output[, c(
+      "Nr", "Filename", "RootNr", "Label",
+      "Factor1", "Factor2", "LengthPx",
+      "LengthMM"
+    )]
   }
 
   # return data.frame
   return(root_output)
-
 }
 
 
@@ -271,55 +272,53 @@ norm_cust_standard <- function(root_output,
 #' # data summary
 #' inspect_root_norm(root_norm)
 #' @export
-inspect_root_norm <- function(root_norm, plot = TRUE, output = TRUE ){
-
-  if(is_root_norm(root_norm) == F){
-    stop('Input does not fit the criteria - check your input with is_root_norm() function!')
+inspect_root_norm <- function(root_norm, plot = TRUE, output = TRUE) {
+  if (is_root_norm(root_norm) == F) {
+    stop("Input does not fit the criteria - check your input with is_root_norm() function!")
   }
 
   rs_sum <- rootdetectR::summary_stat(root_norm)
 
-  rs_sum$quality[rs_sum$n < 5] <- 'bad'
-  rs_sum$quality[rs_sum$n >= 5 & rs_sum$n < 10] <- 'fair'
-  rs_sum$quality[rs_sum$n >= 10] <- 'good'
+  rs_sum$quality[rs_sum$n < 5] <- "bad"
+  rs_sum$quality[rs_sum$n >= 5 & rs_sum$n < 10] <- "fair"
+  rs_sum$quality[rs_sum$n >= 10] <- "good"
 
-  if(output == T){
+  if (output == T) {
+    cat(paste("Factor1 levels present:", paste(as.character(unique(rs_sum$Factor1)), collapse = ", "), "\n"))
+    cat(paste("Factor2 levels present:", paste(as.character(unique(rs_sum$Factor2)), collapse = ", "), "\n\n"))
 
-    cat(paste('Factor1 levels present:', paste(as.character(unique(rs_sum$Factor1)), collapse = ', '), '\n'))
-    cat(paste('Factor2 levels present:', paste(as.character(unique(rs_sum$Factor2)),collapse = ', '), '\n\n'))
-
-    fair <- rs_sum[which(rs_sum$n < 10 & rs_sum$n >= 5),]
-    if(nrow(fair) != 0){
-      cat('Lines with n 5-10: ')
-      cat(paste(as.character(fair$Factor1), ';', as.character(fair$Factor2), '\n', sep = ''))
+    fair <- rs_sum[which(rs_sum$n < 10 & rs_sum$n >= 5), ]
+    if (nrow(fair) != 0) {
+      cat("Lines with n 5-10: ")
+      cat(paste(as.character(fair$Factor1), ";", as.character(fair$Factor2), "\n", sep = ""))
     }
 
-    bad <- rs_sum[which(rs_sum$n < 5 & rs_sum$n >= 1),]
-    if(nrow(bad) != 0){
-      cat('Lines with n 1-5: ')
-      cat(paste(as.character(bad$Factor1), ';', as.character(bad$Factor2), '\n', sep = ''))
+    bad <- rs_sum[which(rs_sum$n < 5 & rs_sum$n >= 1), ]
+    if (nrow(bad) != 0) {
+      cat("Lines with n 1-5: ")
+      cat(paste(as.character(bad$Factor1), ";", as.character(bad$Factor2), "\n", sep = ""))
     }
 
 
-    missing <- rs_sum[which(rs_sum$n == 0),]
-    if(nrow(missing) != 0){
-      cat('Missing Lines (n =0): ')
-      cat(paste(as.character(missing$Factor1), ';', as.character(missing$Factor2), sep = ''))
+    missing <- rs_sum[which(rs_sum$n == 0), ]
+    if (nrow(missing) != 0) {
+      cat("Missing Lines (n =0): ")
+      cat(paste(as.character(missing$Factor1), ";", as.character(missing$Factor2), sep = ""))
     }
   }
 
-  if(plot == T){
-
+  if (plot == T) {
     p <- ggplot2::ggplot(rs_sum, ggplot2::aes(y = Factor1, x = Factor2)) +
-      ggplot2::geom_tile(ggplot2::aes(fill=quality), colour = 'black') +
+      ggplot2::geom_tile(ggplot2::aes(fill = quality), colour = "black") +
       ggplot2::geom_text(ggplot2::aes(label = n)) +
       ggplot2::theme_bw() +
-      ggplot2::theme(panel.border = ggplot2::element_blank(), panel.grid.major = ggplot2::element_blank(),
-            panel.grid.minor = ggplot2::element_blank()) +
-      ggplot2::scale_fill_manual(values = c('bad' = 'red','fair' = 'yellow','good' = 'green'))
+      ggplot2::theme(
+        panel.border = ggplot2::element_blank(), panel.grid.major = ggplot2::element_blank(),
+        panel.grid.minor = ggplot2::element_blank()
+      ) +
+      ggplot2::scale_fill_manual(values = c("bad" = "red", "fair" = "yellow", "good" = "green"))
 
     return(p)
-
   }
 }
 
@@ -340,19 +339,17 @@ inspect_root_norm <- function(root_norm, plot = TRUE, output = TRUE ){
 #' summary_stat(root_norm)
 #'
 #' # calculate summary statistic grouped by Factor 1 only
-#' summary_stat(root_norm, col_grouping = 'Factor1', col_value = 'LengthMM')
+#' summary_stat(root_norm, col_grouping = "Factor1", col_value = "LengthMM")
 #' @export
-summary_stat <- function(root_norm, col_grouping = c('Factor1', 'Factor2'), col_value = 'LengthMM') {
-
-
-  colnames(root_norm)[colnames(root_norm) == col_value] <- 'LengthMM'
+summary_stat <- function(root_norm, col_grouping = c("Factor1", "Factor2"), col_value = "LengthMM") {
+  colnames(root_norm)[colnames(root_norm) == col_value] <- "LengthMM"
 
   sum <- plyr::ddply(root_norm, col_grouping, plyr::summarize,
-                 n = length(LengthMM), median = median(LengthMM),
-                 mean = mean(LengthMM), sd = sd(LengthMM),
-                 se = se(LengthMM))
-    return(sum)
-
+    n = length(LengthMM), median = median(LengthMM),
+    mean = mean(LengthMM), sd = sd(LengthMM),
+    se = se(LengthMM)
+  )
+  return(sum)
 }
 
 
@@ -370,28 +367,25 @@ summary_stat <- function(root_norm, col_grouping = c('Factor1', 'Factor2'), col_
 #'
 #' normality_test(root_norm)
 #' @export
-normality_test <- function(root_norm, col_grouping = 'Label', col_value = 'LengthMM') {
-
+normality_test <- function(root_norm, col_grouping = "Label", col_value = "LengthMM") {
   # create empty dataframe
   norm_table <- data.frame(Label = character(0), p.value = numeric(0))
 
   # rename column in root_norm according to grouping
-  colnames(root_norm)[colnames(root_norm) == col_grouping] <- 'Label'
-  colnames(root_norm)[colnames(root_norm) == col_value] <- 'LengthMM'
+  colnames(root_norm)[colnames(root_norm) == col_grouping] <- "Label"
+  colnames(root_norm)[colnames(root_norm) == col_value] <- "LengthMM"
 
   root_norm$Label <- as.factor(root_norm$Label)
 
   for (lev in 1:length(levels(root_norm$Label))) {
-
     # create subset contain only the data for one label
     hist_sub <- subset(root_norm, Label == levels(root_norm$Label)[lev])
-    temp <-   data.frame(Label = levels(root_norm$Label)[lev], p.value = shapiro.test(hist_sub$LengthMM)$p.value)
+    temp <- data.frame(Label = levels(root_norm$Label)[lev], p.value = shapiro.test(hist_sub$LengthMM)$p.value)
     norm_table <- rbind(norm_table, temp)
-
   }
 
-    colnames(norm_table)[1] <- col_grouping
-    return(norm_table)
+  colnames(norm_table)[1] <- col_grouping
+  return(norm_table)
 }
 
 
@@ -411,24 +405,28 @@ normality_test <- function(root_norm, col_grouping = 'Label', col_value = 'Lengt
 #' rel_data(root_norm)
 #' @export
 rel_data <- function(root_norm, control = "20") {
-    # create subset containing only control data
-    # (name of the control was assigned in the beginning)
-    rel_table_mock <- subset(root_norm, Factor2 == control)
-    # calc median for all levels of Factor 1 an save to LengthMM_median_control
-    rel_table_mock_median <- plyr::ddply(rel_table_mock, plyr::.(Factor1),
-                                  plyr::summarize, LengthMM_median_control =
-                                  median(LengthMM))
-    # merge tables
-    rel_table_merge <- merge(root_norm, rel_table_mock_median, by = "Factor1")
-    # new subset without the mock data
-    rel_table <- subset(rel_table_merge, Factor2 != control)
-    # calculate relative values for the new 'treatment-only' table
-    rel_table$relative_value <-
-      (100 * rel_table$LengthMM) / rel_table$LengthMM_median_control
-    rel_root_table <- rel_table[, c("Label", "Factor1", "Factor2", "RootNr",
-                                    "relative_value")]
+  # create subset containing only control data
+  # (name of the control was assigned in the beginning)
+  rel_table_mock <- subset(root_norm, Factor2 == control)
+  # calc median for all levels of Factor 1 an save to LengthMM_median_control
+  rel_table_mock_median <- plyr::ddply(rel_table_mock, plyr::.(Factor1),
+    plyr::summarize,
+    LengthMM_median_control =
+      median(LengthMM)
+  )
+  # merge tables
+  rel_table_merge <- merge(root_norm, rel_table_mock_median, by = "Factor1")
+  # new subset without the mock data
+  rel_table <- subset(rel_table_merge, Factor2 != control)
+  # calculate relative values for the new 'treatment-only' table
+  rel_table$relative_value <-
+    (100 * rel_table$LengthMM) / rel_table$LengthMM_median_control
+  rel_root_table <- rel_table[, c(
+    "Label", "Factor1", "Factor2", "RootNr",
+    "relative_value"
+  )]
 
-    return(rel_root_table)
+  return(rel_root_table)
 }
 
 
@@ -450,32 +448,31 @@ rel_data <- function(root_norm, control = "20") {
 #' # remove outliers
 #' rm_outlier_df(root_norm, fill_na = F)
 #' @export
-rm_outlier_df <- function(root_norm, col_grouping = 'Label', col_value = 'LengthMM', fill_na = F) {
-
-  colnames(root_norm)[colnames(root_norm) == col_grouping] <- 'Label'
-  colnames(root_norm)[colnames(root_norm) == col_value] <- 'LengthMM'
+rm_outlier_df <- function(root_norm, col_grouping = "Label", col_value = "LengthMM", fill_na = F) {
+  colnames(root_norm)[colnames(root_norm) == col_grouping] <- "Label"
+  colnames(root_norm)[colnames(root_norm) == col_value] <- "LengthMM"
 
   # remove all NAs before from LengthMM
-  root_norm <- root_norm[!is.na(root_norm$LengthMM),]
+  root_norm <- root_norm[!is.na(root_norm$LengthMM), ]
 
   # create empty data-frame
-  final <- root_norm[0,]
+  final <- root_norm[0, ]
 
   # loop over labels in data.frame
-  for(name in unique(root_norm$Label)){
-    #extract subsets and replace outliers with NA
-    temp <- root_norm[root_norm$Label == name,]
+  for (name in unique(root_norm$Label)) {
+    # extract subsets and replace outliers with NA
+    temp <- root_norm[root_norm$Label == name, ]
     temp$LengthMM <- rm_outlier(temp$LengthMM, fill_na = T)
 
     final <- rbind(final, temp)
   }
 
-  if(fill_na == F){
-    final <- final[!is.na(final$LengthMM),]
+  if (fill_na == F) {
+    final <- final[!is.na(final$LengthMM), ]
   }
 
-  colnames(final)[colnames(final) == 'Label'] <- col_grouping
-  colnames(final)[colnames(final) == 'LengthMM'] <- col_value
+  colnames(final)[colnames(final) == "Label"] <- col_grouping
+  colnames(final)[colnames(final) == "LengthMM"] <- col_value
 
   return(final)
 }

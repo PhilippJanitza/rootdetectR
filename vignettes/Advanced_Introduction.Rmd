@@ -16,9 +16,9 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>", 
-  fig.width=6, 
-  fig.height=6
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 6
 )
 devtools::load_all(".")
 ```
@@ -178,7 +178,6 @@ To test if your Rootdetection Output has the right format you can use the functi
 ```{r}
 # this input dataset follows all the standards
 is_root_output(root_output)
-
 ```
 
 <<<<<<< HEAD
@@ -205,7 +204,7 @@ addition it is possible to avoid the splitting of the label by setting
 
 ```{r}
 # calculate LengthMM for all lines
-root_norm <- norm_10mm_standard(root_output, label_delim = ';')
+root_norm <- norm_10mm_standard(root_output, label_delim = ";")
 
 head(root_norm)
 ```
@@ -221,8 +220,10 @@ function.
 
 ```{r}
 # calculate LengthMM for all lines
-root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_delim = ';', 
-                                         label_standard = '20mm', standard_length_mm = '20')
+root_norm_multfac2 <- norm_cust_standard(root_output_multfac2,
+  label_delim = ";",
+  label_standard = "20mm", standard_length_mm = "20"
+)
 
 head(root_norm_multfac2)
 ```
@@ -247,7 +248,7 @@ standard must not be present.
 
 ```{r}
 # calculate LengthMM for all lines
-root_norm <- norm_10mm_standard(root_output, label_delim = ';')
+root_norm <- norm_10mm_standard(root_output, label_delim = ";")
 
 is_root_norm(root_norm)
 ```
@@ -270,7 +271,6 @@ In addition to the `is_root_norm` function there is the possibility to plot an o
 ```{r}
 # get an overview of the input data set
 inspect_root_norm(root_norm)
-
 ```
 
 <<<<<<< HEAD
@@ -310,7 +310,7 @@ $relativevalue = \displaystyle \frac{100 * treatmentvalue}{control median}$
 >>>>>>> 77515d9093ecf96b6d7d53f196f9048a1ae36b3c
 
 ```{r}
-rel_table <- rel_data(root_norm, control = '20')
+rel_table <- rel_data(root_norm, control = "20")
 head(rel_table)
 ```
 
@@ -407,7 +407,7 @@ significant).
 >>>>>>> 77515d9093ecf96b6d7d53f196f9048a1ae36b3c
 
 ```{r}
-# draw_out = F produces only a list of matrices containing p-values from Tukey post-hoc test 
+# draw_out = F produces only a list of matrices containing p-values from Tukey post-hoc test
 ow_anova_factor1 <- onefacaov_fac1(root_norm, draw_out = F)
 ow_anova_factor1
 ```
@@ -476,7 +476,7 @@ p-value \< 0.5 and are defined as significant).
 # draw_out = F produces a list of matrices containing p-values from Tukey post-hoc test
 # in addition you need to tell the function the name of the control
 # make sure that the control value is exactly the same as in column Factor2
-ow_anova_factor2 <- onefacaov_fac2(root_norm, control = '20', draw_out = F)
+ow_anova_factor2 <- onefacaov_fac2(root_norm, control = "20", draw_out = F)
 ow_anova_factor2
 ```
 
@@ -542,7 +542,7 @@ information check the [Plots](#plot-data) section.
 # draw_out = F produces a matrix containing p-values from Tukey post-hoc test
 # label_delim defines how Factor1 and Factor 2 are splitted in column Label
 
-tw_anova <- twofacaov(root_norm, label_delim = ';', draw_out = F)
+tw_anova <- twofacaov(root_norm, label_delim = ";", draw_out = F)
 tw_anova
 ```
 
@@ -609,8 +609,10 @@ information check the [Plots](#plot-data) section.
 # draw_out = F produces a matrix containing p-values from Tukey post-hoc test
 # label_delim defines how Factor1 and Factor 2 are splitted in column Label
 # in addition you need to tell the function the name of the control
-interaction_tw_anova <- interaction_twofacaov(root_norm, control = "20", label_delim = ';', 
-                                      draw_out = F)
+interaction_tw_anova <- interaction_twofacaov(root_norm,
+  control = "20", label_delim = ";",
+  draw_out = F
+)
 interaction_tw_anova
 ```
 
@@ -690,7 +692,7 @@ each line.
 ```{r}
 # this will produce a list of plots
 histograms <- plot_hist(root_norm, draw_out = F)
-# For each line under each condition a plot will be produced 
+# For each line under each condition a plot will be produced
 length(histograms)
 # you can acess e.g. the first plot by typing:
 histograms[[1]]
@@ -740,19 +742,19 @@ To visualize the absolute data there is the function `plot_abs` implemented in `
 
 ```{r}
 # plot absolute data as box plot
-absolute_plot <- plot_abs(root_norm, plot_significance = F, label_delim = ';', type = 'box')
+absolute_plot <- plot_abs(root_norm, plot_significance = F, label_delim = ";", type = "box")
 absolute_plot
 ```
 
 ```{r}
 # plot absolute data as combination of box plot and jitter plot
-absolute_plot <- plot_abs(root_norm, plot_significance = F, label_delim = ';', type = 'jitter')
+absolute_plot <- plot_abs(root_norm, plot_significance = F, label_delim = ";", type = "jitter")
 absolute_plot
 ```
 
 ```{r}
 # plot absolute data as violin plot
-absolute_plot <- plot_abs(root_norm, plot_significance = F, label_delim = ';', type = 'violin')
+absolute_plot <- plot_abs(root_norm, plot_significance = F, label_delim = ";", type = "violin")
 absolute_plot
 ```
 
@@ -773,8 +775,10 @@ It is possible to change the color of box, jitter or violin plot by using the ar
 # first check the quantity of Factor2 conditions
 length(unique(root_norm$Factor2))
 # add a vector with two colours to your data
-absolute_plot <- plot_abs(root_norm, plot_significance = F, label_delim = ';', type = 'jitter', 
-                          plot_colours = c('blue', 'red'))
+absolute_plot <- plot_abs(root_norm,
+  plot_significance = F, label_delim = ";", type = "jitter",
+  plot_colours = c("blue", "red")
+)
 absolute_plot
 ```
 
@@ -784,8 +788,10 @@ function twofacaov is run internally.
 
 ```{r}
 # use the twofacaov in the plotting function to plot statistics
-absolute_plot <- plot_abs(root_norm, plot_significance = T, label_delim = ';', 
-                          type = 'jitter', plot_colours = c('blue', 'red'))
+absolute_plot <- plot_abs(root_norm,
+  plot_significance = T, label_delim = ";",
+  type = "jitter", plot_colours = c("blue", "red")
+)
 absolute_plot
 ```
 
@@ -797,9 +803,11 @@ this data set we need to increase the letter height.
 
 ```{r}
 # increase letter heigth
-absolute_plot <- plot_abs(root_norm, plot_significance = T, label_delim = ';', 
-                          type = 'jitter', plot_colours = c('blue', 'red'), 
-                          height_letter = 5)
+absolute_plot <- plot_abs(root_norm,
+  plot_significance = T, label_delim = ";",
+  type = "jitter", plot_colours = c("blue", "red"),
+  height_letter = 5
+)
 absolute_plot
 ```
 
@@ -815,8 +823,10 @@ To visualize the impact of Factor2 treatment it is possible to draw a vertical l
 
 ```{r}
 # plot rersponse behaviour
-absolute_plot <- plot_abs(root_norm, plot_significance = F,
-                          plot_response = T)
+absolute_plot <- plot_abs(root_norm,
+  plot_significance = F,
+  plot_response = T
+)
 absolute_plot
 ```
 
@@ -842,7 +852,7 @@ function
 
 ```{r}
 # plot relative data
-relative_plot <- plot_rel(root_norm, plot_significance = F, type = 'jitter', control = '20')
+relative_plot <- plot_rel(root_norm, plot_significance = F, type = "jitter", control = "20")
 relative_plot
 ```
 
@@ -851,8 +861,10 @@ ANOVA of interaction effects (interaction_twofacaov) is run internally.
 
 ```{r}
 # plot relative data with statistics
-relative_plot <- plot_rel(root_norm, plot_significance = T, 
-                          type = 'jitter', control = '20', height_letter = 10)
+relative_plot <- plot_rel(root_norm,
+  plot_significance = T,
+  type = "jitter", control = "20", height_letter = 10
+)
 relative_plot
 ```
 
@@ -861,15 +873,19 @@ have a data set containing multiple Factor2 treatment levels. Therefore
 the data set `root_output_multfac2` is used in the next examples.
 
 ```{r}
-# first we need to normalize the dataset with length standard 
+# first we need to normalize the dataset with length standard
 # (Caution: customized length standard used)
-root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_delim = ';', 
-                                         label_standard = '20mm', standard_length_mm = '20')
+root_norm_multfac2 <- norm_cust_standard(root_output_multfac2,
+  label_delim = ";",
+  label_standard = "20mm", standard_length_mm = "20"
+)
 
 # plot relative data with multiple factor2 treatment levels without statistics
-relative_plot_multfac2 <- plot_rel(root_norm_multfac2, plot_significance = F, 
-                          type = 'jitter', control = '20', height_letter = 10)
-relative_plot_multfac2 
+relative_plot_multfac2 <- plot_rel(root_norm_multfac2,
+  plot_significance = F,
+  type = "jitter", control = "20", height_letter = 10
+)
+relative_plot_multfac2
 ```
 
 Although we have multiple Factor2 treatment levels in this example all
@@ -880,17 +896,21 @@ function described in the section [Additional
 Features](#additional-features).
 
 ```{r}
-# first we need to normalize the dataset with length standard 
+# first we need to normalize the dataset with length standard
 # (Caution: customized length standard used)
-root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_delim = ';', 
-                                         label_standard = '20mm', standard_length_mm = '20')
+root_norm_multfac2 <- norm_cust_standard(root_output_multfac2,
+  label_delim = ";",
+  label_standard = "20mm", standard_length_mm = "20"
+)
 
 
 # plot relative data with multiple factor2 treatment levels with statistics
-relative_plot_multfac2 <- plot_rel(root_norm_multfac2, plot_significance = T,
-                                   type = 'jitter', control = '20', height_letter = 10)
+relative_plot_multfac2 <- plot_rel(root_norm_multfac2,
+  plot_significance = T,
+  type = "jitter", control = "20", height_letter = 10
+)
 # calling the variable will show us that there is a list with two plots
-relative_plot_multfac2 
+relative_plot_multfac2
 ```
 
 <<<<<<< HEAD
@@ -928,7 +948,7 @@ the standard error of a numeric vector. The function `se` is used in
 ```{r}
 # get measurments for a single line and condition from Normalized Root Detection Output
 # for this example we use root measurements Col-0 grown at 20°C
-col0_20_measurments <- root_norm[root_norm$Label == 'Col_0;20',]$LengthMM
+col0_20_measurments <- root_norm[root_norm$Label == "Col_0;20", ]$LengthMM
 # calculate Standard Error
 se(col0_20_measurments)
 ```
@@ -963,9 +983,9 @@ x_iqr <- (IQR(x, na.rm = T) * 1.5)
 x_iqr
 
 # calculate lower end Q1 - 1.5 * IQR
-quantile(x, 0.25) - x_iqr 
+quantile(x, 0.25) - x_iqr
 # calculate upper end Q3 + 1.5 * IQR
-quantile(x, 0.75) + x_iqr 
+quantile(x, 0.75) + x_iqr
 
 # so the first (82) and last (129) datapoint of x should be removed
 ```
@@ -1028,13 +1048,12 @@ message.**
 ```{r}
 # We can use the root_output_multfac2 dataset to subset our data
 # this will produce a subset for eacht Factor2 control treatment pair
-list_of_subsets <- subset_fac2(root_norm_multfac2, control = '20')
+list_of_subsets <- subset_fac2(root_norm_multfac2, control = "20")
 
 # this will produce a list of data.frames with the length of our control treatment pairs
 # the names of the list elements correspond to Factor2 treatment name
 head(list_of_subsets$`20_and_28`)
 head(list_of_subsets$`20_and_20_28`)
-
 ```
 
 <br>
@@ -1061,7 +1080,7 @@ About 8% of all males and 0.5% of all females have a color vision deficiency. Th
 >>>>>>> 77515d9093ecf96b6d7d53f196f9048a1ae36b3c
 
 ```{r}
-# colors_wong is a variable storing a string with hex-codes for 7 colourblind friendly 
+# colors_wong is a variable storing a string with hex-codes for 7 colourblind friendly
 colors_wong
 
 # to visualize the colours there is a function called show_colors
@@ -1069,7 +1088,7 @@ colors_wong
 show_colors(colors_wong)
 
 # it is also possible to create strings with R colornames
-example_colors <- c('red', 'blue', 'palegreen', 'yellow3')
+example_colors <- c("red", "blue", "palegreen", "yellow3")
 show_colors(example_colors)
 ```
 
@@ -1096,10 +1115,10 @@ grid.raster(primroses)
 
 ```{r}
 # extract the 6 most prominent colors and store into a string
-prim_colors <- extract_colors(primroses, n =6)
+prim_colors <- extract_colors(primroses, n = 6)
 # it is also possible to show the picture containing only the 6 extracted colors
 # therefore you must set plot_out = T
-prim_colors <- extract_colors(primroses, n =6, plot_out = T)
+prim_colors <- extract_colors(primroses, n = 6, plot_out = T)
 # you can then use show_colors to plot the extracted colors
 show_colors(prim_colors)
 ```
@@ -1123,14 +1142,16 @@ It is possible to use the ANOVA functions of `rootdetectR` with non-standard-roo
 ```{r}
 # create a dataset containing only a single grouping variable (Factor1)
 root_norm <- norm_10mm_standard(root_output)
-root_norm20 <- root_norm[root_norm$Factor2 == '20',]
+root_norm20 <- root_norm[root_norm$Factor2 == "20", ]
 root_norm20$Factor2 <- NULL
 
 # use onefacaov_fac1 to conduct an one-way ANOVA of this dataset
 # define grouping and dependend variables
 # be sure to set grouping_var2 = NULL if you have only one grouping variable
-onefacaov_fac1(root_norm20, col_grouping1 = 'Factor1', 
-               col_grouping2 = NULL, col_value = 'LengthMM')
+onefacaov_fac1(root_norm20,
+  col_grouping1 = "Factor1",
+  col_grouping2 = NULL, col_value = "LengthMM"
+)
 ```
 
 ## Create Significance Letters
@@ -1145,7 +1166,7 @@ and col names as obtained from the ANOVA function of `rootdetectR`.
 ```{r}
 # conduct ANOVA and TukeyHSD
 root_norm <- norm_10mm_standard(root_output)
-tw_anova <- twofacaov(root_norm, label_delim = ';', draw_out = F)
+tw_anova <- twofacaov(root_norm, label_delim = ";", draw_out = F)
 
 # obtain significance_letters
 get_sig_letters(tw_anova)
@@ -1181,13 +1202,15 @@ In most experiments several conditions are compared to a control condition. Ther
 >>>>>>> 77515d9093ecf96b6d7d53f196f9048a1ae36b3c
 
 ```{r}
-# check sorting of labels 
+# check sorting of labels
 root_norm <- norm_10mm_standard(root_output)
 levels(root_norm$Label)
 
 # change order by sorting function
-root_norm <- sort_label(root_norm, label_delim = ';', 
-                        control_fac1 = 'yucOx', control_fac2 = '28')
+root_norm <- sort_label(root_norm,
+  label_delim = ";",
+  control_fac1 = "yucOx", control_fac2 = "28"
+)
 
 # check sorting again
 levels(root_norm$Label)
@@ -1197,16 +1220,18 @@ For more advanced sorting of labels a vector containing all the lines in
 right order must be provided with basic r code.
 
 ```{r}
-# check sorting of labels 
+# check sorting of labels
 root_norm <- norm_10mm_standard(root_output)
 levels(root_norm$Label)
 
 # change order by vector
-sorting_vector <- c("weitar1_1;20", "weitar1_1;28", "Col_0;20", 
-                    "Col_0;28", "tir1_1afb2_3;20", "tir1_1afb2_3;28", 
-                    "yucOx;20", "yucOx;28")
+sorting_vector <- c(
+  "weitar1_1;20", "weitar1_1;28", "Col_0;20",
+  "Col_0;28", "tir1_1afb2_3;20", "tir1_1afb2_3;28",
+  "yucOx;20", "yucOx;28"
+)
 
-root_norm$Label <- factor(root_norm$Label,levels = sorting_vector)
+root_norm$Label <- factor(root_norm$Label, levels = sorting_vector)
 
 # check sorting again
 levels(root_norm$Label)
@@ -1233,9 +1258,11 @@ and 'Col0;28'
 # show all labels
 levels(root_output$Label)
 # rename some of them
-new_labels <- rename_element(root_output, colname = 'Label', 
-                             old_name = c('Col_0;20','Col_0;28'), 
-                             new_name = c('Col0;20','Col0;28'))
+new_labels <- rename_element(root_output,
+  colname = "Label",
+  old_name = c("Col_0;20", "Col_0;28"),
+  new_name = c("Col0;20", "Col0;28")
+)
 # show levels of new data.frame
 levels(new_labels$Label)
 ```
