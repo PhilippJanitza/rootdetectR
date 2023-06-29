@@ -15,11 +15,3 @@ This function will detach all elements except th base R packages:
 'package:datasets', 'package:methods', 'Autoloads', 'package:base', 'tools:rstudio'
 _Caution: This function will also detach rootdetectR_
 }
-\examples{
-# detach all elements in search()
-detach_all()
-
-# detach all element except rootdetectR
-detach_all(except = "rootdetectR")
-
-}

@@ -240,12 +240,6 @@ sort_label <- function(root_norm, label_delim = ";", col_label = "Label", contro
 #' _Caution: This function will also detach rootdetectR_
 #' @param except vector; elements that should be excluded from detaching
 #' @examples
-#' # detach all elements in search()
-#' detach_all()
-#'
-#' # detach all element except rootdetectR
-#' detach_all(except = "rootdetectR")
-#'
 #' @export
 detach_all <- function(except) {
   # create vector with base packages

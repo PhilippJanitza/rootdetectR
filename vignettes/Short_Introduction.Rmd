@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
   fig.width = 4,
   fig.height = 4
 )
-devtools::load_all(".")
 ```
 
 
@@ -41,7 +40,7 @@ install_github("PhilippJanitza/rootdetectR", build_vignettes = TRUE)
 
 After the installation the package can be loaded within R.
 
-```r
+```{r}
 library(rootdetectR)
 ```
 

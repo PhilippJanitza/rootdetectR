@@ -24,9 +24,9 @@ With n the user can set the number of clusters (colors to be extracted). The sta
 \examples{
 # extract the 4 most prominent colors from the example picture primroses
 
-extract_colors(primroses, n = 4)
+#extract_colors(primroses, n = 4)
 
 # show the picture with the reduced number of colors
 
-extract_colors(primroses, n = 4, plot_out = T)
+#extract_colors(primroses, n = 4, plot_out = T)
 }
