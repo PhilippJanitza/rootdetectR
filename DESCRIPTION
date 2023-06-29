@@ -14,16 +14,13 @@ Imports:
     EnvStats (>= 2.3.1),
     ggplot2 (>= 3.2.1),
     gridExtra (>= 2.3),
-<<<<<<< HEAD
     magrittr (>= 1.5),
     multcompView (>= 0.1-7),
     multtest (>= 2.40.0),
     plyr (>= 1.8.4),
-    tidyr (>= 0.8.3.9000)
-=======
+    tidyr (>= 0.8.3.9000),
     magrittr (>= 1.5)
 RoxygenNote: 7.2.3
->>>>>>> 77515d9093ecf96b6d7d53f196f9048a1ae36b3c
 Suggests: 
     jpeg,
     knitr,
@@ -34,4 +31,3 @@ VignetteBuilder:
 biocViews:
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
