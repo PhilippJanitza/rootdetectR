@@ -56,11 +56,11 @@ onefacaov_fac1 <- function(root_norm,
     # matlist <- as.list(rep(NA, nr_fac2))
 
     # ANOVA
-    lm_aov <- lm(LengthMM ~ Factor1, root_norm, na.action = na.omit)
-    pval.aov <- anova(aov(lm_aov))[1, 5]
+    lm_aov <- stats::lm(LengthMM ~ Factor1, root_norm, na.action = stats::na.omit)
+    pval.aov <- stats::anova(stats::aov(lm_aov))[1, 5]
 
     # Tukey
-    tuk <- as.data.frame(TukeyHSD(aov(lm_aov), ordered = FALSE)$Factor1)
+    tuk <- as.data.frame(stats::TukeyHSD(stats::aov(lm_aov), ordered = FALSE)$Factor1)
     tuk <- cbind(rownames(tuk), tuk)
     colnames(tuk)[1] <- "comparison"
 
@@ -79,29 +79,29 @@ onefacaov_fac1 <- function(root_norm,
     }
 
     if (draw_out) {
-      pdf(file = paste(file_base, ".pdf", sep = ""))
+      grDevices::pdf(file = paste(file_base, ".pdf", sep = ""))
 
       # Draw the Tuky-p-value-Matrix
       col <- matrix("black", nrow = nr_fac1, ncol = nr_fac1)
       col[lower.tri(col, diag = TRUE)] <- "white"
-      image(t(mat[nr_fac1:1, ]),
+      graphics::image(t(mat[nr_fac1:1, ]),
         col = c("red", "white"),
         breaks = c(0, 0.05, 1), axes = FALSE
       )
-      title(main = paste(fac2[tp], ", pval.aov = ",
+      graphics::title(main = paste(fac2[tp], ", pval.aov = ",
         round(pval.aov, 5),
         sep = ""
       ))
       s <- seq(from = 0, to = 1, length = nr_fac1)
-      axis(1, at = s, labels = fac1, las = 2, cex.axis = axis_label_size)
-      axis(2, at = s, labels = rev(fac1), las = 2, cex.axis = axis_label_size)
-      abline(
+      graphics::axis(1, at = s, labels = fac1, las = 2, cex.axis = axis_label_size)
+      graphics::axis(2, at = s, labels = rev(fac1), las = 2, cex.axis = axis_label_size)
+      graphics::abline(
         h = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
         v = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
         col = "grey"
       )
       sg <- expand.grid(rev(s), s)
-      text(sg[, 2], sg[, 1], format(as.vector(mat),
+      graphics::text(sg[, 2], sg[, 1], format(as.vector(mat),
         digits = 2, nsmall = 3,
         scientific = T
       )[1:nr_fac1^2],
@@ -109,10 +109,10 @@ onefacaov_fac1 <- function(root_norm,
       )
 
       if (summary_plots) {
-        plot(aov(lm_aov))
+        plot(stats::aov(lm_aov))
       }
 
-      dev.off()
+      grDevices::dev.off()
     }
 
 
@@ -138,11 +138,11 @@ onefacaov_fac1 <- function(root_norm,
         root_norm[which(root_norm$Factor2 == fac2[tp]), ]
 
       # ANOVA
-      lm_aov <- lm(LengthMM ~ Factor1, data_aov, na.action = na.omit)
-      pval.aov <- anova(aov(lm_aov))[1, 5]
+      lm_aov <- stats::lm(LengthMM ~ Factor1, data_aov, na.action = stats::na.omit)
+      pval.aov <- stats::anova(stats::aov(lm_aov))[1, 5]
 
       # Tukey
-      tuk <- as.data.frame(TukeyHSD(aov(lm_aov), ordered = FALSE)$Factor1)
+      tuk <- as.data.frame(stats::TukeyHSD(stats::aov(lm_aov), ordered = FALSE)$Factor1)
       tuk <- cbind(rownames(tuk), tuk)
       colnames(tuk)[1] <- "comparison"
 
@@ -164,29 +164,29 @@ onefacaov_fac1 <- function(root_norm,
       matlist[[tp]] <- mat
 
       if (draw_out) {
-        pdf(file = paste(file_base, "_", fac2[tp], ".pdf", sep = ""))
+        grDevices::pdf(file = paste(file_base, "_", fac2[tp], ".pdf", sep = ""))
 
         # Draw the Tuky-p-value-Matrix
         col <- matrix("black", nrow = nr_fac1, ncol = nr_fac1)
         col[lower.tri(col, diag = TRUE)] <- "white"
-        image(t(mat[nr_fac1:1, ]),
+        graphics::image(t(mat[nr_fac1:1, ]),
           col = c("red", "white"),
           breaks = c(0, 0.05, 1), axes = FALSE
         )
-        title(main = paste(fac2[tp], ", pval.aov = ",
+        graphics::title(main = paste(fac2[tp], ", pval.aov = ",
           round(pval.aov, 5),
           sep = ""
         ))
         s <- seq(from = 0, to = 1, length = nr_fac1)
-        axis(1, at = s, labels = fac1, las = 2, cex.axis = axis_label_size)
-        axis(2, at = s, labels = rev(fac1), las = 2, cex.axis = axis_label_size)
-        abline(
+        graphics::axis(1, at = s, labels = fac1, las = 2, cex.axis = axis_label_size)
+        graphics::axis(2, at = s, labels = rev(fac1), las = 2, cex.axis = axis_label_size)
+        graphics::abline(
           h = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
           v = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
           col = "grey"
         )
         sg <- expand.grid(rev(s), s)
-        text(sg[, 2], sg[, 1], format(as.vector(mat),
+        graphics::text(sg[, 2], sg[, 1], format(as.vector(mat),
           digits = 2, nsmall = 3,
           scientific = TRUE
         )[1:nr_fac1^2],
@@ -194,10 +194,10 @@ onefacaov_fac1 <- function(root_norm,
         )
 
         if (summary_plots) {
-          plot(aov(lm_aov))
+          plot(stats::aov(lm_aov))
         }
 
-        dev.off()
+        grDevices::dev.off()
       }
     }
 
@@ -266,9 +266,9 @@ onefacaov_fac2 <- function(root_norm,
           root_norm$Factor2 ==
             fac2[tp])), ]
       # ANOVA
-      lm_all <- lm(LengthMM ~ Factor2, d, na.action = na.omit)
-      aov_all <- aov(lm_all)
-      mat[1, i] <- anova(aov_all)[1, 5]
+      lm_all <- stats::lm(LengthMM ~ Factor2, d, na.action = stats::na.omit)
+      aov_all <- stats::aov(lm_all)
+      mat[1, i] <- stats::anova(aov_all)[1, 5]
     }
 
     # adjust pval
@@ -279,24 +279,24 @@ onefacaov_fac2 <- function(root_norm,
       col <- matrix("black", nrow = 1, ncol = nr_fac1)
       col[lower.tri(col, diag = TRUE)] <- "white"
       # filename
-      pdf(file = paste(file_base, "_", fac2[tp], ".pdf", sep = ""), width = 6, height = 2.5)
-      image(t(mat),
+      grDevices::pdf(file = paste(file_base, "_", fac2[tp], ".pdf", sep = ""), width = 6, height = 2.5)
+      graphics::image(t(mat),
         col = c("red", "white"), breaks = c(0, 0.05, 1),
         axes = FALSE
       )
-      title(main = paste(fac2[con_position], "vs.", fac2[tp]))
+      graphics::title(main = paste(fac2[con_position], "vs.", fac2[tp]))
       s <- seq(from = 0, to = 1, length = nr_fac1)
-      axis(1, at = s, labels = fac1, las = 2, cex.axis = axis_label_size)
-      axis(2, at = s[1], labels = "pval", las = 2, cex.axis = axis_label_size)
-      abline(v = c(s - (s[2] - s[1]) / 2, s[nr_fac1] +
+      graphics::axis(1, at = s, labels = fac1, las = 2, cex.axis = axis_label_size)
+      graphics::axis(2, at = s[1], labels = "pval", las = 2, cex.axis = axis_label_size)
+      graphics::abline(v = c(s - (s[2] - s[1]) / 2, s[nr_fac1] +
         (s[2] - s[1]) / 2), col = "grey")
-      text(s, s[1], format(as.vector(mat),
+      graphics::text(s, s[1], format(as.vector(mat),
         digits = 2, nsmall = 3,
         scientific = TRUE
       )[1:nr_fac1^2],
       cex = p_value_size
       )
-      dev.off()
+      grDevices::dev.off()
     }
 
     # add mat to list with name
@@ -351,10 +351,10 @@ twofacaov <- function(root_norm,
   colnames(root_norm)[colnames(root_norm) == col_label] <- "Label"
 
   # model that compares all vs all
-  aov_all_vs_all <- aov(LengthMM ~ Factor1 * Factor2, data = root_norm)
+  aov_all_vs_all <- stats::aov(LengthMM ~ Factor1 * Factor2, data = root_norm)
 
   # tukey post hoc test
-  tuk <- as.data.frame(TukeyHSD(aov_all_vs_all,
+  tuk <- as.data.frame(stats::TukeyHSD(aov_all_vs_all,
     ordered = FALSE
   )$`Factor1:Factor2`)
   tuk <- cbind(rownames(tuk), tuk)
@@ -391,22 +391,22 @@ twofacaov <- function(root_norm,
     # Draw the Tuky-p-value-Matrix
     col <- matrix("black", nrow = nr_labs, ncol = nr_labs)
     col[lower.tri(col, diag = TRUE)] <- "white"
-    pdf(file = file)
-    image(t(mat[nr_labs:1, ]),
+    grDevices::pdf(file = file)
+    graphics::image(t(mat[nr_labs:1, ]),
       col = c("red", "white"),
       breaks = c(0, 0.05, 1), axes = FALSE
     )
-    title(main = "ANOVA all vs all")
+    graphics::title(main = "ANOVA all vs all")
     s <- seq(from = 0, to = 1, length = nr_labs)
-    axis(1, at = s, labels = labs, las = 2, cex.axis = axis_label_size)
-    axis(2, at = s, labels = rev(labs), las = 2, cex.axis = axis_label_size)
-    abline(
+    graphics::axis(1, at = s, labels = labs, las = 2, cex.axis = axis_label_size)
+    graphics::axis(2, at = s, labels = rev(labs), las = 2, cex.axis = axis_label_size)
+    graphics::abline(
       h = c(s - (s[2] - s[1]) / 2, s[nr_labs] + (s[2] - s[1]) / 2), v =
         c(s - (s[2] - s[1]) / 2, s[nr_labs] + (s[2] - s[1]) / 2),
       col = "grey"
     )
     sg <- expand.grid(rev(s), s)
-    text(sg[, 2], sg[, 1], format(as.vector(mat),
+    graphics::text(sg[, 2], sg[, 1], format(as.vector(mat),
       digits = 2, nsmall = 3,
       scientific = TRUE
     )[1:nr_labs^2],
@@ -418,7 +418,7 @@ twofacaov <- function(root_norm,
       plot(aov_all_vs_all)
     }
 
-    dev.off()
+    grDevices::dev.off()
   }
   return(mat)
 }
@@ -507,12 +507,12 @@ interaction_twofacaov <- function(root_norm,
             root_norm$Factor2 ==
               fac2[tp])), ]
         # definiere linear model for ANOVA
-        lm_all <- lm(log2(LengthMM) ~ Factor1 * Factor2,
+        lm_all <- stats::lm(log2(LengthMM) ~ Factor1 * Factor2,
           d,
-          na.action = na.omit
+          na.action = stats::na.omit
         )
         # get matrix with all the p-values!!
-        mat[i, j] <- anova(aov(lm_all))[3, 5]
+        mat[i, j] <- stats::anova(stats::aov(lm_all))[3, 5]
       }
     }
 
@@ -533,33 +533,33 @@ interaction_twofacaov <- function(root_norm,
       col <- matrix("black", nrow = nr_fac1, ncol = nr_fac1)
       col[lower.tri(col, diag = TRUE)] <- "white"
       # filename for pdf
-      pdf(file <- paste(file_base, "_", control, "_vs_", fac2[tp],
+      grDevices::pdf(file <- paste(file_base, "_", control, "_vs_", fac2[tp],
         ".pdf",
         sep = ""
       ))
       # draw matrix draw white and red cells
-      image(t(mat[nr_fac1:1, ]),
+      graphics::image(t(mat[nr_fac1:1, ]),
         col = c("red", "white"),
         breaks = c(0, 0.05, 1), axes = FALSE
       )
-      title(main = paste("treatment effect ", control, " vs ", fac2[tp]))
+      graphics::title(main = paste("treatment effect ", control, " vs ", fac2[tp]))
       # axis label
       s <- seq(from = 0, to = 1, length = nr_fac1)
-      axis(1, at = s, labels = fac1, las = 1, cex.axis = axis_label_size)
-      axis(2, at = s, labels = rev(fac1), las = 1, cex.axis = axis_label_size)
+      graphics::axis(1, at = s, labels = fac1, las = 1, cex.axis = axis_label_size)
+      graphics::axis(2, at = s, labels = rev(fac1), las = 1, cex.axis = axis_label_size)
       # grid lines
-      abline(
+      graphics::abline(
         h = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
         v = c(s - (s[2] - s[1]) / 2, s[nr_fac1] + (s[2] - s[1]) / 2),
         col = "grey"
       )
       # print p-Werte into it
       sg <- expand.grid(rev(s), s)
-      text(sg[, 2], sg[, 1], cex = p_value_size, format(as.vector(mat),
+      graphics::text(sg[, 2], sg[, 1], cex = p_value_size, format(as.vector(mat),
         digits = 1, nsmall = 3,
         scientific = TRUE
       )[1:nr_fac1^2], col = as.vector(col))
-      dev.off()
+      grDevices::dev.off()
     }
 
     # Generate dataframes with p-values for each condition (for each loop)

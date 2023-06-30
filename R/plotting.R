@@ -225,7 +225,7 @@ plot_abs <- function(root_norm,
 
     # letter 1/5 of highest value
     y_coord <- plyr::ddply(root_norm, plyr::.(Label), plyr::summarize,
-      y = fivenum(LengthMM)[5]
+      y = stats::fivenum(LengthMM)[5]
     )
     y_coord$y <- y_coord$y + height_letter
     plot_letters <- merge(letters, y_coord, by = "Label")
@@ -250,8 +250,8 @@ plot_abs <- function(root_norm,
 
       sub <- levels(root_norm$Label)[i:j]
 
-      one <- median((root_norm[root_norm$Label == sub[1], ]$LengthMM))
-      two <- median((root_norm[root_norm$Label == sub[2], ]$LengthMM))
+      one <- stats::median((root_norm[root_norm$Label == sub[1], ]$LengthMM))
+      two <- stats::median((root_norm[root_norm$Label == sub[2], ]$LengthMM))
 
       ymin_line <- c(ymin_line, one)
       ymax_line <- c(ymax_line, two)
@@ -267,9 +267,9 @@ plot_abs <- function(root_norm,
       if (type == "jitter") {
         ggplot2::geom_boxplot(
           data = root_norm,
-          ggplot2::aes(
-            x = Label,
-            y = LengthMM
+          ggplot2::aes_string(
+            x = "Label",
+            y = "LengthMM"
           ),
           outlier.shape = NA, lwd = width_lines
         )
@@ -279,10 +279,10 @@ plot_abs <- function(root_norm,
       if (type == "jitter") {
         ggplot2::geom_jitter(
           data = root_norm,
-          ggplot2::aes(
-            x = Label,
-            y = LengthMM,
-            colour = as.factor(Factor2)
+          ggplot2::aes_string(
+            x = "Label",
+            y = "LengthMM",
+            colour = as.factor("Factor2")
           ),
           position = ggplot2::position_jitter(0.2,
             seed = 1
@@ -297,9 +297,9 @@ plot_abs <- function(root_norm,
       if (type == "box") {
         ggplot2::geom_boxplot(
           data = root_norm,
-          ggplot2::aes(
-            x = Label, y = LengthMM,
-            fill = as.factor(Factor2)
+          ggplot2::aes_string(
+            x = "Label", y = "LengthMM",
+            fill = as.factor("Factor2")
           ), lwd = width_lines
         )
       }
@@ -311,9 +311,9 @@ plot_abs <- function(root_norm,
       if (type == "violin") {
         ggplot2::geom_violin(
           data = root_norm,
-          ggplot2::aes(
-            x = Label, y = LengthMM,
-            fill = as.factor(Factor2)
+          ggplot2::aes_string(
+            x = "Label", y = "LengthMM",
+            fill = as.factor("Factor2")
           ), lwd = width_lines
         )
       }
@@ -325,11 +325,11 @@ plot_abs <- function(root_norm,
       if (plot_significance) {
         ggplot2::geom_text(
           data = plot_letters,
-          ggplot2::aes(
-            x = Label,
-            y = y,
-            label = Letters,
-            angle = angle_letter
+          ggplot2::aes_string(
+            x = "Label",
+            y = "y",
+            label = "Letters",
+            angle = "angle_letter"
           ),
           size = size_letter
         )
@@ -338,10 +338,10 @@ plot_abs <- function(root_norm,
     {
       if (plot_response) {
         ggplot2::geom_linerange(
-          ggplot2::aes(
-            x = x_line,
-            ymax = ymax_line,
-            ymin = ymin_line
+          ggplot2::aes_string(
+            x = "x_line",
+            ymax = "ymax_line",
+            ymin = "ymin_line"
           ),
           alpha = alpha_response, size = width_response
         )
@@ -373,7 +373,7 @@ plot_abs <- function(root_norm,
       if (plot_n) {
         EnvStats::stat_n_text(
           data = root_norm,
-          ggplot2::aes(x = Label, y = LengthMM),
+          ggplot2::aes_string(x = "Label", y = "LengthMM"),
           angle = 90, size = size_n
         )
       }
