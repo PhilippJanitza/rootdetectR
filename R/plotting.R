@@ -31,15 +31,15 @@ plot_hist <- function(root_norm, draw_out = F,
 
   for (lev in 1:length(levels(root_norm$Label))) {
     # create subset contain only the data for one label
-    hist_sub <- subset(root_norm, Label == levels(root_norm$Label)[lev])
+    hist_sub <- root_norm[root_norm$Label == levels(root_norm$Label)[lev],]
     hist_sub$Factor1 <- droplevels(hist_sub$Factor1)
 
     # calculate Shapiro-Wilk
-    shap <- shapiro.test(hist_sub$LengthMM)
+    shap <- stats::shapiro.test(hist_sub$LengthMM)
 
     # calculate breaks
     brx <- pretty(range(hist_sub$LengthMM),
-      n = nclass.Sturges(hist_sub$LengthMM), min.n = 1
+      n = grDevices::nclass.Sturges(hist_sub$LengthMM), min.n = 1
     )
 
     p <- ggplot2::ggplot(hist_sub, ggplot2::aes_string(
@@ -80,7 +80,7 @@ plot_hist <- function(root_norm, draw_out = F,
   }
 
   if (draw_out == T) {
-    pdf(file)
+    grDevices::pdf(file)
 
     fp <- length(plot_list) %/% 12
     x <- 1
@@ -97,7 +97,7 @@ plot_hist <- function(root_norm, draw_out = F,
     }
 
 
-    dev.off()
+    grDevices::dev.off()
   }
   return(plot_list)
 }
@@ -224,9 +224,11 @@ plot_abs <- function(root_norm,
 
 
     # letter 1/5 of highest value
-    y_coord <- plyr::ddply(root_norm, plyr::.(Label), plyr::summarize,
-      y = stats::fivenum(LengthMM)[5]
-    )
+
+    # y_coord <- plyr::ddply(root_norm, plyr::.(Label), plyr::summarize,
+    #   y = stats::fivenum(LengthMM)[5]
+    # )
+    y_coord <- fivenum_root(root_norm)
     y_coord$y <- y_coord$y + height_letter
     plot_letters <- merge(letters, y_coord, by = "Label")
   }
@@ -426,7 +428,6 @@ plot_abs <- function(root_norm,
 #' # Plot with siginficance letters
 #'
 #' root_test_norm <- norm_10mm_standard(root_output)
-#' root_stat <- interaction_twofacaov(root_test_norm, draw_out = FALSE, label_delim = ";")
 #' # boxplot with statistics
 #' plot_rel(root_test_norm, plot_significance = TRUE, control = "20", type = "box")
 #'
@@ -484,10 +485,7 @@ plot_rel <- function(root_norm,
 
     for (i in 1:length(interaction_twofacaov_output)) {
       # create rel subsets
-      rel_sub <- subset(
-        rel_root_norm,
-        Factor2 == names(interaction_twofacaov_output)[i]
-      )
+      rel_sub <- rel_root_norm[rel_root_norm$Factor2 == names(interaction_twofacaov_output)[i],]
       rel_sub$Factor2 <- as.factor(rel_sub$Factor2)
       rel_sub$Factor2 <- droplevels(rel_sub$Factor2)
 
@@ -521,9 +519,10 @@ plot_rel <- function(root_norm,
 
 
       # letter 1/5 of highest value
-      y_coord <- plyr::ddply(rel_sub, plyr::.(Label), plyr::summarize,
-        y = fivenum(relative_value)[5]
-      )
+      # y_coord <- plyr::ddply(rel_sub, plyr::.(Label), plyr::summarize,
+      #   y = stats::fivenum(relative_value)[5]
+      # )
+      y_coord <- fivenum_root(rel_sub, values = "relative_value")
       y_coord$y <- y_coord$y + height_letter
       plot_letters <- merge(letters, y_coord, by = "Label")
 
@@ -621,9 +620,9 @@ plot_rel <- function(root_norm,
         if (type == "jitter") {
           ggplot2::geom_boxplot(
             data = rel_root_norm,
-            ggplot2::aes(
-              x = Label, y =
-                relative_value
+            ggplot2::aes_string(
+              x = "Label", y =
+                "relative_value"
             ), outlier.shape = NA,
             lwd = width_lines
           )
@@ -633,10 +632,10 @@ plot_rel <- function(root_norm,
         if (type == "jitter") {
           ggplot2::geom_jitter(
             data = rel_root_norm,
-            ggplot2::aes(
-              x = Label, y =
-                relative_value, colour =
-                as.factor(Label)
+            ggplot2::aes_string(
+              x = "Label", y =
+                "relative_value", colour =
+                as.factor("Label")
             ), position =
               ggplot2::position_jitter(0.2, seed = 1), size = size_jitter_dot
           )
@@ -648,9 +647,9 @@ plot_rel <- function(root_norm,
       {
         if (type == "box") {
           ggplot2::geom_boxplot(
-            data = rel_root_norm, ggplot2::aes(
-              x = Label, y = relative_value,
-              fill = as.factor(Label)
+            data = rel_root_norm, ggplot2::aes_string(
+              x = "Label", y = "relative_value",
+              fill = as.factor("Label")
             ),
             lwd = width_lines
           )
@@ -663,9 +662,9 @@ plot_rel <- function(root_norm,
         if (type == "violin") {
           ggplot2::geom_violin(
             data = rel_root_norm,
-            ggplot2::aes(
-              x = Label, y = relative_value,
-              fill = as.factor(Label)
+            ggplot2::aes_string(
+              x = "Label", y = "relative_value",
+              fill = as.factor("Label")
             ), lwd = width_lines
           )
         }

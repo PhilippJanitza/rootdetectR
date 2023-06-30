@@ -89,7 +89,6 @@ plot_rel(root_test_norm, plot_significance = FALSE, control = "20", type = "jitt
 # Plot with siginficance letters
 
 root_test_norm <- norm_10mm_standard(root_output)
-root_stat <- interaction_twofacaov(root_test_norm, draw_out = FALSE, label_delim = ";")
 # boxplot with statistics
 plot_rel(root_test_norm, plot_significance = TRUE, control = "20", type = "box")
 

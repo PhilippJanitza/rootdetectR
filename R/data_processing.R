@@ -78,7 +78,7 @@ is_root_output <- function(root_output, length_standard = "10mm") {
 #' - No length standard must be present
 #'
 #' - hyphens (-) in Labels are not allowed
-#' @param root_output data.frame; normalized Rootdetection data set
+#' @param root_norm data.frame; normalized Rootdetection data set
 #' @return logical; TRUE or FALSE
 #' @examples
 #' # normalize root_output
@@ -345,8 +345,8 @@ summary_stat <- function(root_norm, col_grouping = c("Factor1", "Factor2"), col_
   colnames(root_norm)[colnames(root_norm) == col_value] <- "LengthMM"
 
   sum <- plyr::ddply(root_norm, col_grouping, plyr::summarize,
-    n = length(LengthMM), median = median(LengthMM),
-    mean = mean(LengthMM), sd = sd(LengthMM),
+    n = length(LengthMM), median = stats::median(LengthMM),
+    mean = mean(LengthMM), sd = stats::sd(LengthMM),
     se = se(LengthMM)
   )
   return(sum)
@@ -409,15 +409,17 @@ rel_data <- function(root_norm, control = "20") {
   # (name of the control was assigned in the beginning)
   rel_table_mock <- root_norm[root_norm$Factor2 == control,]
   # calc median for all levels of Factor 1 an save to LengthMM_median_control
-  rel_table_mock_median <- plyr::ddply(rel_table_mock, plyr::.(Factor1),
-    plyr::summarize,
-    LengthMM_median_control =
-      median(LengthMM)
-  )
+  # rel_table_mock_median <- plyr::ddply(rel_table_mock, plyr::.(Factor1),
+  #   plyr::summarize,
+  #   LengthMM_median_control =
+  #     stats::median(LengthMM)
+  # )
+  rel_table_mock_median <- median_rel(rel_table_mock)
+
   # merge tables
   rel_table_merge <- merge(root_norm, rel_table_mock_median, by = "Factor1")
   # new subset without the mock data
-  rel_table <- subset(rel_table_merge, Factor2 != control)
+  rel_table <- rel_table_merge[rel_table_merge$Factor2 != control,]
   # calculate relative values for the new 'treatment-only' table
   rel_table$relative_value <-
     (100 * rel_table$LengthMM) / rel_table$LengthMM_median_control

@@ -75,10 +75,10 @@ extract_colors <- function(image, n = 6, plot_out = F) {
 #'
 #' @export
 show_colors <- function(x) {
-  on.exit(par(mar = c(0.5, 0.5, 0.5, 0.5)))
+  on.exit(graphics::par(mar = c(0.5, 0.5, 0.5, 0.5)))
 
   n <- length(x)
-  image(1:n, 1, as.matrix(1:n),
+  graphics::image(1:n, 1, as.matrix(1:n),
     col = x,
     ylab = "", xlab = "", xaxt = "n", yaxt = "n", bty = "n"
   )

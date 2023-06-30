@@ -37,8 +37,6 @@ interaction_twofacaov(
 \item{axis_label_size}{numeric; font size of axis labels}
 
 \item{p_value_size}{numeric; font size of the p-values printed in pdf file}
-
-\item{col_label}{string; column name of label (combining grouping variable 1 and 2 separated by delimiter)}
 }
 \value{
 list; matrices containg p-values for pairwise two way ANOVA for each Factor1 per Factor2 control treatment effect

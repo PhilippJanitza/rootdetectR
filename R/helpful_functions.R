@@ -6,7 +6,7 @@
 #' x <- 1:20
 #' se(x)
 #' @export
-se <- function(x) sd(x, na.rm = T) / sqrt(length(na.omit(x)))
+se <- function(x) stats::sd(x, na.rm = T) / sqrt(length(stats::na.omit(x)))
 
 
 
@@ -28,8 +28,8 @@ se <- function(x) sd(x, na.rm = T) / sqrt(length(na.omit(x)))
 #' rm_outlier(x, fill_na = TRUE)
 #' @export
 rm_outlier <- function(x, fill_na = F) {
-  low_border <- quantile(x, 0.25, na.rm = T) - (IQR(x, na.rm = T) * 1.5)
-  high_border <- quantile(x, 0.75, na.rm = T) + (IQR(x, na.rm = T) * 1.5)
+  low_border <- stats::quantile(x, 0.25, na.rm = T) - (stats::IQR(x, na.rm = T) * 1.5)
+  high_border <- stats::quantile(x, 0.75, na.rm = T) + (stats::IQR(x, na.rm = T) * 1.5)
 
   if (fill_na) {
     # outliers will be changed to NA

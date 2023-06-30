@@ -7,7 +7,7 @@
 is_root_norm(root_norm)
 }
 \arguments{
-\item{root_output}{data.frame; normalized Rootdetection data set}
+\item{root_norm}{data.frame; normalized Rootdetection data set}
 }
 \value{
 logical; TRUE or FALSE

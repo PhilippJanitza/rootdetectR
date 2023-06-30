@@ -433,7 +433,6 @@ twofacaov <- function(root_norm,
 #' @param col_grouping1 string; column name of the first grouping variable (Factor1)
 #' @param col_grouping2 string; column name of the second grouping variable (Factor2)
 #' @param col_value string; name of the column containing values (dependent variable) (LengthMM)
-#' @param col_label string; column name of label (combining grouping variable 1 and 2 separated by delimiter)
 #' @param label_delim character; defines how Factor1 and Factor2 are separated in Label
 #' @param control string; name of the grouping variable 2 (Factor2) control condition
 #' @param label_delim character; defines how Factor1 and Factor2 are separated in Label
