@@ -256,7 +256,6 @@ norm_cust_standard <- function(root_output,
 }
 
 
-
 #' @title Visualize and Inspect Rootdetection Data
 #' @importFrom magrittr "%>%"
 #' @description The function produces a summary of all lines and conditions of a normalized rootdetection dataset.
@@ -342,8 +341,9 @@ inspect_root_norm <- function(root_norm, plot = TRUE, output = TRUE) {
 #' summary_stat(root_norm, col_grouping = "Factor1", col_value = "LengthMM")
 #' @export
 summary_stat <- function(root_norm, col_grouping = c("Factor1", "Factor2"), col_value = "LengthMM") {
-  colnames(root_norm)[colnames(root_norm) == col_value] <- "LengthMM"
 
+  colnames(root_norm)[colnames(root_norm) == col_value] <- "LengthMM"
+  LengthMM <- NULL
   sum <- plyr::ddply(root_norm, col_grouping, plyr::summarize,
     n = length(LengthMM), median = stats::median(LengthMM),
     mean = mean(LengthMM), sd = stats::sd(LengthMM),

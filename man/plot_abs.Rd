@@ -37,13 +37,13 @@ plot_abs(
 
 \item{label_delim}{character; define how Factor1 and Factor2 are separated in Label}
 
-\item{type}{string; "box" = will produce box plot, 'jitter' = will produce combination of box and jitter plot,  'violin' = will produce violin plot}
+\item{type}{string; "box" = box plot, 'jitter' = box and jitter plot,  'violin' = violin plot}
 
 \item{size_jitter_dot}{number; defines the size of the dots in jitter plots}
 
 \item{plot_n}{logical; if TRUE sample size (n) will be plotted}
 
-\item{plot_colours}{vector; provide colours for the plot - color vector must have the same length than grouping variable 2 (Factor2)}
+\item{plot_colours}{vector; provide colors for the plot (same length than grouping variable)}
 
 \item{plot_title}{string; sets a plot title}
 
@@ -88,7 +88,8 @@ plot; box, box jitter or violin plot of the absolute data
 }
 \description{
 Absolute data are plotted as box plot, box and jitter plot combination or violin plot.
-Signifcances can be illustrated by letter encoding. There are a lot of possibilities to adjust the visualization.
+Signifcances can be illustrated by letter encoding.
+There are a lot of possibilities to adjust the visualization.
 }
 \examples{
 # plot without significance letters
@@ -100,7 +101,8 @@ plot_abs(root_norm, type = "box")
 plot_abs(root_norm, type = "jitter")
 # violin plot
 plot_abs(root_norm, type = "violin")
-# provide own colours (standard r colours or hex-code) - must have the same length than grouping variable 2 level(root_test_norm$Factor2)
+# provide own colours (standard r colours or hex-code)
+# must have the same length than grouping variable 2 level(root_test_norm$Factor2)
 plot_abs(root_norm, plot_colours = c("dodgerblue3", "firebrick2"))
 
 # plot with significance letters

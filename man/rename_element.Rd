@@ -21,8 +21,10 @@ data.frame; with renamed elements in "colname"
 \description{
 The function will rename elements in a specific column by vectors "old_name" and "new_name".
 Simply give the function a vector with old names that should be renamed by a vector with new names.
-_Be carefull that elements in new_name have the rigth position_ (e.g. the second element in "old_name" will be replaced by the second element in "new_name").
+_Be carefull that elements in new_name have the rigth position_
+(e.g. the second element in "old_name" will be replaced by the second element in "new_name").
 }
 \examples{
-rename_element(root_output, colname = "Label", old_name = c("Col_0;28", "Col_0;20"), new_name = c("Col0_28", "Col0_20"))
+rename_element(root_output, colname = "Label",
+               old_name = c("Col_0;28", "Col_0;20"), new_name = c("Col0_28", "Col0_20"))
 }

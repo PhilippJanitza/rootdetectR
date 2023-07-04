@@ -21,7 +21,8 @@ onefacaov_fac1(
 
 \item{col_grouping1}{string; name of the column that should be used as grouping variable 1 (Factor1)}
 
-\item{col_grouping2}{string; name of the column that should be used as grouping variable 2 (Factor2) to iterate over, can be set to NULL if not existing}
+\item{col_grouping2}{string; name of the column that should be used as grouping variable 2 (Factor2)
+to iterate over, can be set to NULL if not existing}
 
 \item{col_value}{string; name of the column containing values (dependent variable) (LengthMM)}
 
@@ -36,15 +37,16 @@ onefacaov_fac1(
 \item{p_value_size}{numeric; font size of p-values in pdf file (if draw_out = TRUE)}
 }
 \value{
-list; data.frames containing p-values of one-way ANOVA and Tukey post-hoc over grouping variable 1 (Factor1)
+list; data.frames containing p-values of one-way ANOVA and Tukey post-hoc
 }
 \description{
-The function performs a one-way ANOVA and Tukey post-hoc test over grouping variable 1 (Factor1). The function iterates over a second grouping variable (Factor2) if given.
+The function performs a one-way ANOVA and Tukey post-hoc test over grouping variable 1 (Factor1).
+The function iterates over a second grouping variable (Factor2) if given.
 }
 \examples{
 ### Usage Standard Rootdetection ###
 
-# get data.frame containg p-values from one-way ANOVA and Tukey post-hoc test over grouping variable 1
+# get data.frame containg p-values
 root_norm <- norm_10mm_standard(root_output)
 onefacaov_fac1(root_norm, draw_out = FALSE)
 
