@@ -42,14 +42,18 @@ twofacaov(
 \item{p_value_size}{numeric; font size of the p-values printed in pdf file}
 }
 \value{
-list; data.frames containing p-values for one-way ANOVA and Tukey post-hoc over grouping variable 1 and 2 (Factor1 and Factor2)
+list; data.frames containing p-values for one-way ANOVA and Tukey post-hoc over grouping
+variable 1 and 2 (Factor1 and Factor2)
 }
 \description{
-The function performs a two way ANOVA and Tukey post-hoc test for normalized Rootdetection standard over grouping variable 1 and 2 (Factor1 and Factor2).
-Caution: In the actual version it is necessary to provide a Label column (grouping variable 1 and 2 separated by label delimiter (label_delim)) in addition to grouping variable 1 and 2 necessary.
+The function performs a two way ANOVA and Tukey post-hoc test for normalized Rootdetection
+standard over grouping variable 1 and 2 (Factor1 and Factor2).
+Caution: In the actual version it is necessary to provide a Label column
+(grouping variable 1 and 2 separated by label delimiter (label_delim)) in addition to grouping
+variable 1 and 2 necessary.
 }
 \examples{
-# get data.frame containing p-values for two-way ANOVA and Tukey post-hoc over grouping variable 1 and 2 (Factor1 and Factor2)
+# get data.frame containing p-values for two-way ANOVA and Tukey post-hoc
 
 root_norm <- norm_10mm_standard(root_output)
 twofacaov(root_norm, label_delim = ";", draw_out = FALSE)

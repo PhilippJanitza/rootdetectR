@@ -1,19 +1,21 @@
 #' @title One-way ANOVA Over Grouping Variable 1
-#' @description The function performs a one-way ANOVA and Tukey post-hoc test over grouping variable 1 (Factor1). The function iterates over a second grouping variable (Factor2) if given.
+#' @description The function performs a one-way ANOVA and Tukey post-hoc test over grouping variable 1 (Factor1).
+#' The function iterates over a second grouping variable (Factor2) if given.
 #' @param root_norm data.frame; normalized Rootdetection data set
 #' @param col_grouping1 string; name of the column that should be used as grouping variable 1 (Factor1)
-#' @param col_grouping2 string; name of the column that should be used as grouping variable 2 (Factor2) to iterate over, can be set to NULL if not existing
+#' @param col_grouping2 string; name of the column that should be used as grouping variable 2 (Factor2)
+#' to iterate over, can be set to NULL if not existing
 #' @param col_value  string; name of the column containing values (dependent variable) (LengthMM)
 #' @param summary_plots logical; If TRUE summary (plot(aov)) will be plotted
 #' @param draw_out logical; If TRUE a matrix containing p-values is plotted in a pdf file
 #' @param file_base string; file base name of the pdf output (is needed if draw_out = TRUE)
 #' @param axis_label_size numeric; font size of axis labels in pdf file (if draw_out = TRUE)
 #' @param p_value_size numeric; font size of p-values in pdf file (if draw_out = TRUE)
-#' @return list; data.frames containing p-values of one-way ANOVA and Tukey post-hoc over grouping variable 1 (Factor1)
+#' @return list; data.frames containing p-values of one-way ANOVA and Tukey post-hoc
 #' @examples
 #' ### Usage Standard Rootdetection ###
 #'
-#' # get data.frame containg p-values from one-way ANOVA and Tukey post-hoc test over grouping variable 1
+#' # get data.frame containg p-values
 #' root_norm <- norm_10mm_standard(root_output)
 #' onefacaov_fac1(root_norm, draw_out = FALSE)
 #'
@@ -210,7 +212,8 @@ onefacaov_fac1 <- function(root_norm,
 
 #' @title One-way ANOVA Over Grouping Variable 2 Treatments
 #' @description The function performs a one-way ANOVA and Tukey post-hoc test over grouping variable 2 (Factor2).
-#' The function takes each control + treatment combination of grouping variable 2 and perfoms a one-way ANOVA iterating over grouping Variable 1 (Factor1).
+#' The function takes each control + treatment combination of grouping variable 2 and perfoms a one-way ANOVA
+#' iterating over grouping Variable 1 (Factor1).
 #' The p-values are adjusted using Benjamini-Hochberg correction.
 #' @param root_norm data.frame; normalized Rootdetection data set
 #' @param col_grouping1 string; name of the column that should be used as grouping variable 1 (Factor1)
@@ -221,9 +224,9 @@ onefacaov_fac1 <- function(root_norm,
 #' @param file_base string; file base name of the pdf output (is needed if draw_out = TRUE)
 #' @param axis_label_size numeric; font size of axis labels in pdf file (if draw_out = TRUE)
 #' @param p_value_size numeric; font size of p-values in pdf file (if draw_out = TRUE)
-#' @return list; data.frames containing p-values for one-way ANOVA and Tukey post-hoc over grouping variable 2 (Factor2)
+#' @return list; data.frames containing p-values for one-way ANOVA and Tukey post-hoc
 #' @examples
-#' # get data.frame containg p-values for one-way ANOVA and Tukey post-hoc over grouping variable 2 (Factor2)
+#' # get data.frame containg p-values for one-way ANOVA and Tukey post-hoc over grouping variable 2
 #' root_norm <- norm_10mm_standard(root_output)
 #' onefacaov_fac2(root_norm, control = "20", draw_out = FALSE)
 #'
@@ -309,8 +312,11 @@ onefacaov_fac2 <- function(root_norm,
 
 
 #' @title Two-Way ANOVA Over Grouping Variable 1 And 2
-#' @description The function performs a two way ANOVA and Tukey post-hoc test for normalized Rootdetection standard over grouping variable 1 and 2 (Factor1 and Factor2).
-#' Caution: In the actual version it is necessary to provide a Label column (grouping variable 1 and 2 separated by label delimiter (label_delim)) in addition to grouping variable 1 and 2 necessary.
+#' @description The function performs a two way ANOVA and Tukey post-hoc test for normalized Rootdetection
+#' standard over grouping variable 1 and 2 (Factor1 and Factor2).
+#' Caution: In the actual version it is necessary to provide a Label column
+#' (grouping variable 1 and 2 separated by label delimiter (label_delim)) in addition to grouping
+#' variable 1 and 2 necessary.
 #' @param root_norm data.frame; normalized Rootdetection data set
 #' @param col_grouping1 string; column name of the first grouping variable (Factor1)
 #' @param col_grouping2 string; column name of the second grouping variable (Factor2)
@@ -322,9 +328,10 @@ onefacaov_fac2 <- function(root_norm,
 #' @param file string; file name of the pdf output (is needed if draw_out = T)
 #' @param axis_label_size numeric; font size of axis labels
 #' @param p_value_size numeric; font size of the p-values printed in pdf file
-#' @return list; data.frames containing p-values for one-way ANOVA and Tukey post-hoc over grouping variable 1 and 2 (Factor1 and Factor2)
+#' @return list; data.frames containing p-values for one-way ANOVA and Tukey post-hoc over grouping
+#' variable 1 and 2 (Factor1 and Factor2)
 #' @examples
-#' # get data.frame containing p-values for two-way ANOVA and Tukey post-hoc over grouping variable 1 and 2 (Factor1 and Factor2)
+#' # get data.frame containing p-values for two-way ANOVA and Tukey post-hoc
 #'
 #' root_norm <- norm_10mm_standard(root_output)
 #' twofacaov(root_norm, label_delim = ";", draw_out = FALSE)
@@ -426,9 +433,11 @@ twofacaov <- function(root_norm,
 
 
 #' @title Pairwise Two-Way ANOVA Of Interaction (Treatment) Effects
-#' @description The function performs a pairwise two-way ANOVA of interaction effects of Factor2 control to Factor2 treatment for every Factor1.
+#' @description The function performs a pairwise two-way ANOVA of interaction effects of Factor2
+#' control to Factor2 treatment for every Factor1.
 #' The p-values are adjusted using Benjamini-Hochberg correction procedure.
-#' #' Caution: In the actual version it is necessary to provide a Label column (grouping variable 1 and 2 separated by label delimiter (label_delim)) in addition to grouping variable 1 and 2 necessary.
+#' #' Caution: In the actual version it is necessary to provide a Label column(grouping variable 1
+#' and 2 separated by label delimiter (label_delim)) in addition to grouping variable 1 and 2 necessary.
 #' @param root_norm data.frame; normalized Rootdetection data set
 #' @param col_grouping1 string; column name of the first grouping variable (Factor1)
 #' @param col_grouping2 string; column name of the second grouping variable (Factor2)
@@ -440,7 +449,7 @@ twofacaov <- function(root_norm,
 #' @param file_base string; file name of the pdf output (is needed if draw_out = T)
 #' @param axis_label_size numeric; font size of axis labels
 #' @param p_value_size numeric; font size of the p-values printed in pdf file
-#' @return list; matrices containg p-values for pairwise two way ANOVA for each Factor1 per Factor2 control treatment effect
+#' @return list; matrices containing p-values for pairwise two way ANOVA (treatment effect)
 #' @examples
 #' # get data.frame containing p-values for pairwise two-way ANOVA of interaction effects
 #'
@@ -450,7 +459,8 @@ twofacaov <- function(root_norm,
 #' # get data.frame and plot as pdf output
 #'
 #' root_norm <- norm_10mm_standard(root_output)
-#' interaction_twofacaov(root_norm, control = "20", label_delim = ";", draw_out = TRUE, file_base = "2fac_ANOVA_BH_corrected")
+#' interaction_twofacaov(root_norm, control = "20", label_delim = ";",
+#'                       draw_out = TRUE, file_base = "2fac_ANOVA_BH_corrected")
 #' # function creates a pdf file 2fac_ANOVA_BH_corrected_28.pdf
 #' @export
 interaction_twofacaov <- function(root_norm,

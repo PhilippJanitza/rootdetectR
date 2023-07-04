@@ -106,13 +106,14 @@ plot_hist <- function(root_norm, draw_out = F,
 
 #' @title Plotting Absolute Data Of Normalized Rootdetection Data Set
 #' @description Absolute data are plotted as box plot, box and jitter plot combination or violin plot.
-#' Signifcances can be illustrated by letter encoding. There are a lot of possibilities to adjust the visualization.
+#' Signifcances can be illustrated by letter encoding.
+#' There are a lot of possibilities to adjust the visualization.
 #' @param root_norm data.frame; normalized Rootdetection data set
 #' @param label_delim character; define how Factor1 and Factor2 are separated in Label
-#' @param type string; "box" = will produce box plot, 'jitter' = will produce combination of box and jitter plot,  'violin' = will produce violin plot
+#' @param type string; "box" = box plot, 'jitter' = box and jitter plot,  'violin' = violin plot
 #' @param size_jitter_dot number; defines the size of the dots in jitter plots
 #' @param plot_n logical; if TRUE sample size (n) will be plotted
-#' @param plot_colours vector; provide colours for the plot - color vector must have the same length than grouping variable 2 (Factor2)
+#' @param plot_colours vector; provide colors for the plot (same length than grouping variable)
 #' @param plot_title string; sets a plot title
 #' @param size_plot_title numeric; defines size of the plot title
 #' @param y_label string; axes description of y-axes
@@ -143,7 +144,8 @@ plot_hist <- function(root_norm, draw_out = F,
 #' plot_abs(root_norm, type = "jitter")
 #' # violin plot
 #' plot_abs(root_norm, type = "violin")
-#' # provide own colours (standard r colours or hex-code) - must have the same length than grouping variable 2 level(root_test_norm$Factor2)
+#' # provide own colours (standard r colours or hex-code)
+#' # must have the same length than grouping variable 2 level(root_test_norm$Factor2)
 #' plot_abs(root_norm, plot_colours = c("dodgerblue3", "firebrick2"))
 #'
 #' # plot with significance letters

@@ -39,12 +39,14 @@ interaction_twofacaov(
 \item{p_value_size}{numeric; font size of the p-values printed in pdf file}
 }
 \value{
-list; matrices containg p-values for pairwise two way ANOVA for each Factor1 per Factor2 control treatment effect
+list; matrices containing p-values for pairwise two way ANOVA (treatment effect)
 }
 \description{
-The function performs a pairwise two-way ANOVA of interaction effects of Factor2 control to Factor2 treatment for every Factor1.
+The function performs a pairwise two-way ANOVA of interaction effects of Factor2
+control to Factor2 treatment for every Factor1.
 The p-values are adjusted using Benjamini-Hochberg correction procedure.
-#' Caution: In the actual version it is necessary to provide a Label column (grouping variable 1 and 2 separated by label delimiter (label_delim)) in addition to grouping variable 1 and 2 necessary.
+#' Caution: In the actual version it is necessary to provide a Label column(grouping variable 1
+and 2 separated by label delimiter (label_delim)) in addition to grouping variable 1 and 2 necessary.
 }
 \examples{
 # get data.frame containing p-values for pairwise two-way ANOVA of interaction effects
@@ -55,6 +57,7 @@ interaction_twofacaov(root_norm, control = "20", label_delim = ";", draw_out = F
 # get data.frame and plot as pdf output
 
 root_norm <- norm_10mm_standard(root_output)
-interaction_twofacaov(root_norm, control = "20", label_delim = ";", draw_out = TRUE, file_base = "2fac_ANOVA_BH_corrected")
+interaction_twofacaov(root_norm, control = "20", label_delim = ";",
+                      draw_out = TRUE, file_base = "2fac_ANOVA_BH_corrected")
 # function creates a pdf file 2fac_ANOVA_BH_corrected_28.pdf
 }

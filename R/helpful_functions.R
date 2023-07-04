@@ -44,14 +44,17 @@ rm_outlier <- function(x, fill_na = F) {
 
 
 #' @title Create Subsets Of Normalized Rootdetection Standard Data Set By Factor2
-#' @description This function creates subsets for each grouping variable 2 (Factor2) control and treatment pair of a normalized Rootdetection data set.
+#' @description This function creates subsets for each grouping variable 2 (Factor2) control and
+#' treatment pair of a normalized Rootdetection data set.
 #' (At least two treatment conditions are required)
 #' @param root_norm data.frame; normalized Rootdetection data set
 #' @param control string; name of the grouping variable 2 (Factor2) control condition
 #' @return list of data.frames; each subset will be in an separated data.frame stored in a list
 #' @examples
 #' # create normalized data.set with multiple Factor2
-#' root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_standard = "20mm", standard_length_mm = "20")
+#' root_norm_multfac2 <- norm_cust_standard(root_output_multfac2,
+#'                                          label_standard = "20mm",
+#'                                          standard_length_mm = "20")
 #'
 #' # create subsets for each control_treatment pair
 #' subset_fac2(root_norm_multfac2, control = "20")
@@ -264,14 +267,16 @@ detach_all <- function(except) {
 #' @title Change Names of Elements In Specific Column
 #' @description The function will rename elements in a specific column by vectors "old_name" and "new_name".
 #' Simply give the function a vector with old names that should be renamed by a vector with new names.
-#' _Be carefull that elements in new_name have the rigth position_ (e.g. the second element in "old_name" will be replaced by the second element in "new_name").
+#' _Be carefull that elements in new_name have the rigth position_
+#' (e.g. the second element in "old_name" will be replaced by the second element in "new_name").
 #' @param df data.frame; input data.frame
 #' @param colname character; name of the column storing the elements to be renamed
 #' @param old_name vector; elements that should be renamed in column specified by 'colname'
 #' @param new_name vector; new names of the elements specified by "old_name"
 #' @return data.frame; with renamed elements in "colname"
 #' @examples
-#' rename_element(root_output, colname = "Label", old_name = c("Col_0;28", "Col_0;20"), new_name = c("Col0_28", "Col0_20"))
+#' rename_element(root_output, colname = "Label",
+#'                old_name = c("Col_0;28", "Col_0;20"), new_name = c("Col0_28", "Col0_20"))
 #' @export
 rename_element <- function(df, colname, old_name, new_name) {
   # check if colname is factor -> transform to character

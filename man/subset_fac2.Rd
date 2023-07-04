@@ -15,12 +15,15 @@ subset_fac2(root_norm, control = "20")
 list of data.frames; each subset will be in an separated data.frame stored in a list
 }
 \description{
-This function creates subsets for each grouping variable 2 (Factor2) control and treatment pair of a normalized Rootdetection data set.
+This function creates subsets for each grouping variable 2 (Factor2) control and
+treatment pair of a normalized Rootdetection data set.
 (At least two treatment conditions are required)
 }
 \examples{
 # create normalized data.set with multiple Factor2
-root_norm_multfac2 <- norm_cust_standard(root_output_multfac2, label_standard = "20mm", standard_length_mm = "20")
+root_norm_multfac2 <- norm_cust_standard(root_output_multfac2,
+                                         label_standard = "20mm",
+                                         standard_length_mm = "20")
 
 # create subsets for each control_treatment pair
 subset_fac2(root_norm_multfac2, control = "20")
