@@ -28,6 +28,7 @@ plot_hist <- function(root_norm, draw_out = F,
   # make sure Factor1 and Factor 2 are factors
   root_norm$Factor1 <- as.factor(root_norm$Factor1)
   root_norm$Factor2 <- as.factor(root_norm$Factor2)
+  root_norm$Label <- as.factor(root_norm$Label)
 
   for (lev in 1:length(levels(root_norm$Label))) {
     # create subset contain only the data for one label
