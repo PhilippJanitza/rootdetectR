@@ -342,12 +342,16 @@ inspect_root_norm <- function(root_norm, plot = TRUE, output = TRUE) {
 #' @export
 summary_stat <- function(root_norm, col_grouping = c("Factor1", "Factor2"), col_value = "LengthMM") {
 
-  colnames(root_norm)[colnames(root_norm) == col_value] <- "LengthMM"
-  LengthMM <- NULL
+  if(!col_value %in% colnames(root_norm)){
+    stop(paste0("Column ", col_value, " not found in data.frame"))
+  }
+
+  colnames(root_norm)[colnames(root_norm) == col_value] <- "kleeche"
+  kleeche <- NULL
   sum <- plyr::ddply(root_norm, col_grouping, plyr::summarize,
-    n = length(LengthMM), median = stats::median(LengthMM),
-    mean = mean(LengthMM), sd = stats::sd(LengthMM),
-    se = se(LengthMM)
+    n = length(kleeche), median = stats::median(kleeche),
+    mean = mean(kleeche), sd = stats::sd(kleeche),
+    se = se(kleeche)
   )
   return(sum)
 }
