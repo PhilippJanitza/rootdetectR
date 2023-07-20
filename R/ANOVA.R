@@ -277,7 +277,6 @@ onefacaov_fac2 <- function(root_norm,
     # adjust pval
     if(length(mat[1, ]) > 1){
       mat[1, ] <- multtest::mt.rawp2adjp(mat[1, ], proc = "BH")$adjp[, 2]
-
     }
 
     if (draw_out) {
