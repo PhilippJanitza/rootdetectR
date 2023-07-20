@@ -287,7 +287,7 @@ plot_abs <- function(root_norm,
           ggplot2::aes_string(
             x = "Label",
             y = "LengthMM",
-            colour = as.factor("Factor2")
+            colour = "Factor2"
           ),
           position = ggplot2::position_jitter(0.2,
             seed = 1
@@ -304,7 +304,7 @@ plot_abs <- function(root_norm,
           data = root_norm,
           ggplot2::aes_string(
             x = "Label", y = "LengthMM",
-            fill = as.factor("Factor2")
+            fill = "Factor2"
           ), lwd = width_lines
         )
       }
@@ -318,7 +318,7 @@ plot_abs <- function(root_norm,
           data = root_norm,
           ggplot2::aes_string(
             x = "Label", y = "LengthMM",
-            fill = as.factor("Factor2")
+            fill = "Factor2"
           ), lwd = width_lines
         )
       }
