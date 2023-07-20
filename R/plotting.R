@@ -231,7 +231,7 @@ plot_abs <- function(root_norm,
     # y_coord <- plyr::ddply(root_norm, plyr::.(Label), plyr::summarize,
     #   y = stats::fivenum(LengthMM)[5]
     # )
-    y_coord <- fivenum_root(root_norm)
+    y_coord <- rootdetectR::fivenum_root(root_norm)
     y_coord$y <- y_coord$y + height_letter
     plot_letters <- merge(letters, y_coord, by = "Label")
   }
@@ -525,7 +525,7 @@ plot_rel <- function(root_norm,
       # y_coord <- plyr::ddply(rel_sub, plyr::.(Label), plyr::summarize,
       #   y = stats::fivenum(relative_value)[5]
       # )
-      y_coord <- fivenum_root(rel_sub, values = "relative_value")
+      y_coord <- rootdetectR::fivenum_root(rel_sub, values = "relative_value")
       y_coord$y <- y_coord$y + height_letter
       plot_letters <- merge(letters, y_coord, by = "Label")
 
