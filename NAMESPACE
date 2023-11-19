@@ -2,11 +2,13 @@
 
 export(detach_all)
 export(extract_colors)
+export(fivenum_root)
 export(get_sig_letters)
 export(inspect_root_norm)
 export(interaction_twofacaov)
 export(is_root_norm)
 export(is_root_output)
+export(median_rel)
 export(norm_10mm_standard)
 export(norm_cust_standard)
 export(normality_test)

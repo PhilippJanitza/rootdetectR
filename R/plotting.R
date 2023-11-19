@@ -32,7 +32,7 @@ plot_hist <- function(root_norm, draw_out = F,
 
   for (lev in 1:length(levels(root_norm$Label))) {
     # create subset contain only the data for one label
-    hist_sub <- root_norm[root_norm$Label == levels(root_norm$Label)[lev],]
+    hist_sub <- root_norm[root_norm$Label == levels(root_norm$Label)[lev], ]
     hist_sub$Factor1 <- droplevels(hist_sub$Factor1)
 
     # calculate Shapiro-Wilk
@@ -488,7 +488,7 @@ plot_rel <- function(root_norm,
 
     for (i in 1:length(interaction_twofacaov_output)) {
       # create rel subsets
-      rel_sub <- rel_root_norm[rel_root_norm$Factor2 == names(interaction_twofacaov_output)[i],]
+      rel_sub <- rel_root_norm[rel_root_norm$Factor2 == names(interaction_twofacaov_output)[i], ]
       rel_sub$Factor2 <- as.factor(rel_sub$Factor2)
       rel_sub$Factor2 <- droplevels(rel_sub$Factor2)
 

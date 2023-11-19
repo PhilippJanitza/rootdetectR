@@ -171,11 +171,11 @@ norm_10mm_standard <- function(root_output, split = TRUE, label_delim = ";") {
   # features --> change name of 10mm to something else choose length that
   # should be used as normalisation (other than 10mm)
   # calc 10mm
-  standard_mm <- root_output[root_output$Label == "10mm",]
+  standard_mm <- root_output[root_output$Label == "10mm", ]
   standard_mm_mean <- mean(standard_mm$LengthPx)
   root_output$LengthMM <- root_output$LengthPx / (standard_mm_mean / 10)
   # delete 10mm
-  root_output <- root_output[root_output$Label != "10mm",]
+  root_output <- root_output[root_output$Label != "10mm", ]
   root_output$Label <- droplevels(root_output$Label)
 
   # if split is TRUE order the columns and devide labels according to
@@ -230,11 +230,11 @@ norm_cust_standard <- function(root_output,
   root_output$Label <- as.factor(root_output$Label)
 
   # calc 10mm
-  standard_mm <- root_output[root_output$Label == label_standard,]
+  standard_mm <- root_output[root_output$Label == label_standard, ]
   standard_mm_mean <- mean(standard_mm$LengthPx)
   root_output$LengthMM <- root_output$LengthPx / (standard_mm_mean / as.numeric(standard_length_mm))
   # delete 10mm
-  root_output <- root_output[root_output$Label != label_standard,]
+  root_output <- root_output[root_output$Label != label_standard, ]
   root_output$Label <- droplevels(root_output$Label)
 
   # if split is TRUE order the columns and devide labels according to
@@ -341,8 +341,7 @@ inspect_root_norm <- function(root_norm, plot = TRUE, output = TRUE) {
 #' summary_stat(root_norm, col_grouping = "Factor1", col_value = "LengthMM")
 #' @export
 summary_stat <- function(root_norm, col_grouping = c("Factor1", "Factor2"), col_value = "LengthMM") {
-
-  if(!col_value %in% colnames(root_norm)){
+  if (!col_value %in% colnames(root_norm)) {
     stop(paste0("Column ", col_value, " not found in data.frame"))
   }
 
@@ -383,7 +382,7 @@ normality_test <- function(root_norm, col_grouping = "Label", col_value = "Lengt
 
   for (lev in 1:length(levels(root_norm$Label))) {
     # create subset contain only the data for one label
-    hist_sub <- root_norm[root_norm$Label == levels(root_norm$Label)[lev],]
+    hist_sub <- root_norm[root_norm$Label == levels(root_norm$Label)[lev], ]
     temp <- data.frame(Label = levels(root_norm$Label)[lev], p.value = stats::shapiro.test(hist_sub$LengthMM)$p.value)
     norm_table <- rbind(norm_table, temp)
   }
@@ -411,7 +410,7 @@ normality_test <- function(root_norm, col_grouping = "Label", col_value = "Lengt
 rel_data <- function(root_norm, control = "20") {
   # create subset containing only control data
   # (name of the control was assigned in the beginning)
-  rel_table_mock <- root_norm[root_norm$Factor2 == control,]
+  rel_table_mock <- root_norm[root_norm$Factor2 == control, ]
   # calc median for all levels of Factor 1 an save to LengthMM_median_control
   # rel_table_mock_median <- plyr::ddply(rel_table_mock, plyr::.(Factor1),
   #   plyr::summarize,
@@ -423,7 +422,7 @@ rel_data <- function(root_norm, control = "20") {
   # merge tables
   rel_table_merge <- merge(root_norm, rel_table_mock_median, by = "Factor1")
   # new subset without the mock data
-  rel_table <- rel_table_merge[rel_table_merge$Factor2 != control,]
+  rel_table <- rel_table_merge[rel_table_merge$Factor2 != control, ]
   # calculate relative values for the new 'treatment-only' table
   rel_table$relative_value <-
     (100 * rel_table$LengthMM) / rel_table$LengthMM_median_control

@@ -275,7 +275,7 @@ onefacaov_fac2 <- function(root_norm,
     }
 
     # adjust pval
-    if(length(mat[1, ]) > 1){
+    if (length(mat[1, ]) > 1) {
       mat[1, ] <- multtest::mt.rawp2adjp(mat[1, ], proc = "BH")$adjp[, 2]
     }
 
@@ -461,8 +461,10 @@ twofacaov <- function(root_norm,
 #' # get data.frame and plot as pdf output
 #'
 #' root_norm <- norm_10mm_standard(root_output)
-#' interaction_twofacaov(root_norm, control = "20", label_delim = ";",
-#'                       draw_out = TRUE, file_base = "2fac_ANOVA_BH_corrected")
+#' interaction_twofacaov(root_norm,
+#'   control = "20", label_delim = ";",
+#'   draw_out = TRUE, file_base = "2fac_ANOVA_BH_corrected"
+#' )
 #' # function creates a pdf file 2fac_ANOVA_BH_corrected_28.pdf
 #' @export
 interaction_twofacaov <- function(root_norm,

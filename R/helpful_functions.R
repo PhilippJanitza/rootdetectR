@@ -53,8 +53,9 @@ rm_outlier <- function(x, fill_na = F) {
 #' @examples
 #' # create normalized data.set with multiple Factor2
 #' root_norm_multfac2 <- norm_cust_standard(root_output_multfac2,
-#'                                          label_standard = "20mm",
-#'                                          standard_length_mm = "20")
+#'   label_standard = "20mm",
+#'   standard_length_mm = "20"
+#' )
 #'
 #' # create subsets for each control_treatment pair
 #' subset_fac2(root_norm_multfac2, control = "20")
@@ -275,8 +276,10 @@ detach_all <- function(except) {
 #' @param new_name vector; new names of the elements specified by "old_name"
 #' @return data.frame; with renamed elements in "colname"
 #' @examples
-#' rename_element(root_output, colname = "Label",
-#'                old_name = c("Col_0;28", "Col_0;20"), new_name = c("Col0_28", "Col0_20"))
+#' rename_element(root_output,
+#'   colname = "Label",
+#'   old_name = c("Col_0;28", "Col_0;20"), new_name = c("Col0_28", "Col0_20")
+#' )
 #' @export
 rename_element <- function(df, colname, old_name, new_name) {
   # check if colname is factor -> transform to character
