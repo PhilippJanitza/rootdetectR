@@ -36,6 +36,26 @@
 "root_output_multfac2"
 
 
+#' Output Of An Example Study With time series growth data
+#'
+#' A dataset containing measured _Arabidopsis thaliana_ wild-type (Col-0) seedling roots measured at 20 °C and 28°C.
+#' First pictures were taken 48h after sowing and then every 4 hours the same plate is measured for additional 138 hours.
+#' For both temperature conditions 8 roots were measured.
+#'
+#' @format A data frame with 544 rows of  10 variables:
+#' \describe{
+#'   \item{Nr}{Number given by Rootdetection}
+#'   \item{Filename}{Filename of the photo}
+#'   \item{RootNr}{Number given by Rootdetection}
+#'   \item{Label}{Label describing the line}
+#'   \item{Factor1}{First Factor - mostly genotype}
+#'   \item{Factor2}{Second Factor - mostly temperature}
+#'   \item{Timepoint}{time after sowing}
+#'   \item{LengthPx}{Length of measured root or Hypocotyl in Pixel}
+#'   \item{LengthMM}{Length of measured root or Hypocotyl in mm}
+#' }
+"root_timeseries"
+
 
 #' Picture Of Colorful Primroses
 #'
